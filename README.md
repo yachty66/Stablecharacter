@@ -18,7 +18,12 @@ how can i do a slash command instead and helper for the required fields like
 
 "/chat user_name: user_gender: bot_name: bot_age: bot_gender: bot_personality:" 
 
+either i have 16 different bots where each bot has a static personality or i have one bot who is sending a image in the channel. i think it would be cooler to have 16 different bots because than you have this profile. i think its cooler to have 16 bots because than its more personalized. shit i even need 32 types. for male and female. thats shit. can create 32 bots. 
 
+i am thinking if i than should rather create 32 unique bots (all 16 personalities twice because of gender) or if i should have one bot only (i still can give him the personality traits but the bot will not have the profile image of the respective mbti type). 
+
+
+i can still make a single class i guess.
 
 ## tasks
 
@@ -30,6 +35,7 @@ how can i do a slash command instead and helper for the required fields like
 - [ ] make this avatars from discord available on gather town
 
 - [ ] once i have 100 paying users i am going to buy the discord tshirt
+- [ ] create a MBTI twitter account
 
 lets build the metaverse 
 
