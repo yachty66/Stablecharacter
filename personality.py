@@ -1,12 +1,9 @@
 #need to create personality 
-
 #this is going to be so much fun lol.
-
 #i can contactc dozens of influencers to make advertisement for me. can scale rt
 #should be able to push out the mvp tonight 
 #can make a channel with feature requests
-
-
+#next i need to check if the discord works
 '''
 self.messages = [
             {
@@ -53,20 +50,15 @@ class Personality():
         self.chat()
         
     def chat(self):
-        #get the value from the json file prompts.json where the key is equals to self.name
         with open('prompts.json') as f:
             data = json.load(f)
-
         value = data[self.type]
-        #insert for {name}, {age} in value self.name, self.age etc..
         value = value.replace('{name}', self.name)
         value = value.replace('{age}', self.age)
         value = value.replace("{gender}", self.gender)
         value = value.replace("{type}", self.type)
         value = value.replace("{user_name}", self.user_name)
         value = value.replace("{user_gender}", self.user_gender)
-        # Note: you need to be using OpenAI Python v0.27.0 for the code below to work
-        print("value which is used: ", value)
         openai.api_key = self.api_key
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -77,5 +69,5 @@ class Personality():
         )
         print(completion.choices[0].message["content"])
         
-instance = Personality("manfred", "20", "male", "Architect", "alfred", "male")
+instance = Personality("manfred", "20", "male", "Activist", "alfred", "male")
         
