@@ -24,27 +24,58 @@ self.messages = [
         
 completion = openai.ChatCompletion.create(model=self.model, messages=messages)
 
+# Note: you need to be using OpenAI Python v0.27.0 for the code below to work
+import openai
+
+openai.ChatCompletion.create(
+  model="gpt-3.5-turbo",
+  messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Who won the world series in 2020?"},
+        {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
+        {"role": "user", "content": "Where was it played?"}
+    ]
+)
 
 '''
 import json
+import openai
 
 class Personality():
     def __init__(self, name, age, gender, type, user_name, user_gender):
         self.name = name
+        self.age = age
+        self.gender = gender
+        self.type = type
+        self.user_name = user_name
+        self.user_gender = user_gender
+        self.api_key = "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"
         self.chat()
-        
         
     def chat(self):
         #get the value from the json file prompts.json where the key is equals to self.name
         with open('prompts.json') as f:
             data = json.load(f)
-        value = data[self.name]
-        #insert at ht
-        print(value)
-        #defininbg openai chat here 
-        pass
-    
-    
+
+        value = data[self.type]
+        #insert for {name}, {age} in value self.name, self.age etc..
+        value = value.replace('{name}', self.name)
+        value = value.replace('{age}', self.age)
+        value = value.replace("{gender}", self.gender)
+        value = value.replace("{type}", self.type)
+        value = value.replace("{user_name}", self.user_name)
+        value = value.replace("{user_gender}", self.user_gender)
+        # Note: you need to be using OpenAI Python v0.27.0 for the code below to work
+        print("value which is used: ", value)
+        openai.api_key = self.api_key
+        completion = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                    {"role": "system", "content": value},
+                    {"role": "user", "content": "hey! how are you today?"},
+                ]
+        )
+        print(completion.choices[0].message["content"])
         
-        
+instance = Personality("manfred", "20", "male", "Architect", "alfred", "male")
         
