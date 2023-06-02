@@ -27,7 +27,11 @@ how can i do a slash command instead and helper for the required fields like
 
 - [ ] create channel for feature requests 
 - [ ] create a video where i demonstrate how its possible to create a bot
+- [ ] make this avatars from discord available on gather town
 
+- [ ] once i have 100 paying users i am going to buy the discord tshirt
+
+lets build the metaverse 
 
 what is the ideal outcome here? people go on discord and than they type "/chat" followed by the personality they want to chat with and than they get via dm a response from the personality type they wanna chat with. if they had in total triggered 5 messages from the bot they get a message that they first need to subscribe to further chat. they get forwarded to stripe where they have to pay 10€ for unlimited chats. can also add the function that they first would need to define the bot before start with chatting - type, age, gender and name 
 
