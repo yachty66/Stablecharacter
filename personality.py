@@ -48,7 +48,7 @@ class Personality():
         self.user_gender = user_gender
         self.api_key = "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"
         self.messages = []
-        self.chat()
+        #self.chat()
         
     def chat(self, message):
         with open('prompts.json') as f:
@@ -75,9 +75,7 @@ class Personality():
             )
             response = completion.choices[0].message["content"]
             self.messages.append({"role": "assistant", "content": response})  # Append assistant's response
-            #print(completion.choices[0].message["content"])
-        
-    
+            #print(completion.choices[0].message["content"])    
         
 #instance = Personality("manfred", "20", "male", "Activist", "alfred", "male")
         
