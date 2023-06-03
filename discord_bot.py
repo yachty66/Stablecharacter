@@ -2,9 +2,12 @@ import discord
 from discord import option
 from personality import Personality
 from discord import Embed
+from discord.ext import commands
 import openai
 
-bot = discord.Bot()
+intents = discord.Intents.all()
+bot = discord.Bot(intents=intents)
+#bot = commands.Bot(command_prefix="!")
 
 class ChatBot:
     def __init__(self):
@@ -49,7 +52,6 @@ class ChatBot:
             if ',' in user_name or ',' in bot_name:
                 await ctx.respond("Commas are not allowed in user or bot names.")
                 return
-
             user_gender_text = "Male" if user_gender == 1 else "Female"
             bot_gender_text = "Male" if bot_gender == 1 else "Female"
             response_text = f"Received your details! Name: {user_name}, Age: {user_age}, Gender: {user_gender_text}. I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality."
@@ -71,23 +73,25 @@ class ChatBot:
             await thread.send(first_message) 
             await thread.send(embed=embed)
             
-    def register_events(self):
-        #need to take  
-        @bot.event
-        async def on_message(message):            
-            if message.author == bot.user:
-                print("bot send message")
-                return
-            await message.channel.send("Hello World")
             
-    def message_response(self, messages):
-        #extract from user_name: hello, user_age: 33, user_gender: Male, bot_name: ssks, bot_age: 33, bot_gender: 1, bot_personality: INTJ
-        message_parts = messages.content.split(', ')
+    def message_response(self, message):
+        #this method is sometimes called with an empty message. why is this happening and what can i do?
+        #only gets triggered if the user is sending a message. currently always triggered
+        print("message:")
+        print(message)
+        print("message content:")
+        print(message.content)
+        message_parts = message.content.split(', ')
+        print("message parts :")
+        print(message_parts)
         values = {}
         for part in message_parts:
+            print("part:")
+            print(part)
             key, value = part.split(': ')
             values[key] = value
-
+        print("values:")
+        print(values)
         user_name = values['user_name']
         user_age = int(values['user_age'])
         user_gender = values['user_gender']
@@ -95,10 +99,17 @@ class ChatBot:
         bot_age = int(values['bot_age'])
         bot_gender = int(values['bot_gender'])
         bot_personality = values['bot_personality']
-        
 
-
-        print("message response")
+    def register_events(self):
+        #need to take  
+        @bot.event
+        async def on_message(message):            
+            if message.author == bot.user:
+                print("bot send message")
+                return
+            if message.content.strip() != "":
+                    self.message_response(message)
+            await message.channel.send("Hello World")
         
     def run(self):
         bot.run("MTExMjU1NTYzMjU0NjA0MTg5Ng.G8oodP.f7rccXDaTjm_jYLJpNoj1XFfYGknIG4KN1UD8U")
