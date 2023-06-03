@@ -44,6 +44,8 @@ i am creating a chatbot for discord. everytime the user is sending message i tak
 
 - [ ] 100 paying user i am going to incooperate my company in the usa
 - [ ] once i have 100 paying users i am going to buy the discord tshirt
+- [ ] outreach 
+    - [ ] create a lego version of all types 
 - [ ] create a MBTI twitter account
 - [ ] monetanisation:
     free version:

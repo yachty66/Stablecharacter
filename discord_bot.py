@@ -83,14 +83,15 @@ class ChatBot:
         for part in message_parts:
             key, value = part.split(': ')
             values[key] = value
-        #values for the request are saved. still need to figure how to handflmdf
         user_name = values['user_name']
-        user_age = int(values['user_age'])
+        user_age = values['user_age']
         user_gender = values['user_gender']
         bot_name = values['bot_name']
-        bot_age = int(values['bot_age'])
-        bot_gender = int(values['bot_gender'])
+        bot_age = values['bot_age']
+        bot_gender = values['bot_gender']
         bot_personality = values['bot_personality']
+        #need to get the whole last chat as input for the chat
+        #put the whole chat history content into a list and 
 
     def register_events(self):
         @bot.event
