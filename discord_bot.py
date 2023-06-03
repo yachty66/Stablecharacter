@@ -74,13 +74,13 @@ class ChatBot:
             await thread.send(embed=embed)
             
             
-    def message_response(self, message):
-        #this method is sometimes called with an empty message. why is this happening and what can i do?
-        #only gets triggered if the user is sending a message. currently always triggered
-        print("message:")
-        print(message)
-        print("message content:")
-        print(message.content)
+    async def message_response(self, message):
+        first_message = await message.channel.history(limit=1).flatten()
+        first_message = first_message[0]
+        print("first message:")
+        print(first_message)
+        
+        #need to send a request with first message and the last x messages
         message_parts = message.content.split(', ')
         print("message parts :")
         print(message_parts)
