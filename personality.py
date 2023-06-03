@@ -47,9 +47,10 @@ class Personality():
         self.user_name = user_name
         self.user_gender = user_gender
         self.api_key = "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"
+        self.messages = []
         self.chat()
         
-    def chat(self):
+    def chat(self, message):
         with open('prompts.json') as f:
             data = json.load(f)
         value = data[self.type]
@@ -59,15 +60,24 @@ class Personality():
         value = value.replace("{type}", self.type)
         value = value.replace("{user_name}", self.user_name)
         value = value.replace("{user_gender}", self.user_gender)
-        openai.api_key = self.api_key
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                    {"role": "system", "content": value},
-                    {"role": "user", "content": "hey! how are you today?"},
-                ]
-        )
-        print(completion.choices[0].message["content"])
         
-instance = Personality("manfred", "20", "male", "Activist", "alfred", "male")
+        if not self.messages:
+            self.messages = [
+                {"role": "system", "content": value},
+                {"role": "user", "content": message},
+            ]
+        else:
+            self.messages.append({"role": "user", "content": message})
+            openai.api_key = self.api_key
+            completion = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=self.messages
+            )
+            response = completion.choices[0].message["content"]
+            self.messages.append({"role": "assistant", "content": response})  # Append assistant's response
+            #print(completion.choices[0].message["content"])
+        
+    
+        
+#instance = Personality("manfred", "20", "male", "Activist", "alfred", "male")
         

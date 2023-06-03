@@ -1,5 +1,6 @@
 import discord
 from discord import option
+from personality import Personality
 
 class ChatBot:
     def __init__(self):
@@ -43,21 +44,18 @@ class ChatBot:
             user_gender_text = "Male" if user_gender == 1 else "Female"
             bot_gender_text = "Male" if bot_gender == 1 else "Female"
             await ctx.respond(f"Received your details! Name: {user_name}, Age: {user_age}, Gender: {user_gender_text}. I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality.")
-            
-            # Get the text channel where the command was invoked
+            bot = Personality(bot_name, bot_age, bot_gender_text, bot_personality, user_name, user_gender_text)
             text_channel = ctx.channel
-            
-            # Create a private thread in the text channel
             thread = await text_channel.create_thread(name=f"{user_name}-{bot_name}-chat", type=discord.ChannelType.private_thread)
-            
-            # Add the user to the private thread
             await thread.add_user(ctx.author)
+            #i am ready to send a message to the thread
+            first_message = f"Hey {user_name}!:)"
+            #send via thread
+            await thread.send(first_message) 
             
-            # Send a message to the private thread
-            await thread.send(f"Hi {user_name}! I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality. We can continue our conversation here.")
+            #await thread.send(f"Hi {user_name}! I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality. We can continue our conversation here.")
 
     def run(self):
-        #can make a list of my bot tokens and  than run the respective type
         self.bot.run("MTExMjU1NTYzMjU0NjA0MTg5Ng.G8oodP.f7rccXDaTjm_jYLJpNoj1XFfYGknIG4KN1UD8U")
 
 if __name__ == "__main__":

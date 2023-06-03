@@ -26,6 +26,8 @@ i am thinking if i than should rather create 32 unique bots (all 16 personalitie
 
 i am sending now a single dm to a user. how can i 
 
+cool than i will have the conversation there. need to embedd the chat their now
+
 
 
 
