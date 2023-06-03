@@ -43,10 +43,18 @@ class ChatBot:
             user_gender_text = "Male" if user_gender == 1 else "Female"
             bot_gender_text = "Male" if bot_gender == 1 else "Female"
             await ctx.respond(f"Received your details! Name: {user_name}, Age: {user_age}, Gender: {user_gender_text}. I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality.")
-            # Create DM with the user who used the slash command
-            user = ctx.author
-            dm_channel = await user.create_dm()
-            await dm_channel.send(f"Hi {user_name}! I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality. We can continue our conversation here.")
+            
+            # Get the text channel where the command was invoked
+            text_channel = ctx.channel
+            
+            # Create a private thread in the text channel
+            thread = await text_channel.create_thread(name=f"{user_name}-{bot_name}-chat", type=discord.ChannelType.private_thread)
+            
+            # Add the user to the private thread
+            await thread.add_user(ctx.author)
+            
+            # Send a message to the private thread
+            await thread.send(f"Hi {user_name}! I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality. We can continue our conversation here.")
 
     def run(self):
         #can make a list of my bot tokens and  than run the respective type
@@ -54,3 +62,4 @@ class ChatBot:
 
 if __name__ == "__main__":
     ChatBot()
+

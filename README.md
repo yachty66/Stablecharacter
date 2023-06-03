@@ -1,5 +1,7 @@
 # 16personalities_chat
 
+hey luke. i made yesterday a post in several subreddits  
+
 
 Setup & Onboarding: When a user first joins the server, use a dedicated onboarding channel to gather the user's information such as name and gender. This can be done through a bot that sends them a DM or asks in the onboarding channel itself. Make sure to explain what the information is being used for and how they can configure their own bot.
 
@@ -22,8 +24,22 @@ either i have 16 different bots where each bot has a static personality or i hav
 
 i am thinking if i than should rather create 32 unique bots (all 16 personalities twice because of gender) or if i should have one bot only (i still can give him the personality traits but the bot will not have the profile image of the respective mbti type). 
 
+i am sending now a single dm to a user. how can i 
 
-i can still make a single class i guess.
+
+
+
+free version:
+
+- 50 messages limit
+- inside thread
+
+paid version:
+
+- chat via dm
+- better model
+- unlimited messages
+- bot sends images
 
 ## tasks
 
@@ -34,6 +50,7 @@ i can still make a single class i guess.
 - [ ] create a video where i demonstrate how its possible to create a bot
 - [ ] make this avatars from discord available on gather town
 
+- [ ] 100 paying user i am going to incooperate my company in the usa
 - [ ] once i have 100 paying users i am going to buy the discord tshirt
 - [ ] create a MBTI twitter account
 
