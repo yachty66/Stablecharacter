@@ -26,22 +26,16 @@ i am thinking if i than should rather create 32 unique bots (all 16 personalitie
 
 i am sending now a single dm to a user. how can i 
 
-cool than i will have the conversation there. need to embedd the chat their now
+cool than i will have the conversation there. need to embedd the chat their now.
+
+every message from the bot inside the thread contains an embed with an image of the certain type. the first message is a normal message with all the details. 
+
+
+i am completely blown away from the opportunities you have if you only focus on the backend. literally all the sales bots can be represented via discord. the opportunities are enourmously. there is so much cash to make its incredible. holy cow.
 
 
 
 
-free version:
-
-- 50 messages limit
-- inside thread
-
-paid version:
-
-- chat via dm
-- better model
-- unlimited messages
-- bot sends images
 
 ## tasks
 
@@ -55,6 +49,18 @@ paid version:
 - [ ] 100 paying user i am going to incooperate my company in the usa
 - [ ] once i have 100 paying users i am going to buy the discord tshirt
 - [ ] create a MBTI twitter account
+- [ ] monetanisation:
+    free version:
+
+    - 50 messages limit
+    - inside thread
+
+    paid version:
+
+    - chat via dm
+    - better model
+    - unlimited messages
+    - bot sends images
 
 lets build the metaverse 
 

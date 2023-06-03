@@ -1,6 +1,7 @@
 import discord
 from discord import option
 from personality import Personality
+from discord import Embed
 
 bot = discord.Bot()
 
@@ -45,7 +46,9 @@ class ChatBot:
         async def chat_command(ctx, user_name: str, user_gender: int, user_age: int, bot_name: str, bot_age: int, bot_gender: int, bot_personality: str):
             user_gender_text = "Male" if user_gender == 1 else "Female"
             bot_gender_text = "Male" if bot_gender == 1 else "Female"
-            await ctx.respond(f"Received your details! Name: {user_name}, Age: {user_age}, Gender: {user_gender_text}. I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality.")
+            response_text = f"Received your details! Name: {user_name}, Age: {user_age}, Gender: {user_gender_text}. I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality."
+            embed = Embed(title="ChatBot", description=response_text, color=0x00ff00)
+            await ctx.respond(embed=embed)
             user_name = str(user_name)
             user_age = str(user_age)
             user_gender_text = str(user_gender_text)
@@ -57,24 +60,23 @@ class ChatBot:
             text_channel = ctx.channel
             thread = await text_channel.create_thread(name=f"{user_name}-{bot_name}-chat", type=discord.ChannelType.private_thread)
             await thread.add_user(ctx.author)
-            first_message = f"Hey {user_name}!:)"
-            bot_response = bot.chat(first_message)
+            first_message = f"user_name: {user_name}, user_age: {user_age}, user_gender: {user_gender_text}, bot_name: {bot_name}, bot_age: {bot_age}, bot_gender: {bot_gender}, bot_personality: {bot_personality}"
+            #bot_response = bot.chat(first_message)
             await thread.send(first_message) 
+            await thread.send(embed=embed)
             
     def register_events(self):
+        #
         @bot.event
         async def on_message(message):            
             if message.author == bot.user:
                 print("bot send message")
                 return
             await message.channel.send("Hello World")
-            #if isinstance(message.channel, discord.Thread) and message.channel.name.startswith(f"{message.author.name}-"):
-            #    await message.channel.send("Hello World")
         
     def run(self):
         bot.run("MTExMjU1NTYzMjU0NjA0MTg5Ng.G8oodP.f7rccXDaTjm_jYLJpNoj1XFfYGknIG4KN1UD8U")
         
-
 if __name__ == "__main__":
     ChatBot()
 
