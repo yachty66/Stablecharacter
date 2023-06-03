@@ -2,6 +2,7 @@ import discord
 from discord import option
 from personality import Personality
 from discord import Embed
+import openai
 
 bot = discord.Bot()
 
@@ -10,6 +11,7 @@ class ChatBot:
         self.register_commands()
         self.register_events()
         self.run()
+        self.api_key = "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"
 
     def register_commands(self):
         @bot.slash_command(name="chat", guild_ids=[1114168386105131138])
@@ -44,6 +46,10 @@ class ChatBot:
             discord.OptionChoice(name="ESFP", value="ESFP")
         ])
         async def chat_command(ctx, user_name: str, user_gender: int, user_age: int, bot_name: str, bot_age: int, bot_gender: int, bot_personality: str):
+            if ',' in user_name or ',' in bot_name:
+                await ctx.respond("Commas are not allowed in user or bot names.")
+                return
+
             user_gender_text = "Male" if user_gender == 1 else "Female"
             bot_gender_text = "Male" if bot_gender == 1 else "Female"
             response_text = f"Received your details! Name: {user_name}, Age: {user_age}, Gender: {user_gender_text}. I am {bot_name}, a {bot_age} year old {bot_gender_text} bot with a {bot_personality} personality."
@@ -66,13 +72,33 @@ class ChatBot:
             await thread.send(embed=embed)
             
     def register_events(self):
-        #
+        #need to take  
         @bot.event
         async def on_message(message):            
             if message.author == bot.user:
                 print("bot send message")
                 return
             await message.channel.send("Hello World")
+            
+    def message_response(self, messages):
+        #extract from user_name: hello, user_age: 33, user_gender: Male, bot_name: ssks, bot_age: 33, bot_gender: 1, bot_personality: INTJ
+        message_parts = messages.content.split(', ')
+        values = {}
+        for part in message_parts:
+            key, value = part.split(': ')
+            values[key] = value
+
+        user_name = values['user_name']
+        user_age = int(values['user_age'])
+        user_gender = values['user_gender']
+        bot_name = values['bot_name']
+        bot_age = int(values['bot_age'])
+        bot_gender = int(values['bot_gender'])
+        bot_personality = values['bot_personality']
+        
+
+
+        print("message response")
         
     def run(self):
         bot.run("MTExMjU1NTYzMjU0NjA0MTg5Ng.G8oodP.f7rccXDaTjm_jYLJpNoj1XFfYGknIG4KN1UD8U")
