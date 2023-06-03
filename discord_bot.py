@@ -11,6 +11,7 @@ bot = discord.Bot(intents=intents)
 
 class ChatBot:
     def __init__(self):
+        self.is_processing = False
         self.register_commands()
         self.register_events()
         self.run()
@@ -75,23 +76,14 @@ class ChatBot:
             
             
     async def message_response(self, message):
-        first_message = await message.channel.history(limit=1).flatten()
-        first_message = first_message[0]
-        print("first message:")
-        print(first_message)
-        
-        #need to send a request with first message and the last x messages
-        message_parts = message.content.split(', ')
-        print("message parts :")
-        print(message_parts)
+        second_oldest_messages = await message.channel.history(limit=2, oldest_first=True).flatten()
+        second_oldest_messages = second_oldest_messages[1]
+        message_parts = second_oldest_messages.content.split(', ')
         values = {}
         for part in message_parts:
-            print("part:")
-            print(part)
             key, value = part.split(': ')
             values[key] = value
-        print("values:")
-        print(values)
+        #values for the request are saved. still need to figure how to handflmdf
         user_name = values['user_name']
         user_age = int(values['user_age'])
         user_gender = values['user_gender']
@@ -101,15 +93,17 @@ class ChatBot:
         bot_personality = values['bot_personality']
 
     def register_events(self):
-        #need to take  
         @bot.event
         async def on_message(message):            
             if message.author == bot.user:
                 print("bot send message")
+                return    
+            if self.is_processing:  # Add this condition to check if the bot is processing a message
                 return
             if message.content.strip() != "":
-                    self.message_response(message)
-            await message.channel.send("Hello World")
+                self.is_processing = True  # Set the variable to True before processing the message
+                await self.message_response(message)
+                self.is_processing = False  # Set the variable back to False after processing the message
         
     def run(self):
         bot.run("MTExMjU1NTYzMjU0NjA0MTg5Ng.G8oodP.f7rccXDaTjm_jYLJpNoj1XFfYGknIG4KN1UD8U")

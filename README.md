@@ -1,8 +1,5 @@
 # 16personalities_chat
 
-hey luke. i made yesterday a post in several subreddits  
-
-
 Setup & Onboarding: When a user first joins the server, use a dedicated onboarding channel to gather the user's information such as name and gender. This can be done through a bot that sends them a DM or asks in the onboarding channel itself. Make sure to explain what the information is being used for and how they can configure their own bot.
 
 Bot Configuration: Next, users could go to a "bot configuration" channel where they can choose their bot's name, age, gender, and personality type. This channel should have a bot that can receive these parameters, maybe through specific commands.
@@ -33,8 +30,7 @@ every message from the bot inside the thread contains an embed with an image of 
 
 i am completely blown away from the opportunities you have if you only focus on the backend. literally all the sales bots can be represented via discord. the opportunities are enourmously. there is so much cash to make its incredible. holy cow.
 
-
-
+i am creating a chatbot for discord. everytime the user is sending message i take the whole chathistory and send it to openai to generate an response. in the meanwhile the user can send another message which can be confusing. how can i handle this problem?
 
 
 ## tasks
