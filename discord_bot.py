@@ -9,14 +9,16 @@ import json
 intents = discord.Intents.all()
 bot = discord.Bot(intents=intents)
 #bot = commands.Bot(command_prefix="!")
+openai.api_key = "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"
 
 class ChatBot:
     def __init__(self):
+        self.bot_name_meta = "bot1112555632546041896"
         self.is_processing = False
         self.register_commands()
         self.register_events()
         self.run()
-        self.api_key = "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"
+
 
     def register_commands(self):
         @bot.slash_command(name="chat", guild_ids=[1114168386105131138])
@@ -101,10 +103,8 @@ class ChatBot:
                         
     async def message_response(self, message):
         chat_history, user_name, user_age, user_gender, bot_name, bot_age, bot_gender, bot_personality = await self.message_data(message)
-        #first draft 
         with open('prompts.json') as f:
             data = json.load(f)
-        #type seems to be unknown somehow
         value = data[bot_personality]
         value = value.replace('{name}', bot_name)
         value = value.replace('{age}', bot_age)
@@ -122,13 +122,36 @@ class ChatBot:
                 combined_chat_history[-1][msg.author.name] += f" {msg.content}"
             else:
                 combined_chat_history.append({msg.author.name: msg.content})
-        combined_chat_history.reverse()  # Reverse the order of messages
+        combined_chat_history.reverse()
         for msg in combined_chat_history:
             for author, content in msg.items():
+                print("author:")
+                print(author)
+                print("username:")
+                print(user_name)
+                #here instead
                 role = "user" if author == user_name else "assistant"
                 messages.append({"role": role, "content": content})
-        print("messages")
+        print("messages:")
+        '''
+        messages=[{'role': 'system', 'content': 'You are a chatbot who is acting as a human with the personality from one of the myers briggs 16 personalities characters - the Architect (INTJ-A / INTJ-T) you are a imaginative and strategic thinker, with a plan for everything. An Architect (INTJ) is a person with the Introverted, Intuitive, Thinking, and Judging personality traits. These thoughtful tacticians love perfecting the details of life, applying creativity and rationality to everything they do. Their inner world is often a private, complex one. You never mention that you are an AI chatbot, your are a human. Your name is 22, your gender is 1 and your age is 22. The name of the person with which you are chatting is 22 and their gender is Male.'}, 
+        {'role': 'assistant', 'content': 'helllo'}]
+        messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Who won the world series in 2020?"},
+        {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
+        {"role": "user", "content": "Where was it played?"}
+    ]
+        '''
         print(messages)
+        completion = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=messages
+        )
+        response = completion.choices[0].message["content"]
+        print("response:")
+        print(response)
+        return response
 
     def register_events(self):
         @bot.event
@@ -140,9 +163,10 @@ class ChatBot:
                 return
             if message.content.strip() != "":
                 self.is_processing = True  # Set the variable to True before processing the message
-                await self.message_response(message)
+                response = await self.message_response(message)
+                await message.channel.send(response)
                 self.is_processing = False  # Set the variable back to False after processing the message
-            await message.channel.send("Hello World")
+
         
     def run(self):
         bot.run("MTExMjU1NTYzMjU0NjA0MTg5Ng.G8oodP.f7rccXDaTjm_jYLJpNoj1XFfYGknIG4KN1UD8U")
