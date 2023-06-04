@@ -73,11 +73,10 @@ class ChatBot:
             #bot_response = bot.chat(first_message)
             await thread.send(first_message) 
             await thread.send(embed=embed)
-            
-            
+                        
     async def message_response(self, message):
-        second_oldest_messages = await message.channel.history(limit=2, oldest_first=True).flatten()
-        second_oldest_messages = second_oldest_messages[1]
+        chat_history = await message.channel.history().flatten()
+        second_oldest_messages = chat_history[-2:]
         message_parts = second_oldest_messages.content.split(', ')
         values = {}
         for part in message_parts:
@@ -90,8 +89,14 @@ class ChatBot:
         bot_age = values['bot_age']
         bot_gender = values['bot_gender']
         bot_personality = values['bot_personality']
-        #need to get the whole last chat as input for the chat
-        #put the whole chat history content into a list and 
+        chat_history = await message.channel.history(limit=100).flatten()
+        chat_list = []
+        for msg in chat_history:
+            chat_list.append({msg.author.name: msg.content})
+        print("chat list:")
+        print(chat_list)
+        #looks like [{'MaxHager': 'drei'}, {'bot1112555632546041896': 'Hello World'}, {'MaxHager': 'drei'}, {'bot1112555632546041896': 'Hello World'}, {'MaxHager': 'drei'}, {'bot1112555632546041896': 'Hello World'}, {'MaxHager': 'zwei'}, {'bot1112555632546041896': 'Hello World'}, {'MaxHager': 'hello'}, {'bot1112555632546041896': ''}, {'bot1112555632546041896': 'user_name: 333, user_age: 33, user_gender: Male, bot_name: 33, bot_age: 33, bot_gender: 1, bot_personality: INTJ'}, {'bot1112555632546041896': ''}]
+    
 
     def register_events(self):
         @bot.event
@@ -105,6 +110,7 @@ class ChatBot:
                 self.is_processing = True  # Set the variable to True before processing the message
                 await self.message_response(message)
                 self.is_processing = False  # Set the variable back to False after processing the message
+            await message.channel.send("Hello World")
         
     def run(self):
         bot.run("MTExMjU1NTYzMjU0NjA0MTg5Ng.G8oodP.f7rccXDaTjm_jYLJpNoj1XFfYGknIG4KN1UD8U")
