@@ -15,6 +15,8 @@ class ChatBot:
     def __init__(self):
         self.bot_name_meta = "bot1112555632546041896"
         self.is_processing = False
+        self.bot_gender = ""
+        self.bot_mbti = ""
         self.register_commands()
         self.register_events()
         self.run()
@@ -99,6 +101,8 @@ class ChatBot:
                         
     async def message_response(self, message):
         chat_history, user_name, user_age, user_gender, bot_name, bot_age, bot_gender, bot_personality = await self.message_data(message)
+        self.bot_gender = bot_gender
+        self.bot_mbti = bot_personality
         with open('prompts.json') as f:
             data = json.load(f)
         value = data[bot_personality]
@@ -141,7 +145,11 @@ class ChatBot:
             if message.content.strip() != "":
                 self.is_processing = True  # Set the variable to True before processing the message
                 response = await self.message_response(message)
-                await message.channel.send(response)
+                #response needs to be send via embed
+                embed_response = Embed(description=response, color=0x00ff00)
+                image_url = f"images_{self.bot_gender}s/{self.bot_mbti}.png"  # Replace with the desired image URL
+                embed_response.set_image(url=image_url)
+                await message.channel.send(embed=embed_response)
                 self.is_processing = False  # Set the variable back to False after processing the message
         
     def run(self):

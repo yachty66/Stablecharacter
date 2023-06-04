@@ -32,15 +32,19 @@ i am completely blown away from the opportunities you have if you only focus on 
 
 i am creating a chatbot for discord. everytime the user is sending message i take the whole chathistory and send it to openai to generate an response. in the meanwhile the user can send another message which can be confusing. how can i handle this problem?
 
-next step is to a either create embed or to chat and test around the different characters
+next step is to a either create embed or to chat and test around the different characters.
 
+how does the embedd need to look like?
 
 ## tasks
 
-- [ ] create all the different personality types
+- [x] create all the different personality types
 - [ ] create images for all the personality types
 - [ ] make beautifoul embed 
-- [ ] make embed be send inside thread 
+- [ ] make embed be send inside thread
+    - [ ] color according to type
+    - [ ] image
+    - [ ] message
 
 
 - [ ] create channel for feature requests 

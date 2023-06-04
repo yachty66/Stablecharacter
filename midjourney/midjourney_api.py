@@ -139,8 +139,8 @@ class MidjourneyApi():
                 image_response = requests.get(image_url)
                 a = urlparse(image_url)
                 image_name = os.path.basename(a.path)
-                self.image_path_str = f"images/{image_name}"
-                with open(f"images/{image_name}", "wb") as file:
+                self.image_path_str = f"midjourney/images_males/{image_name}"
+                with open(f"images_males/{image_name}", "wb") as file:
                     file.write(image_response.content)
                 break
             except:
