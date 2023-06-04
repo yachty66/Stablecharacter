@@ -4,6 +4,7 @@ from personality import Personality
 from discord import Embed
 from discord.ext import commands
 import openai
+import json
 
 intents = discord.Intents.all()
 bot = discord.Bot(intents=intents)
@@ -73,10 +74,14 @@ class ChatBot:
             #bot_response = bot.chat(first_message)
             await thread.send(first_message) 
             await thread.send(embed=embed)
-                        
-    async def message_response(self, message):
+    
+    async def message_data(self, message):
         chat_history = await message.channel.history().flatten()
-        second_oldest_messages = chat_history[-2:]
+        second_oldest_messages = chat_history[-2:][0]
+        print("chat history:")
+        print(chat_history)
+        print("second oldest messages:")
+        print(second_oldest_messages.content)
         message_parts = second_oldest_messages.content.split(', ')
         values = {}
         for part in message_parts:
@@ -89,14 +94,41 @@ class ChatBot:
         bot_age = values['bot_age']
         bot_gender = values['bot_gender']
         bot_personality = values['bot_personality']
-        chat_history = await message.channel.history(limit=100).flatten()
         chat_list = []
         for msg in chat_history:
             chat_list.append({msg.author.name: msg.content})
-        print("chat list:")
-        print(chat_list)
-        #looks like [{'MaxHager': 'drei'}, {'bot1112555632546041896': 'Hello World'}, {'MaxHager': 'drei'}, {'bot1112555632546041896': 'Hello World'}, {'MaxHager': 'drei'}, {'bot1112555632546041896': 'Hello World'}, {'MaxHager': 'zwei'}, {'bot1112555632546041896': 'Hello World'}, {'MaxHager': 'hello'}, {'bot1112555632546041896': ''}, {'bot1112555632546041896': 'user_name: 333, user_age: 33, user_gender: Male, bot_name: 33, bot_age: 33, bot_gender: 1, bot_personality: INTJ'}, {'bot1112555632546041896': ''}]
-    
+        return chat_history, user_name, user_age, user_gender, bot_name, bot_age, bot_gender, bot_personality
+                        
+    async def message_response(self, message):
+        chat_history, user_name, user_age, user_gender, bot_name, bot_age, bot_gender, bot_personality = await self.message_data(message)
+        #first draft 
+        with open('prompts.json') as f:
+            data = json.load(f)
+        #type seems to be unknown somehow
+        value = data[bot_personality]
+        value = value.replace('{name}', bot_name)
+        value = value.replace('{age}', bot_age)
+        value = value.replace("{gender}", bot_gender)
+        value = value.replace("{type}", bot_personality)
+        value = value.replace("{user_name}", user_name)
+        value = value.replace("{user_gender}", user_gender)
+        messages = [
+            {"role": "system", "content": value},
+        ]
+        chat_history = chat_history[:-3]
+        combined_chat_history = []
+        for i, msg in enumerate(chat_history):
+            if i > 0 and msg.author == chat_history[i - 1].author:
+                combined_chat_history[-1][msg.author.name] += f" {msg.content}"
+            else:
+                combined_chat_history.append({msg.author.name: msg.content})
+        combined_chat_history.reverse()  # Reverse the order of messages
+        for msg in combined_chat_history:
+            for author, content in msg.items():
+                role = "user" if author == user_name else "assistant"
+                messages.append({"role": role, "content": content})
+        print("messages")
+        print(messages)
 
     def register_events(self):
         @bot.event

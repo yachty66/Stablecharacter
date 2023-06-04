@@ -33,6 +33,8 @@ i am completely blown away from the opportunities you have if you only focus on 
 i am creating a chatbot for discord. everytime the user is sending message i take the whole chathistory and send it to openai to generate an response. in the meanwhile the user can send another message which can be confusing. how can i handle this problem?
 
 
+
+
 ## tasks
 
 
