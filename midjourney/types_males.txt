@@ -1,16 +1,3 @@
-Architect, INTJ-A / INTJ-T, Imaginative and strategic thinkers, with a plan for everything, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Logician, INTP-A / INTP-T, Innovative inventors with an unquenchable thirst for knowledge, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Commander, ENTJ-A / ENTJ-T, Bold, imaginative and strong-willed leaders, always finding a way – or making one, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Debater, ENTP-A / ENTP-T, Smart and curious thinkers who cannot resist an intellectual challenge, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Advocate, INFJ-A / INFJ-T, Quiet and mystical, yet very inspiring and tireless idealists, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Mediator, INFP-A / INFP-T, Poetic, kind and altruistic people, always eager to help a good cause, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Protagonist, ENFJ-A / ENFJ-T, Charismatic and inspiring leaders, able to mesmerize their listeners, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Campaigner, ENFP-A / ENFP-T, Enthusiastic, creative and sociable free spirits, who can always find a reason to smile, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Logistician, ISTJ-A / ISTJ-T, Practical and fact-minded individuals, whose reliability cannot be doubted, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Defender, ISFJ-A / ISFJ-T, Very dedicated and warm protectors, always ready to defend their loved ones, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Executive, ESTJ-A / ESTJ-T, Excellent administrators, unsurpassed at managing things – or people, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Consul, ESFJ-A / ESFJ-T, Extraordinarily caring, social and popular people, always eager to help, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Virtuoso, ISTP-A / ISTP-T, Bold and practical experimenters, masters of all kinds of tools, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Adventurer, ISFP-A / ISFP-T, Flexible and charming artists, always ready to explore and experience something new, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Entrepreneur, ESTP-A / ESTP-T, Smart, energetic and very perceptive people, who truly enjoy living on the edge, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
-Entertainer, ESFP-A / ESFP-T, Spontaneous, energetic and enthusiastic people – life is never boring around them, hyper realistic portrait photography, male, face, wide shot, natural lighting, kodak portra 800, 105 mm f1. 8, 32k 
+version https://git-lfs.github.com/spec/v1
+oid sha256:27ab2142864986c149bd9af6ef13a30d6c20075248d1c693095b6c7e2ec46e2e
+size 3496

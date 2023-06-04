@@ -1,9 +1,3 @@
-from midjourney_api import MidjourneyApi
-
-if __name__ == '__main__':
-    #read  each line  from types.txt and store each line as itemn in list - without \n
-    with open('types_males.txt') as f:   
-        types = f.read().splitlines()
-    for i in range(len(types)):
-        midjourney_api = MidjourneyApi(types[i])
-        image_path=midjourney_api.image_path()
+version https://git-lfs.github.com/spec/v1
+oid sha256:fedeb9c850c6ebcc2fc67aaa8ec9162fc62c997a6af48666132b069d69ceb6f3
+size 364
