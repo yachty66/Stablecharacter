@@ -72,7 +72,7 @@ class ChatBot:
             bot_gender = str(bot_gender)
             bot_personality = str(bot_personality)
             text_channel = ctx.channel
-            thread = await text_channel.create_thread(name=f"{bot_personality}-{bot_gender}-chat", type=discord.ChannelType.private_thread)
+            thread = await text_channel.create_thread(name=f"{bot_personality}-{bot_gender}", type=discord.ChannelType.private_thread)
             await thread.add_user(ctx.author)
             first_message = f"user_name: {user_name}, user_age: {user_age}, user_gender: {user_gender}, bot_name: {bot_name}, bot_age: {bot_age}, bot_gender: {bot_gender}, bot_personality: {bot_personality}"
             await thread.send(first_message) 
@@ -111,6 +111,8 @@ class ChatBot:
         value = value.replace("{type}", bot_personality)
         value = value.replace("{user_name}", user_name)
         value = value.replace("{user_gender}", user_gender)
+        print("value")
+        print(value)
         messages = [
             {"role": "system", "content": value},
         ]
@@ -137,7 +139,6 @@ class ChatBot:
         @bot.event
         async def on_message(message):            
             if message.author == bot.user:
-                print("bot send message")
                 return
             user_id = message.author.id
             if user_id not in self.is_processing:

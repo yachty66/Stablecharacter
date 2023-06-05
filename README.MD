@@ -34,9 +34,13 @@ i am creating a chatbot for discord. everytime the user is sending message i tak
 
 next step is to a either create embed or to chat and test around the different characters
 
-what is 
+my goal is to have a chatbot who is pretty good in interactions with humans. he still 
 
-INFP_Male
+
+i am creating a chatbot. i give him some personality via system prompt. is that enough for having chatgpt act like this personality for the whole chat or do i need to add to each message another small prompt as an reminder to act like a certain personality? 
+
+
+
 
 ## tasks
 
@@ -45,9 +49,10 @@ INFP_Male
 - [x] make beautifoul embed 
 - [x] make embedd be send inside thread 
 - [x] fix problem that people can do slash command in one channel
-- [ ] make appropriate name for the thread who is created
+- [x] make appropriate name for the thread who is created
 - [ ] make chatbot more human (should never mention he is a computer)
-- [ ] 
+    - [ ] if openai in response send message "Hmm" instead 
+- [ ] channel design
 
 - [ ] create channel for feature requests 
 - [ ] create a video where i demonstrate how its possible to create a bot
