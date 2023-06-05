@@ -39,6 +39,14 @@ my goal is to have a chatbot who is pretty good in interactions with humans. he 
 
 i am creating a chatbot. i give him some personality via system prompt. is that enough for having chatgpt act like this personality for the whole chat or do i need to add to each message another small prompt as an reminder to act like a certain personality? 
 
+hey you just landed on the page 
+
+
+user directly land on the getting started page and from there they get instructed into how to use the app 
+
+
+i created a discord server where people can chat with bots which have the personality types from 16 personalities. if a person is joining the server the person lands in the getting started channel. their i want to give the user an introduction that she needs to go to the "chat-room" channel and there the person can send a slash command message to configure its own bot and after that a private thread with the specified bot opens up. please provide an appropriate message which i can pin in my getting started channel.
+
 
 
 
@@ -50,11 +58,11 @@ i am creating a chatbot. i give him some personality via system prompt. is that 
 - [x] make embedd be send inside thread 
 - [x] fix problem that people can do slash command in one channel
 - [x] make appropriate name for the thread who is created
-- [ ] make chatbot more human (should never mention he is a computer)
-    - [ ] if openai in response send message "Hmm" instead 
-- [ ] channel design
+- [x] make chatbot more human (should never mention he is a computer)
+    - [x] if openai in response send message "Hmm" instead 
+- [x] channel design
 
-- [ ] create channel for feature requests 
+- [x] create channel for feature requests 
 - [ ] create a video where i demonstrate how its possible to create a bot
 - [ ] make this avatars from discord available on gather town
 

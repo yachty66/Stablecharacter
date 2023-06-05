@@ -21,7 +21,7 @@ class ChatBot:
         self.run()
         
     def register_commands(self):
-        @bot.slash_command(name="chat", guild_ids=[1114168386105131138])
+        @bot.slash_command(name="chat", description="Start a chat with a personality type", guild_ids=[1114168386105131138])
         @option("user_name", str, description="Enter your name")
         @option("user_gender", int, description="Choose your gender", choices=[
             discord.OptionChoice(name="Male", value=1),
@@ -120,8 +120,6 @@ class ChatBot:
         value = value.replace("{type}", bot_personality)
         value = value.replace("{user_name}", user_name)
         value = value.replace("{user_gender}", user_gender)
-        print("value")
-        print(value)
         messages = [
             {"role": "system", "content": value},
         ]
@@ -165,8 +163,6 @@ class ChatBot:
                     image_map = json.load(img_map_file)
                 image_key = self.bot_mbti + "_" + self.bot_gender
                 image_url = image_map[image_key]
-                print("image url")
-                print(image_url)
                 embed_response.set_image(url=image_url)  
                 await message.channel.send(embed=embed_response)
                 self.is_processing[user_id] = False
