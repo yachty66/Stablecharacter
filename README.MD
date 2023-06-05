@@ -37,8 +37,8 @@ next step is to a either create embed or to chat and test around the different c
 
 ## tasks
 
-- [ ] create all the different personality types
-- [ ] create images for all the personality types
+- [x] create all the different personality types
+- [x] create images for all the personality types
 - [ ] make beautifoul embed 
 - [ ] make embedd be send inside thread 
 - [ ] fix problem that people can do slash command in one channel
@@ -68,6 +68,12 @@ next step is to a either create embed or to chat and test around the different c
 lets build the metaverse 
 
 what is the ideal outcome here? people go on discord and than they type "/chat" followed by the personality they want to chat with and than they get via dm a response from the personality type they wanna chat with. if they had in total triggered 5 messages from the bot they get a message that they first need to subscribe to further chat. they get forwarded to stripe where they have to pay 10€ for unlimited chats. can also add the function that they first would need to define the bot before start with chatting - type, age, gender and name 
+
+### later
+
+- [ ] make color of embed appropriate to p type
+
+
 
 
 i just need one personality class and a script for dealing with discord. the rest is an ease. 

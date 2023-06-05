@@ -14,7 +14,8 @@ openai.api_key = "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"
 class ChatBot:
     def __init__(self):
         self.bot_name_meta = "bot1112555632546041896"
-        self.is_processing = False
+        self.is_processing = {}
+        #self.is_processing = False
         self.bot_gender = ""
         self.bot_mbti = ""
         self.register_commands()
@@ -139,24 +140,28 @@ class ChatBot:
         async def on_message(message):            
             if message.author == bot.user:
                 print("bot send message")
-                return    
-            if self.is_processing:  # Add this condition to check if the bot is processing a message
                 return
+            user_id = message.author.id
+            if user_id not in self.is_processing:
+                self.is_processing[user_id] = False
+            
+            if self.is_processing[user_id]:   
+                return
+            
             if message.content.strip() != "":
-                self.is_processing = True  # Set the variable to True before processing the message
+                self.is_processing[user_id] = True
                 response = await self.message_response(message)
-                #response needs to be sent via embed
                 embed_response = Embed(description=response, color=0x00ff00)
-                image_url = f"images_{self.bot_gender}s/{self.bot_mbti}.png"  # Replace with the desired image URL
+                image_url = f"images_{self.bot_gender}s/{self.bot_mbti}.png"
                 with open("image_map.json") as img_map_file:
                     image_map = json.load(img_map_file)
                 image_key = self.bot_mbti + "_" + self.bot_gender
                 image_url = image_map[image_key]
                 print("image url")
                 print(image_url)
-                embed_response.set_image(url=image_url)  # Set the image size to 128x128
+                embed_response.set_image(url=image_url)  
                 await message.channel.send(embed=embed_response)
-                self.is_processing = False  # Set the variable back to False after processing the message
+                self.is_processing[user_id] = False
         
     def run(self):
         bot.run("MTExMjU1NTYzMjU0NjA0MTg5Ng.G8oodP.f7rccXDaTjm_jYLJpNoj1XFfYGknIG4KN1UD8U")
