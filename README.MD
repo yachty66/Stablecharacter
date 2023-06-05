@@ -34,6 +34,9 @@ i am creating a chatbot for discord. everytime the user is sending message i tak
 
 next step is to a either create embed or to chat and test around the different characters
 
+what is 
+
+INFP_Male
 
 ## tasks
 
@@ -41,7 +44,7 @@ next step is to a either create embed or to chat and test around the different c
 - [x] create images for all the personality types
 - [x] make beautifoul embed 
 - [x] make embedd be send inside thread 
-- [ ] fix problem that people can do slash command in one channel
+- [x] fix problem that people can do slash command in one channel
 - [ ] make appropriate name for the thread who is created
 - [ ] make chatbot more human (should never mention he is a computer)
 - [ ] 
