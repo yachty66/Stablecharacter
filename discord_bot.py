@@ -1,10 +1,10 @@
 import discord
 from discord import option
-from personality import Personality
 from discord import Embed
 from discord.ext import commands
 import openai
 import json
+
 
 intents = discord.Intents.all()
 bot = discord.Bot(intents=intents)
@@ -15,7 +15,6 @@ class ChatBot:
     def __init__(self):
         self.bot_name_meta = "bot1112555632546041896"
         self.is_processing = {}
-        #self.is_processing = False
         self.bot_gender = ""
         self.bot_mbti = ""
         self.register_commands()
@@ -71,7 +70,6 @@ class ChatBot:
             bot_age = str(bot_age)
             bot_gender = str(bot_gender)
             bot_personality = str(bot_personality)
-            bot = Personality(bot_name, bot_age, bot_gender, bot_personality, user_name, user_gender)
             text_channel = ctx.channel
             thread = await text_channel.create_thread(name=f"{user_name}-{bot_name}-chat", type=discord.ChannelType.private_thread)
             await thread.add_user(ctx.author)
