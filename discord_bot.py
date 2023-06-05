@@ -104,13 +104,11 @@ class ChatBot:
         mbti_personality = values['mbti_personality']
         chat_list = []
         for msg in reversed(chat_history):
-            print("content")
             if msg.embeds:
                 embed = msg.embeds[0]
                 content = embed.description
             else:
                 content = msg.content
-            print(content)
             chat_list.append({msg.author.name: content})
         return chat_list, user_name, user_age, user_gender, mbti_name, mbti_age, mbti_gender, mbti_personality
                         
@@ -131,9 +129,6 @@ class ChatBot:
             {"role": "system", "content": value},
         ]
         chat_history = chat_history[3:]
-        print("chat history -3")
-        print(chat_history)
-        #iter over 
         combined_chat_history = []
         for msg in chat_history:
             if combined_chat_history and list(msg.keys())[0] != "MBTI" and list(combined_chat_history[-1].keys())[0] != "MBTI":
@@ -145,40 +140,12 @@ class ChatBot:
             for author, content in msg.items():
                 role = "user" if author != "MBTI" else "assistant"
                 messages.append({"role": role, "content": content})
-
-        print("messages")
-        print(messages)
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=messages
         )
         response = completion.choices[0].message["content"]
         return response
-        
-        
-        
-        
-        
-        '''combined_chat_history = []
-        for i, msg in enumerate(chat_history):
-            if i > 0 and msg.author == chat_history[i - 1].author:
-                combined_chat_history[-1][msg.author.name] += f" {msg.content}"
-            else:
-                combined_chat_history.append({msg.author.name: msg.content})
-        combined_chat_history.reverse()
-        for msg in combined_chat_history:
-            for author, content in msg.items():
-                role = "user" if author == user_name else "assistant"
-                messages.append({"role": role, "content": content})
-                
-                
-                
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=messages
-        )
-        response = completion.choices[0].message["content"]
-        return response'''
 
     def register_events(self):
         @bot.event
