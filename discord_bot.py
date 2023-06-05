@@ -28,13 +28,13 @@ class ChatBot:
             discord.OptionChoice(name="Female", value=2)
         ])
         @option("user_age", int, description="Enter your age", min_value=18)
-        @option("bot_name", str, description="Enter bot's name")
-        @option("bot_age", int, description="Enter bot's age")
-        @option("bot_gender", int, description="Choose bot's gender", choices=[
+        @option("bot_name", str, description="Enter mbti's name")
+        @option("bot_age", int, description="Enter mbti's age")
+        @option("bot_gender", int, description="Choose mbti's gender", choices=[
             discord.OptionChoice(name="Male", value=1),
             discord.OptionChoice(name="Female", value=2)
         ])
-        @option("bot_personality", str, description="Choose bot's personality", choices=[
+        @option("bot_personality", str, description="Choose mbti's personality", choices=[
             discord.OptionChoice(name="INTJ", value="INTJ"),
             discord.OptionChoice(name="INTP", value="INTP"),
             discord.OptionChoice(name="ENTJ", value="ENTJ"),
@@ -62,7 +62,7 @@ class ChatBot:
                 return
             user_gender = "Male" if user_gender == 1 else "Female"
             bot_gender = "Male" if bot_gender == 1 else "Female"
-            response_text = f"Received your details! Name: {user_name}, Age: {user_age}, Gender: {user_gender}. I am {bot_name}, a {bot_age} year old {bot_gender} bot with a {bot_personality} personality."
+            response_text = f"Name: {user_name}, Age: {user_age}, Gender: {user_gender}. I am {bot_name}, a {bot_age} year old {bot_gender} mbti with a {bot_personality} personality."
             if "NT" in bot_personality:
                 self.color = 0x886199
             elif "NF" in bot_personality:
@@ -135,6 +135,8 @@ class ChatBot:
             for author, content in msg.items():
                 role = "user" if author == user_name else "assistant"
                 messages.append({"role": role, "content": content})
+        print("messages: ")
+        print(messages)
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=messages
