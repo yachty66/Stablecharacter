@@ -28,13 +28,13 @@ class ChatBot:
             discord.OptionChoice(name="Female", value=2)
         ])
         @option("user_age", int, description="Enter your age", min_value=18)
-        @option("bot_name", str, description="Enter mbti's name")
-        @option("bot_age", int, description="Enter mbti's age")
-        @option("bot_gender", int, description="Choose mbti's gender", choices=[
+        @option("mbti_name", str, description="Enter mbti's name")
+        @option("mbti_age", int, description="Enter mbti's age")
+        @option("mbti_gender", int, description="Choose mbti's gender", choices=[
             discord.OptionChoice(name="Male", value=1),
             discord.OptionChoice(name="Female", value=2)
         ])
-        @option("bot_personality", str, description="Choose mbti's personality", choices=[
+        @option("mbti_personality", str, description="Choose mbti's personality", choices=[
             discord.OptionChoice(name="INTJ", value="INTJ"),
             discord.OptionChoice(name="INTP", value="INTP"),
             discord.OptionChoice(name="ENTJ", value="ENTJ"),
