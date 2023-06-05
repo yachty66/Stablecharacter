@@ -1,0 +1,5 @@
+runtime: python311
+
+entrypoint: python3 discord_bot.py
+
+instance_class: F1

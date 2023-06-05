@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:df57f2e2d08693ce84da3fa45c6d319dbd7a8f70eb2a6a5702abb567a8c21bed
-size 246
+aiohttp==3.8.4
+aiosignal==1.3.1
+async-timeout==4.0.2
+attrs==23.1.0
+certifi==2023.5.7
+charset-normalizer==3.1.0
+discord-py-interactions==5.6.0
+discord-typings==0.6.0
+git+https://github.com/Rapptz/discord.py
+emoji==2.4.0
+frozenlist==1.3.3
+idna==3.4
+multidict==6.0.4
+openai==0.27.7
+git+https://github.com/Pycord-Development/pycord
+requests==2.31.0
+tomli==2.0.1
+tqdm==4.65.0
+typing_extensions==4.6.3
+urllib3==2.0.2
+yarl==1.9.2
