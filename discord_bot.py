@@ -1,5 +1,4 @@
 import discord
-print("Discord package location:", discord.__file__)
 from discord import option
 from personality import Personality
 from discord import Embed
