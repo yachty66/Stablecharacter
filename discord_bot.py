@@ -15,6 +15,7 @@ class ChatBot:
         self.is_processing = {}
         self.bot_gender = ""
         self.bot_mbti = ""
+        self.color = 0x000000
         self.register_commands()
         self.register_events()
         self.run()
@@ -62,7 +63,15 @@ class ChatBot:
             user_gender = "Male" if user_gender == 1 else "Female"
             bot_gender = "Male" if bot_gender == 1 else "Female"
             response_text = f"Received your details! Name: {user_name}, Age: {user_age}, Gender: {user_gender}. I am {bot_name}, a {bot_age} year old {bot_gender} bot with a {bot_personality} personality."
-            embed = Embed(title="ChatBot", description=response_text, color=0x00ff00)
+            if "NT" in bot_personality:
+                self.color = 0x886199
+            elif "NF" in bot_personality:
+                self.color = 0x32A474
+            elif "STP" in bot_personality or "SFP" in bot_personality:
+                self.color = 0xE4AE3A
+            else:
+                self.color = 0x4198B4
+            embed = Embed(title=f"{bot_personality}-{bot_gender}", description=response_text, color=self.color)
             await ctx.respond(embed=embed)
             user_name = str(user_name)
             user_age = str(user_age)
@@ -150,7 +159,7 @@ class ChatBot:
             if message.content.strip() != "":
                 self.is_processing[user_id] = True
                 response = await self.message_response(message)
-                embed_response = Embed(description=response, color=0x00ff00)
+                embed_response = Embed(description=response, color=self.color)
                 image_url = f"images_{self.bot_gender}s/{self.bot_mbti}.png"
                 with open("image_map.json") as img_map_file:
                     image_map = json.load(img_map_file)
