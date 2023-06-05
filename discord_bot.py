@@ -130,7 +130,7 @@ class ChatBot:
         messages = [
             {"role": "system", "content": value},
         ]
-        chat_history = chat_history[:-3]
+        chat_history = chat_history[3:]
         print("chat history -3")
         print(chat_history)
         #iter over 
