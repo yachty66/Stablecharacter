@@ -39,9 +39,12 @@ next step is to a either create embed or to chat and test around the different c
 
 - [x] create all the different personality types
 - [x] create images for all the personality types
-- [ ] make beautifoul embed 
-- [ ] make embedd be send inside thread 
+- [x] make beautifoul embed 
+- [x] make embedd be send inside thread 
 - [ ] fix problem that people can do slash command in one channel
+- [ ] make appropriate name for the thread who is created
+- [ ] make chatbot more human (should never mention he is a computer)
+- [ ] 
 
 - [ ] create channel for feature requests 
 - [ ] create a video where i demonstrate how its possible to create a bot

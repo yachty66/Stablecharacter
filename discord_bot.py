@@ -5,10 +5,8 @@ from discord.ext import commands
 import openai
 import json
 
-
 intents = discord.Intents.all()
 bot = discord.Bot(intents=intents)
-#bot = commands.Bot(command_prefix="!")
 openai.api_key = "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"
 
 class ChatBot:
@@ -20,8 +18,7 @@ class ChatBot:
         self.register_commands()
         self.register_events()
         self.run()
-
-
+        
     def register_commands(self):
         @bot.slash_command(name="chat", guild_ids=[1114168386105131138])
         @option("user_name", str, description="Enter your name")
@@ -54,7 +51,11 @@ class ChatBot:
             discord.OptionChoice(name="ESTP", value="ESTP"),
             discord.OptionChoice(name="ESFP", value="ESFP")
         ])
-        async def chat_command(ctx, user_name: str, user_gender: int, user_age: int, bot_name: str, bot_age: int, bot_gender: int, bot_personality: str):
+        async def chat_command(ctx, user_name: str, user_gender: int, user_age: int, bot_name: str, bot_age: int, bot_gender: int, bot_personality: str):            
+            if ctx.channel.name != "chat-room":
+                chat_room_channel = discord.utils.get(ctx.guild.channels, name="chat-room")
+                await ctx.respond(f"This command can only be used in the {chat_room_channel.mention} channel.")
+                return
             if ',' in user_name or ',' in bot_name:
                 await ctx.respond("Commas are not allowed in user or bot names.")
                 return
@@ -74,7 +75,6 @@ class ChatBot:
             thread = await text_channel.create_thread(name=f"{user_name}-{bot_name}-chat", type=discord.ChannelType.private_thread)
             await thread.add_user(ctx.author)
             first_message = f"user_name: {user_name}, user_age: {user_age}, user_gender: {user_gender}, bot_name: {bot_name}, bot_age: {bot_age}, bot_gender: {bot_gender}, bot_personality: {bot_personality}"
-            #bot_response = bot.chat(first_message)
             await thread.send(first_message) 
             await thread.send(embed=embed)
     
