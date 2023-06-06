@@ -153,11 +153,8 @@ class ChatBot:
         async def on_message(message):            
             if message.author == bot.user:
                 return
-            print("message received in register event")
             if not isinstance(message.channel, discord.Thread):
-                print("message is not in thread")
                 return
-            
             user_id = message.author.id
             if user_id not in self.is_processing:
                 self.is_processing[user_id] = False
@@ -165,7 +162,6 @@ class ChatBot:
                 return
             if message.content.strip() != "":
                 self.is_processing[user_id] = True
-                print("message will be processes")
                 response = await self.message_response(message)
                 embed_response = Embed(description=response, color=self.color)
                 image_url = f"images_{self.mbti_gender}s/{self.bot_mbti}.png"
