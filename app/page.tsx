@@ -1,10 +1,32 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { RefreshCcw, Settings, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useState, FormEvent } from "react";
+
+interface Message {
+  text: string;
+  isUser: boolean;
+}
 
 export default function MessagingInterface() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (inputValue.trim()) {
+      // Add user message
+      setMessages([...messages, { text: inputValue, isUser: true }]);
+      // Add system response
+      setMessages((prev) => [...prev, { text: "hello world", isUser: false }]);
+      setInputValue("");
+    }
+  };
+
   return (
     <div className="flex justify-center bg-background min-h-screen">
       <div className="flex flex-col w-full max-w-3xl">
@@ -66,33 +88,48 @@ export default function MessagingInterface() {
             Today 3:00 AM
           </div>
 
-          <div className="flex items-start gap-2 max-w-[85%]">
-            <Image
-              src="/placeholder.svg"
-              alt="Profile"
-              width={32}
-              height={32}
-              className="rounded-full mt-1"
-            />
-            <div className="bg-muted p-3 rounded-lg">
-              <p className="text-sm">
-                fuck my life, really. it's like i'm watching myself ruin
-                everything and can't do shit about it
-              </p>
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex items-start gap-2 mb-4 ${
+                message.isUser ? "ml-auto flex-row-reverse" : ""
+              } max-w-[85%]`}
+            >
+              <Image
+                src="/placeholder.svg"
+                alt="Profile"
+                width={32}
+                height={32}
+                className="rounded-full mt-1"
+              />
+              <div
+                className={`p-3 rounded-lg ${
+                  message.isUser
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted"
+                }`}
+              >
+                <p className="text-sm">{message.text}</p>
+              </div>
             </div>
-          </div>
+          ))}
         </main>
 
         {/* Footer */}
         <footer className="border-t">
-          <div className="p-4">
+          <form onSubmit={handleSubmit} className="p-4">
             <div className="flex items-center gap-2">
-              <Input placeholder="Message" className="bg-muted" />
-              <Button size="icon" variant="ghost">
+              <Input
+                placeholder="Message"
+                className="bg-muted"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+              <Button type="submit" size="icon" variant="ghost">
                 <Send className="h-5 w-5 text-muted-foreground" />
               </Button>
             </div>
-          </div>
+          </form>
 
           <div className="flex justify-between items-center px-4 py-2 text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
