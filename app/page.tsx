@@ -16,13 +16,32 @@ export default function MessagingInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
       // Add user message
-      setMessages([...messages, { text: inputValue, isUser: true }]);
-      // Add system response
-      setMessages((prev) => [...prev, { text: "hello world", isUser: false }]);
+      const userMessage = { text: inputValue, isUser: true };
+      setMessages((prev) => [...prev, userMessage]);
+
+      try {
+        // Send the entire message history to the backend
+        const response = await fetch("/api/py/message_response", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify([...messages, userMessage]),
+        });
+
+        const data = await response.json();
+
+        // Add system response
+        setMessages((prev) => [...prev, { text: data.message, isUser: false }]);
+      } catch (error) {
+        console.error("Error:", error);
+        // Handle error appropriately
+      }
+
       setInputValue("");
     }
   };
