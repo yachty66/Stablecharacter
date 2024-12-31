@@ -111,12 +111,14 @@ export default function MessagingInterface() {
   // Then use it in useState
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
-  const [selectedCharacter, setSelectedCharacter] =
-    useState<string>("intp_female");
+  const [selectedCharacter, setSelectedCharacter] = useState<string | null>(
+    null
+  );
   const [showCopied, setShowCopied] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const supabase = createClientComponentClient();
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getUser = async () => {
@@ -156,7 +158,8 @@ export default function MessagingInterface() {
   }, []);
 
   // Helper function to get character group
-  const getCharacterGroup = (charKey: string) => {
+  const getCharacterGroup = (charKey: string | null) => {
+    if (!charKey) return "analysts";
     const type = charKey.substring(0, 4); // Get XXXX from XXXX_gender
     switch (type) {
       case "intj":
@@ -185,14 +188,15 @@ export default function MessagingInterface() {
   };
 
   // Get current character
-  const getCurrentCharacter = (charKey: string) => {
+  const getCurrentCharacter = (charKey: string | null) => {
+    if (!charKey) return null;
     const group = getCharacterGroup(charKey);
     return characterGroups[group].characters[charKey];
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim()) {
+    if (inputValue.trim() && selectedCharacter) {
       // Check if user has reached the message limit
       if (messages.length >= 4 && !user) {
         setShowSettings(true);
@@ -272,114 +276,124 @@ export default function MessagingInterface() {
       <div className="flex flex-col w-full max-w-3xl">
         {/* Header */}
         <header className="flex items-center justify-between px-4 py-2 border-b">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              setSelectedCharacter(getRandomCharacter());
-              setMessages([]); // Clear all messages
-            }}
-          >
-            <RefreshCcw className="h-5 w-5 text-muted-foreground" />
-          </Button>
+          {selectedCharacter && (
+            <>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setSelectedCharacter(getRandomCharacter());
+                  setMessages([]); // Clear all messages
+                }}
+              >
+                <RefreshCcw className="h-5 w-5 text-muted-foreground" />
+              </Button>
 
-          <div className="flex items-center gap-4">
-            <Select
-              value={selectedCharacter}
-              onValueChange={setSelectedCharacter}
-            >
-              <SelectTrigger className="w-[200px]">
-                <SelectValue>
-                  {selectedCharacter && (
-                    <span>
-                      {
-                        characterGroups[getCharacterGroup(selectedCharacter)]
-                          .characters[selectedCharacter].name
-                      }{" "}
-                      ({selectedCharacter.split("_")[0].toUpperCase()})
+              <div className="flex items-center gap-4">
+                <Select
+                  value={selectedCharacter}
+                  onValueChange={setSelectedCharacter}
+                >
+                  <SelectTrigger className="w-[200px]">
+                    <SelectValue>
+                      {selectedCharacter && (
+                        <span>
+                          {
+                            characterGroups[
+                              getCharacterGroup(selectedCharacter)
+                            ].characters[selectedCharacter].name
+                          }{" "}
+                          ({selectedCharacter.split("_")[0].toUpperCase()})
+                        </span>
+                      )}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(characterGroups).map(
+                      ([groupKey, group]) => (
+                        <SelectGroup key={groupKey}>
+                          <SelectLabel>{group.title}</SelectLabel>
+                          {Object.entries(group.characters).map(
+                            ([charKey, char]) => (
+                              <SelectItem key={charKey} value={charKey}>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                                    <Image
+                                      src={char.avatar}
+                                      alt={char.name}
+                                      width={32}
+                                      height={32}
+                                      className="object-cover"
+                                    />
+                                  </div>
+                                  <span>
+                                    {char.name} (
+                                    {charKey.split("_")[0].toUpperCase()})
+                                  </span>
+                                </div>
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectGroup>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+                {getCurrentCharacter(selectedCharacter)?.avatar && (
+                  <div className="w-10 h-10 rounded-full overflow-hidden">
+                    <Image
+                      src={getCurrentCharacter(selectedCharacter).avatar}
+                      alt={getCurrentCharacter(selectedCharacter).name}
+                      width={40}
+                      height={40}
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleShare}
+                  className="relative"
+                >
+                  <span className="sr-only">Share</span>
+                  {showCopied ? (
+                    <Check className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <Share2 className="h-5 w-5 text-muted-foreground" />
+                  )}
+                  {showCopied && (
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-popover px-2 py-1 rounded shadow-sm whitespace-nowrap">
+                      Copied to clipboard!
                     </span>
                   )}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(characterGroups).map(([groupKey, group]) => (
-                  <SelectGroup key={groupKey}>
-                    <SelectLabel>{group.title}</SelectLabel>
-                    {Object.entries(group.characters).map(([charKey, char]) => (
-                      <SelectItem key={charKey} value={charKey}>
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                            <Image
-                              src={char.avatar}
-                              alt={char.name}
-                              width={32}
-                              height={32}
-                              className="object-cover"
-                            />
-                          </div>
-                          <span>
-                            {char.name} ({charKey.split("_")[0].toUpperCase()})
-                          </span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                ))}
-              </SelectContent>
-            </Select>
-            {getCurrentCharacter(selectedCharacter).avatar ? (
-              <div className="w-10 h-10 rounded-full overflow-hidden">
-                <Image
-                  src={getCurrentCharacter(selectedCharacter).avatar}
-                  alt={getCurrentCharacter(selectedCharacter).name}
-                  width={40}
-                  height={40}
-                  className="object-cover"
-                />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowSettings(true)}
+                >
+                  <Settings className="h-5 w-5 text-muted-foreground" />
+                </Button>
               </div>
-            ) : null}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleShare}
-              className="relative"
-            >
-              <span className="sr-only">Share</span>
-              {showCopied ? (
-                <Check className="h-5 w-5 text-green-500" />
-              ) : (
-                <Share2 className="h-5 w-5 text-muted-foreground" />
-              )}
-              {showCopied && (
-                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-popover px-2 py-1 rounded shadow-sm whitespace-nowrap">
-                  Copied to clipboard!
-                </span>
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowSettings(true)}
-            >
-              <Settings className="h-5 w-5 text-muted-foreground" />
-            </Button>
-          </div>
+            </>
+          )}
         </header>
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-4">
-          {messages.length === 0 ? (
+          {messages.length === 0 && selectedCharacter ? (
             <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
               <div className="max-w-md space-y-2">
                 <h2 className="text-2xl font-semibold text-foreground">
-                  Chat with {getCurrentCharacter(selectedCharacter).name}
+                  Chat with {getCurrentCharacter(selectedCharacter)?.name}
                 </h2>
                 <p>
                   Start a conversation with your MBTI personality match. Just
-                  type your message below and click send.
+                  type your message below and press enter.
                 </p>
                 <div className="flex items-center justify-center gap-2 text-sm">
                   <Button
@@ -412,15 +426,21 @@ export default function MessagingInterface() {
                     />
                   </div>
                 ) : (
-                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                    <Image
-                      src={getCurrentCharacter(selectedCharacter).avatar}
-                      alt={getCurrentCharacter(selectedCharacter).name}
-                      width={40}
-                      height={40}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
+                  selectedCharacter && (
+                    <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                      <Image
+                        src={
+                          getCurrentCharacter(selectedCharacter)?.avatar || ""
+                        }
+                        alt={
+                          getCurrentCharacter(selectedCharacter)?.name || "AI"
+                        }
+                        width={40}
+                        height={40}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  )
                 )}
                 <div
                   className={`p-3 rounded-lg ${
