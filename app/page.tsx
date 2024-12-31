@@ -16,6 +16,13 @@ import {
   SelectSeparator,
   SelectGroup,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 interface Message {
   text: string;
@@ -115,6 +122,19 @@ export default function MessagingInterface() {
   const [selectedCharacter, setSelectedCharacter] =
     useState<string>("intp_female");
   const [showCopied, setShowCopied] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const supabase = createClientComponentClient();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+  }, []);
 
   // Update with random character after mount
   useEffect(() => {
@@ -292,7 +312,11 @@ export default function MessagingInterface() {
                 </span>
               )}
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowSettings(true)}
+            >
               <Settings className="h-5 w-5 text-muted-foreground" />
             </Button>
           </div>
@@ -363,6 +387,58 @@ export default function MessagingInterface() {
           </div>
         </footer>
       </div>
+
+      <Dialog open={showSettings} onOpenChange={setShowSettings}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Settings</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-4">
+            {user ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={user.user_metadata?.avatar_url || "/placeholder.svg"}
+                    alt={user.user_metadata?.full_name || "Profile"}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                  <div>
+                    <p className="font-medium">
+                      {user.user_metadata?.full_name}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => supabase.auth.signOut()}
+                  variant="outline"
+                >
+                  Sign out
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={() =>
+                  supabase.auth.signInWithOAuth({
+                    provider: "google",
+                    options: {
+                      redirectTo: window.location.origin,
+                    },
+                  })
+                }
+                className="flex items-center gap-2"
+              >
+                <Image src="https://www.google.com/favicon.ico" alt="Google" width={20} height={20} />
+                Sign in with Google
+              </Button>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
