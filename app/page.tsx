@@ -179,6 +179,12 @@ export default function MessagingInterface() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
+      // Check if user has reached the message limit
+      if (messages.length >= 4 && !user) {
+        setShowSettings(true);
+        return;
+      }
+
       const userMessage = { text: inputValue, isUser: true };
       setMessages((prev) => [...prev, userMessage]);
 
@@ -186,8 +192,6 @@ export default function MessagingInterface() {
         messages: [...messages, userMessage],
         selectedCharacter: selectedCharacter,
       };
-
-      console.log("Sending request:", requestBody); // Debug log
 
       try {
         const response = await fetch("/api/py/message_response", {
@@ -203,8 +207,6 @@ export default function MessagingInterface() {
         }
 
         const data = await response.json();
-        console.log("Received response:", data); // Debug log
-
         setMessages((prev) => [...prev, { text: data.message, isUser: false }]);
       } catch (error) {
         console.error("Error:", error);
@@ -389,7 +391,18 @@ export default function MessagingInterface() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />
-              <Button type="submit" size="icon" className="h-12 w-12">
+              <Button
+                type="submit"
+                size="icon"
+                className="h-12 w-12"
+                onClick={(e) => {
+                  if (messages.length >= 4 && !user) {
+                    e.preventDefault();
+                    setShowSettings(true);
+                    return;
+                  }
+                }}
+              >
                 <Send className="h-5 w-5" />
               </Button>
             </div>
