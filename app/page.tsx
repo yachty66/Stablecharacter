@@ -289,7 +289,7 @@ export default function MessagingInterface() {
                         characterGroups[getCharacterGroup(selectedCharacter)]
                           .characters[selectedCharacter].name
                       }{" "}
-                      ({selectedCharacter.toUpperCase()})
+                      ({selectedCharacter.split("_")[0].toUpperCase()})
                     </span>
                   )}
                 </SelectValue>
@@ -300,24 +300,20 @@ export default function MessagingInterface() {
                     <SelectLabel>{group.title}</SelectLabel>
                     {Object.entries(group.characters).map(([charKey, char]) => (
                       <SelectItem key={charKey} value={charKey}>
-                        {(() => {
-                          // Access the avatar from the characterGroups
-                          const currentCharacter =
-                            characterGroups[getCharacterGroup(charKey)]
-                              .characters[charKey];
-                          char.avatar =
-                            currentCharacter.avatar || "/placeholder.svg";
-                        })()}
-                        <div className="w-10 h-10 rounded-full overflow-hidden">
-                          <Image
-                            src={char.avatar}
-                            alt={char.name}
-                            width={40}
-                            height={40}
-                            className="object-cover"
-                          />
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                            <Image
+                              src={char.avatar}
+                              alt={char.name}
+                              width={32}
+                              height={32}
+                              className="object-cover"
+                            />
+                          </div>
+                          <span>
+                            {char.name} ({charKey.split("_")[0].toUpperCase()})
+                          </span>
                         </div>
-                        {char.name} ({charKey.toUpperCase()})
                       </SelectItem>
                     ))}
                   </SelectGroup>
