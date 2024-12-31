@@ -48,53 +48,62 @@ export default function MessagingInterface() {
     analysts: {
       title: "Analysts (NT)",
       characters: {
-        intj_male: { name: "Marcus", avatar: "/profiles/intj_male.webp" },
-        intj_female: { name: "Diana", avatar: "/profiles/intj_female.webp" },
-        intp_male: { name: "Alex", avatar: "/profiles/intp_male.webp" },
-        intp_female: { name: "Faith", avatar: "/profiles/intp_female.webp" },
-        entj_male: { name: "James", avatar: "/profiles/entj_male.webp" },
-        entj_female: { name: "Victoria", avatar: "/profiles/entj_female.webp" },
-        entp_male: { name: "Max", avatar: "/profiles/entp_male.webp" },
-        entp_female: { name: "Sophia", avatar: "/profiles/entp_female.webp" },
+        intj_male: { name: "Marcus" },
+        intj_female: { name: "Diana" },
+        intp_male: { name: "Alex" },
+        intp_female: { name: "Faith" },
+        entj_male: { name: "James" },
+        entj_female: { name: "Victoria" },
+        entp_male: { name: "Max" },
+        entp_female: { name: "Sophia" },
       },
     },
     diplomats: {
       title: "Diplomats (NF)",
       characters: {
-        infj_male: { name: "Ethan", avatar: "/profiles/infj_male.webp" },
-        infj_female: { name: "Luna", avatar: "/profiles/infj_female.webp" },
-        infp_male: { name: "Oliver", avatar: "/profiles/infp_male.webp" },
-        infp_female: { name: "Maya", avatar: "/profiles/infp_female.webp" },
-        enfj_male: { name: "Nathan", avatar: "/profiles/enfj_male.webp" },
-        enfj_female: { name: "Elena", avatar: "/profiles/enfj_female.webp" },
-        enfp_male: { name: "Leo", avatar: "/profiles/enfp_male.webp" },
-        enfp_female: { name: "Nina", avatar: "/profiles/enfp_female.webp" },
+        infj_male: { name: "Ethan", occupation: "Counseling Psychologist" },
+        infj_female: { name: "Luna", occupation: "Non-profit Director" },
+        infp_male: {
+          name: "Oliver",
+          occupation: "Writer & Creative Writing Teacher",
+        },
+        infp_female: { name: "Maya", occupation: "Art Therapist" },
+        enfj_male: { name: "Nathan", occupation: "Executive Leadership Coach" },
+        enfj_female: {
+          name: "Elena",
+          occupation: "Education Program Director",
+        },
+        enfp_male: { name: "Leo", occupation: "Creative Director" },
+        enfp_female: { name: "Nina", occupation: "Innovation Consultant" },
       },
     },
     sentinels: {
       title: "Sentinels (SJ)",
       characters: {
-        istj_male: { name: "Thomas", avatar: "/profiles/istj_male.webp" },
-        istj_female: { name: "Sarah", avatar: "/profiles/istj_female.webp" },
-        isfj_male: { name: "David", avatar: "/profiles/isfj_male.webp" },
-        isfj_female: { name: "Emma", avatar: "/profiles/isfj_female.webp" },
-        estj_male: { name: "Michael", avatar: "/profiles/estj_male.webp" },
-        estj_female: { name: "Rachel", avatar: "/profiles/estj_female.webp" },
-        esfj_male: { name: "Daniel", avatar: "/profiles/esfj_male.webp" },
-        esfj_female: { name: "Sophie", avatar: "/profiles/esfj_female.webp" },
+        istj_male: { name: "Thomas", occupation: "Financial Analyst" },
+        istj_female: { name: "Sarah", occupation: "Project Manager" },
+        isfj_male: { name: "David", occupation: "Pediatric Nurse" },
+        isfj_female: { name: "Emma", occupation: "Elementary School Teacher" },
+        estj_male: { name: "Michael", occupation: "Operations Director" },
+        estj_female: { name: "Rachel", occupation: "Corporate Attorney" },
+        esfj_male: { name: "Daniel", occupation: "HR Manager" },
+        esfj_female: { name: "Sophie", occupation: "Event Coordinator" },
       },
     },
     explorers: {
       title: "Explorers (SP)",
       characters: {
-        istp_male: { name: "Ryan", avatar: "/profiles/istp_male.webp" },
-        istp_female: { name: "Alex", avatar: "/profiles/istp_female.webp" },
-        isfp_male: { name: "Kai", avatar: "/profiles/isfp_male.webp" },
-        isfp_female: { name: "Mia", avatar: "/profiles/isfp_female.webp" },
-        estp_male: { name: "Jake", avatar: "/profiles/estp_male.webp" },
-        estp_female: { name: "Morgan", avatar: "/profiles/estp_female.webp" },
-        esfp_male: { name: "Marco", avatar: "/profiles/esfp_male.webp" },
-        esfp_female: { name: "Lily", avatar: "/profiles/esfp_female.webp" },
+        istp_male: { name: "Ryan", occupation: "Mechanical Engineer" },
+        istp_female: { name: "Alex", occupation: "Detective" },
+        isfp_male: { name: "Kai", occupation: "Freelance Photographer" },
+        isfp_female: { name: "Mia", occupation: "Interior Designer" },
+        estp_male: { name: "Jake", occupation: "Sales Director" },
+        estp_female: { name: "Morgan", occupation: "Emergency Room Physician" },
+        esfp_male: { name: "Marco", occupation: "Professional Chef" },
+        esfp_female: {
+          name: "Lily",
+          occupation: "Performance Artist & Dance Instructor",
+        },
       },
     },
   };
@@ -300,16 +309,6 @@ export default function MessagingInterface() {
                     <SelectLabel>{group.title}</SelectLabel>
                     {Object.entries(group.characters).map(([charKey, char]) => (
                       <SelectItem key={charKey} value={charKey}>
-                        {(() => {
-                          // Access the avatar from the characterGroups
-                          const currentCharacter =
-                            characterGroups[getCharacterGroup(charKey)]
-                              .characters[charKey];
-                          char.avatar =
-                            currentCharacter.avatar || "/placeholder.svg";
-                          console.log("currentCharacter", currentCharacter);
-                          console.log("Avatar URL:", char.avatar); // Log the avatar URL
-                        })()}
                         {char.avatar ? (
                           <Image
                             src={char.avatar}
@@ -404,7 +403,11 @@ export default function MessagingInterface() {
                 } max-w-[85%]`}
               >
                 <Image
-                  src={"/vercel.svg"}
+                  src={
+                    message.isUser && user?.user_metadata?.avatar_url
+                      ? user.user_metadata.avatar_url
+                      : "/placeholder.svg"
+                  }
                   alt={message.isUser ? "User" : "AI"}
                   width={32}
                   height={32}
