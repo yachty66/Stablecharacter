@@ -132,6 +132,22 @@ export default function MessagingInterface() {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
+
+      // If user just signed in, restore messages and input
+      if (user) {
+        const pendingMessages = localStorage.getItem("pendingMessages");
+        const pendingInput = localStorage.getItem("pendingInput");
+
+        if (pendingMessages) {
+          setMessages(JSON.parse(pendingMessages));
+          localStorage.removeItem("pendingMessages");
+        }
+
+        if (pendingInput) {
+          setInputValue(pendingInput);
+          localStorage.removeItem("pendingInput");
+        }
+      }
     };
     getUser();
   }, []);
@@ -237,6 +253,19 @@ export default function MessagingInterface() {
         console.error("Error copying to clipboard:", error);
       }
     }
+  };
+
+  const handleGoogleSignIn = () => {
+    // Store current messages and input value in localStorage
+    localStorage.setItem("pendingMessages", JSON.stringify(messages));
+    localStorage.setItem("pendingInput", inputValue);
+
+    supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
   };
 
   return (
@@ -452,15 +481,8 @@ export default function MessagingInterface() {
               </div>
             ) : (
               <Button
-                onClick={() =>
-                  supabase.auth.signInWithOAuth({
-                    provider: "google",
-                    options: {
-                      redirectTo: window.location.origin,
-                    },
-                  })
-                }
-                className="flex items-center gap-2"
+                onClick={handleGoogleSignIn}
+                className="w-full flex items-center justify-center gap-2"
               >
                 <Image
                   src="https://www.google.com/favicon.ico"
