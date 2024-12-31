@@ -332,8 +332,12 @@ export default function MessagingInterface() {
               } max-w-[85%]`}
             >
               <Image
-                src="/placeholder.svg"
-                alt="Profile"
+                src={
+                  message.isUser && user?.user_metadata?.avatar_url
+                    ? user.user_metadata.avatar_url
+                    : "/placeholder.svg"
+                }
+                alt={message.isUser ? "User" : "AI"}
                 width={32}
                 height={32}
                 className="rounded-full mt-1"
@@ -398,11 +402,14 @@ export default function MessagingInterface() {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3">
                   <Image
-                    src={user.user_metadata?.avatar_url || "/placeholder.svg"}
-                    alt={user.user_metadata?.full_name || "Profile"}
+                    src={user?.user_metadata?.avatar_url || "/placeholder.svg"}
+                    alt={user?.user_metadata?.full_name || "Profile"}
                     width={40}
                     height={40}
                     className="rounded-full"
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder.svg";
+                    }}
                   />
                   <div>
                     <p className="font-medium">
@@ -432,7 +439,12 @@ export default function MessagingInterface() {
                 }
                 className="flex items-center gap-2"
               >
-                <Image src="https://www.google.com/favicon.ico" alt="Google" width={20} height={20} />
+                <Image
+                  src="https://www.google.com/favicon.ico"
+                  alt="Google"
+                  width={20}
+                  height={20}
+                />
                 Sign in with Google
               </Button>
             )}
