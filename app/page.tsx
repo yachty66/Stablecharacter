@@ -324,35 +324,59 @@ export default function MessagingInterface() {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-4">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex items-start gap-2 mb-4 ${
-                message.isUser ? "ml-auto flex-row-reverse" : ""
-              } max-w-[85%]`}
-            >
-              <Image
-                src={
-                  message.isUser && user?.user_metadata?.avatar_url
-                    ? user.user_metadata.avatar_url
-                    : "/placeholder.svg"
-                }
-                alt={message.isUser ? "User" : "AI"}
-                width={32}
-                height={32}
-                className="rounded-full mt-1"
-              />
-              <div
-                className={`p-3 rounded-lg ${
-                  message.isUser
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted"
-                }`}
-              >
-                <p className="text-sm">{message.text}</p>
+          {messages.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
+              <div className="max-w-md space-y-2">
+                <h2 className="text-2xl font-semibold text-foreground">
+                  Chat with {getCurrentCharacter(selectedCharacter).name}
+                </h2>
+                <p>
+                  Start a conversation with your MBTI personality match. Just
+                  type your message below and press enter.
+                </p>
+                <div className="flex items-center justify-center gap-2 text-sm">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedCharacter(getRandomCharacter())}
+                  >
+                    <RefreshCcw className="h-4 w-4 mr-2" />
+                    Try another personality
+                  </Button>
+                </div>
               </div>
             </div>
-          ))}
+          ) : (
+            messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex items-start gap-2 mb-4 ${
+                  message.isUser ? "ml-auto flex-row-reverse" : ""
+                } max-w-[85%]`}
+              >
+                <Image
+                  src={
+                    message.isUser && user?.user_metadata?.avatar_url
+                      ? user.user_metadata.avatar_url
+                      : "/placeholder.svg"
+                  }
+                  alt={message.isUser ? "User" : "AI"}
+                  width={32}
+                  height={32}
+                  className="rounded-full mt-1"
+                />
+                <div
+                  className={`p-3 rounded-lg ${
+                    message.isUser
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
+                  }`}
+                >
+                  <p className="text-sm">{message.text}</p>
+                </div>
+              </div>
+            ))
+          )}
         </main>
 
         {/* Footer */}
