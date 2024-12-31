@@ -307,23 +307,16 @@ export default function MessagingInterface() {
                               .characters[charKey];
                           char.avatar =
                             currentCharacter.avatar || "/placeholder.svg";
-                          console.log("currentCharacter", currentCharacter);
-                          console.log("Avatar URL:", char.avatar); // Log the avatar URL
                         })()}
-                        {char.avatar ? (
+                        <div className="w-10 h-10 rounded-full overflow-hidden">
                           <Image
                             src={char.avatar}
                             alt={char.name}
-                            width={20}
-                            height={20}
-                            className="inline-block mr-2 rounded-full"
+                            width={40}
+                            height={40}
+                            className="object-cover"
                           />
-                        ) : (
-                          <span
-                            className="inline-block mr-2 rounded-full bg-gray-200"
-                            style={{ width: 20, height: 20 }}
-                          ></span>
-                        )}
+                        </div>
                         {char.name} ({charKey.toUpperCase()})
                       </SelectItem>
                     ))}
@@ -332,13 +325,15 @@ export default function MessagingInterface() {
               </SelectContent>
             </Select>
             {getCurrentCharacter(selectedCharacter).avatar ? (
-              <Image
-                src={getCurrentCharacter(selectedCharacter).avatar}
-                alt={getCurrentCharacter(selectedCharacter).name}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
+              <div className="w-10 h-10 rounded-full overflow-hidden">
+                <Image
+                  src={getCurrentCharacter(selectedCharacter).avatar}
+                  alt={getCurrentCharacter(selectedCharacter).name}
+                  width={40}
+                  height={40}
+                  className="object-cover"
+                />
+              </div>
             ) : null}
           </div>
 
