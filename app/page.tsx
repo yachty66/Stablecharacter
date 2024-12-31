@@ -5,7 +5,7 @@ import Link from "next/link";
 import { RefreshCcw, Settings, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -35,59 +35,19 @@ interface CharacterGroups {
 }
 
 export default function MessagingInterface() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState("");
-  const [selectedCharacter, setSelectedCharacter] =
-    useState<string>("intp_female");
-
-  // Helper function to get character group
-  const getCharacterGroup = (charKey: string) => {
-    const type = charKey.substring(0, 4); // Get XXXX from XXXX_gender
-    switch (type) {
-      case "intj":
-      case "intp":
-      case "entj":
-      case "entp":
-        return "analysts";
-      case "infj":
-      case "infp":
-      case "enfj":
-      case "enfp":
-        return "diplomats";
-      case "istj":
-      case "isfj":
-      case "estj":
-      case "esfj":
-        return "sentinels";
-      case "istp":
-      case "isfp":
-      case "estp":
-      case "esfp":
-        return "explorers";
-      default:
-        return "analysts";
-    }
-  };
-
-  // Get current character
-  const getCurrentCharacter = (charKey: string) => {
-    const group = getCharacterGroup(charKey);
-    return characterGroups[group].characters[charKey];
-  };
-
-  // Organize characters by type
+  // First define the character groups
   const characterGroups = {
     analysts: {
       title: "Analysts (NT)",
       characters: {
-        intj_male: { name: "Marcus", avatar: "/avatars/marcus.jpg" },
-        intj_female: { name: "Diana", avatar: "/avatars/diana.jpg" },
-        intp_male: { name: "Alex", avatar: "/avatars/alex.jpg" },
-        intp_female: { name: "Faith", avatar: "/avatars/faith.jpg" },
-        entj_male: { name: "James", avatar: "/avatars/james.jpg" },
-        entj_female: { name: "Victoria", avatar: "/avatars/victoria.jpg" },
-        entp_male: { name: "Max", avatar: "/avatars/max.jpg" },
-        entp_female: { name: "Sophia", avatar: "/avatars/sophia.jpg" },
+        intj_male: { name: "Marcus" },
+        intj_female: { name: "Diana" },
+        intp_male: { name: "Alex" },
+        intp_female: { name: "Faith" },
+        entj_male: { name: "James" },
+        entj_female: { name: "Victoria" },
+        entp_male: { name: "Max" },
+        entp_female: { name: "Sophia" },
       },
     },
     diplomats: {
@@ -140,6 +100,61 @@ export default function MessagingInterface() {
     },
   };
 
+  // Then define the helper function
+  const getRandomCharacter = () => {
+    const allCharacters = Object.values(characterGroups).flatMap((group) =>
+      Object.keys(group.characters)
+    );
+    const randomIndex = Math.floor(Math.random() * allCharacters.length);
+    return allCharacters[randomIndex];
+  };
+
+  // Then use it in useState
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedCharacter, setSelectedCharacter] =
+    useState<string>("intp_female");
+
+  // Update with random character after mount
+  useEffect(() => {
+    setSelectedCharacter(getRandomCharacter());
+  }, []);
+
+  // Helper function to get character group
+  const getCharacterGroup = (charKey: string) => {
+    const type = charKey.substring(0, 4); // Get XXXX from XXXX_gender
+    switch (type) {
+      case "intj":
+      case "intp":
+      case "entj":
+      case "entp":
+        return "analysts";
+      case "infj":
+      case "infp":
+      case "enfj":
+      case "enfp":
+        return "diplomats";
+      case "istj":
+      case "isfj":
+      case "estj":
+      case "esfj":
+        return "sentinels";
+      case "istp":
+      case "isfp":
+      case "estp":
+      case "esfp":
+        return "explorers";
+      default:
+        return "analysts";
+    }
+  };
+
+  // Get current character
+  const getCurrentCharacter = (charKey: string) => {
+    const group = getCharacterGroup(charKey);
+    return characterGroups[group].characters[charKey];
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
@@ -183,7 +198,14 @@ export default function MessagingInterface() {
       <div className="flex flex-col w-full max-w-3xl">
         {/* Header */}
         <header className="flex items-center justify-between px-4 py-2 border-b">
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              setSelectedCharacter(getRandomCharacter());
+              setMessages([]); // Clear all messages
+            }}
+          >
             <RefreshCcw className="h-5 w-5 text-muted-foreground" />
           </Button>
 
