@@ -6,15 +6,139 @@ import { RefreshCcw, Settings, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, FormEvent } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectLabel,
+  SelectSeparator,
+  SelectGroup,
+} from "@/components/ui/select";
 
 interface Message {
   text: string;
   isUser: boolean;
 }
 
+interface Character {
+  name: string;
+  occupation: string;
+}
+
+interface CharacterGroups {
+  [key: string]: {
+    title: string;
+    characters: { [key: string]: Character };
+  };
+}
+
 export default function MessagingInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [selectedCharacter, setSelectedCharacter] =
+    useState<string>("intp_female");
+
+  // Helper function to get character group
+  const getCharacterGroup = (charKey: string) => {
+    const type = charKey.substring(0, 4); // Get XXXX from XXXX_gender
+    switch (type) {
+      case "intj":
+      case "intp":
+      case "entj":
+      case "entp":
+        return "analysts";
+      case "infj":
+      case "infp":
+      case "enfj":
+      case "enfp":
+        return "diplomats";
+      case "istj":
+      case "isfj":
+      case "estj":
+      case "esfj":
+        return "sentinels";
+      case "istp":
+      case "isfp":
+      case "estp":
+      case "esfp":
+        return "explorers";
+      default:
+        return "analysts";
+    }
+  };
+
+  // Get current character
+  const getCurrentCharacter = (charKey: string) => {
+    const group = getCharacterGroup(charKey);
+    return characterGroups[group].characters[charKey];
+  };
+
+  // Organize characters by type
+  const characterGroups = {
+    analysts: {
+      title: "Analysts (NT)",
+      characters: {
+        intj_male: { name: "Marcus", avatar: "/avatars/marcus.jpg" },
+        intj_female: { name: "Diana", avatar: "/avatars/diana.jpg" },
+        intp_male: { name: "Alex", avatar: "/avatars/alex.jpg" },
+        intp_female: { name: "Faith", avatar: "/avatars/faith.jpg" },
+        entj_male: { name: "James", avatar: "/avatars/james.jpg" },
+        entj_female: { name: "Victoria", avatar: "/avatars/victoria.jpg" },
+        entp_male: { name: "Max", avatar: "/avatars/max.jpg" },
+        entp_female: { name: "Sophia", avatar: "/avatars/sophia.jpg" },
+      },
+    },
+    diplomats: {
+      title: "Diplomats (NF)",
+      characters: {
+        infj_male: { name: "Ethan", occupation: "Counseling Psychologist" },
+        infj_female: { name: "Luna", occupation: "Non-profit Director" },
+        infp_male: {
+          name: "Oliver",
+          occupation: "Writer & Creative Writing Teacher",
+        },
+        infp_female: { name: "Maya", occupation: "Art Therapist" },
+        enfj_male: { name: "Nathan", occupation: "Executive Leadership Coach" },
+        enfj_female: {
+          name: "Elena",
+          occupation: "Education Program Director",
+        },
+        enfp_male: { name: "Leo", occupation: "Creative Director" },
+        enfp_female: { name: "Nina", occupation: "Innovation Consultant" },
+      },
+    },
+    sentinels: {
+      title: "Sentinels (SJ)",
+      characters: {
+        istj_male: { name: "Thomas", occupation: "Financial Analyst" },
+        istj_female: { name: "Sarah", occupation: "Project Manager" },
+        isfj_male: { name: "David", occupation: "Pediatric Nurse" },
+        isfj_female: { name: "Emma", occupation: "Elementary School Teacher" },
+        estj_male: { name: "Michael", occupation: "Operations Director" },
+        estj_female: { name: "Rachel", occupation: "Corporate Attorney" },
+        esfj_male: { name: "Daniel", occupation: "HR Manager" },
+        esfj_female: { name: "Sophie", occupation: "Event Coordinator" },
+      },
+    },
+    explorers: {
+      title: "Explorers (SP)",
+      characters: {
+        istp_male: { name: "Ryan", occupation: "Mechanical Engineer" },
+        istp_female: { name: "Alex", occupation: "Detective" },
+        isfp_male: { name: "Kai", occupation: "Freelance Photographer" },
+        isfp_female: { name: "Mia", occupation: "Interior Designer" },
+        estp_male: { name: "Jake", occupation: "Sales Director" },
+        estp_female: { name: "Morgan", occupation: "Emergency Room Physician" },
+        esfp_male: { name: "Marco", occupation: "Professional Chef" },
+        esfp_female: {
+          name: "Lily",
+          occupation: "Performance Artist & Dance Instructor",
+        },
+      },
+    },
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -55,13 +179,42 @@ export default function MessagingInterface() {
             <RefreshCcw className="h-5 w-5 text-muted-foreground" />
           </Button>
 
-          <div className="flex items-center gap-2">
-            <span className="font-medium">Faith</span>
+          <div className="flex items-center gap-4">
+            <Select
+              value={selectedCharacter}
+              onValueChange={setSelectedCharacter}
+            >
+              <SelectTrigger className="w-[200px]">
+                <SelectValue>
+                  {selectedCharacter && (
+                    <span>
+                      {
+                        characterGroups[getCharacterGroup(selectedCharacter)]
+                          .characters[selectedCharacter].name
+                      }{" "}
+                      ({selectedCharacter.toUpperCase()})
+                    </span>
+                  )}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(characterGroups).map(([groupKey, group]) => (
+                  <SelectGroup key={groupKey}>
+                    <SelectLabel>{group.title}</SelectLabel>
+                    {Object.entries(group.characters).map(([charKey, char]) => (
+                      <SelectItem key={charKey} value={charKey}>
+                        {char.name} ({charKey.toUpperCase()})
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                ))}
+              </SelectContent>
+            </Select>
             <Image
-              src="/placeholder.svg"
-              alt="Profile"
-              width={24}
-              height={24}
+              src={getCurrentCharacter(selectedCharacter).avatar}
+              alt={getCurrentCharacter(selectedCharacter).name}
+              width={40}
+              height={40}
               className="rounded-full"
             />
           </div>
