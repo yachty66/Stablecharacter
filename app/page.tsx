@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RefreshCcw, Settings, Send } from "lucide-react";
+import { RefreshCcw, Settings, Send, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, FormEvent, useEffect } from "react";
@@ -114,6 +114,7 @@ export default function MessagingInterface() {
   const [inputValue, setInputValue] = useState("");
   const [selectedCharacter, setSelectedCharacter] =
     useState<string>("intp_female");
+  const [showCopied, setShowCopied] = useState(false);
 
   // Update with random character after mount
   useEffect(() => {
@@ -193,6 +194,29 @@ export default function MessagingInterface() {
     }
   };
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Chat with MBTI Characters",
+          text: "Check out this interesting chat with MBTI personalities!",
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
+    } else {
+      // Fallback to copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        setShowCopied(true);
+        setTimeout(() => setShowCopied(false), 2000);
+      } catch (error) {
+        console.error("Error copying to clipboard:", error);
+      }
+    }
+  };
+
   return (
     <div className="flex justify-center bg-background min-h-screen">
       <div className="flex flex-col w-full max-w-3xl">
@@ -250,33 +274,23 @@ export default function MessagingInterface() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleShare}
+              className="relative"
+            >
               <span className="sr-only">Share</span>
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 15 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-muted-foreground"
-              >
-                <path
-                  d="M5 7.5C5 8.32843 4.32843 9 3.5 9C2.67157 9 2 8.32843 2 7.5C2 6.67157 2.67157 6 3.5 6C4.32843 6 5 6.67157 5 7.5ZM5.5 7.5C5.5 8.60457 4.60457 9.5 3.5 9.5C2.39543 9.5 1.5 8.60457 1.5 7.5C1.5 6.39543 2.39543 5.5 3.5 5.5C4.60457 5.5 5.5 6.39543 5.5 7.5Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M13 7.5C13 8.32843 12.3284 9 11.5 9C10.6716 9 10 8.32843 10 7.5C10 6.67157 10.6716 6 11.5 6C12.3284 6 13 6.67157 13 7.5ZM13.5 7.5C13.5 8.60457 12.6046 9.5 11.5 9.5C10.3954 9.5 9.5 8.60457 9.5 7.5C9.5 6.39543 10.3954 5.5 11.5 5.5C12.6046 5.5 13.5 6.39543 13.5 7.5Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M7 3.5C7 4.32843 6.32843 5 5.5 5C4.67157 5 4 4.32843 4 3.5C4 2.67157 4.67157 2 5.5 2C6.32843 2 7 2.67157 7 3.5ZM7.5 3.5C7.5 4.60457 6.60457 5.5 5.5 5.5C4.39543 5.5 3.5 4.60457 3.5 3.5C3.5 2.39543 4.39543 1.5 5.5 1.5C6.60457 1.5 7.5 2.39543 7.5 3.5Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M7 11.5C7 12.3284 6.32843 13 5.5 13C4.67157 13 4 12.3284 4 11.5C4 10.6716 4.67157 10 5.5 10C6.32843 10 7 10.6716 7 11.5ZM7.5 11.5C7.5 12.6046 6.60457 13.5 5.5 13.5C4.39543 13.5 3.5 12.6046 3.5 11.5C3.5 10.3954 4.39543 9.5 5.5 9.5C6.60457 9.5 7.5 10.3954 7.5 11.5Z"
-                  fill="currentColor"
-                />
-              </svg>
+              {showCopied ? (
+                <Check className="h-5 w-5 text-green-500" />
+              ) : (
+                <Share2 className="h-5 w-5 text-muted-foreground" />
+              )}
+              {showCopied && (
+                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-popover px-2 py-1 rounded shadow-sm whitespace-nowrap">
+                  Copied to clipboard!
+                </span>
+              )}
             </Button>
             <Button variant="ghost" size="icon">
               <Settings className="h-5 w-5 text-muted-foreground" />
@@ -286,10 +300,6 @@ export default function MessagingInterface() {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-4">
-          <div className="text-sm text-muted-foreground text-center mb-4">
-            Today 3:00 AM
-          </div>
-
           {messages.map((message, index) => (
             <div
               key={index}
