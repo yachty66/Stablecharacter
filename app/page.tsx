@@ -421,7 +421,12 @@ export default function MessagingInterface() {
                   </div>
                 </div>
                 <Button
-                  onClick={() => supabase.auth.signOut()}
+                  onClick={async () => {
+                    await supabase.auth.signOut();
+                    setUser(null);
+                    setShowSettings(false);
+                    window.location.reload(); // Force reload to clear all states
+                  }}
                   variant="outline"
                 >
                   Sign out
