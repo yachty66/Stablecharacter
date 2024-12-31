@@ -125,10 +125,11 @@ export default function MessagingInterface() {
       } = await supabase.auth.getUser();
       setUser(user);
 
-      // If user just signed in, restore messages and input
+      // If user just signed in, restore messages, input, and selected character
       if (user) {
         const pendingMessages = localStorage.getItem("pendingMessages");
         const pendingInput = localStorage.getItem("pendingInput");
+        const pendingCharacter = localStorage.getItem("pendingCharacter");
 
         if (pendingMessages) {
           setMessages(JSON.parse(pendingMessages));
@@ -139,14 +140,19 @@ export default function MessagingInterface() {
           setInputValue(pendingInput);
           localStorage.removeItem("pendingInput");
         }
+
+        if (pendingCharacter) {
+          setSelectedCharacter(pendingCharacter);
+          localStorage.removeItem("pendingCharacter");
+        } else {
+          setSelectedCharacter(getRandomCharacter());
+        }
+      } else {
+        // If no user is logged in, select a random character
+        setSelectedCharacter(getRandomCharacter());
       }
     };
     getUser();
-  }, []);
-
-  // Update with random character after mount
-  useEffect(() => {
-    setSelectedCharacter(getRandomCharacter());
   }, []);
 
   // Helper function to get character group
@@ -248,9 +254,10 @@ export default function MessagingInterface() {
   };
 
   const handleGoogleSignIn = () => {
-    // Store current messages and input value in localStorage
+    // Store current messages, input value, and selected character in localStorage
     localStorage.setItem("pendingMessages", JSON.stringify(messages));
     localStorage.setItem("pendingInput", inputValue);
+    localStorage.setItem("pendingCharacter", selectedCharacter);
 
     supabase.auth.signInWithOAuth({
       provider: "google",
@@ -372,7 +379,7 @@ export default function MessagingInterface() {
                 </h2>
                 <p>
                   Start a conversation with your MBTI personality match. Just
-                  type your message below and press enter.
+                  type your message below and click send.
                 </p>
                 <div className="flex items-center justify-center gap-2 text-sm">
                   <Button
@@ -394,13 +401,27 @@ export default function MessagingInterface() {
                   message.isUser ? "ml-auto flex-row-reverse" : ""
                 } max-w-[85%]`}
               >
-                <Image
-                  src={"/vercel.svg"}
-                  alt={message.isUser ? "User" : "AI"}
-                  width={32}
-                  height={32}
-                  className="rounded-full mt-1"
-                />
+                {message.isUser ? (
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                    <Image
+                      src="/vercel.svg"
+                      alt="User"
+                      width={40}
+                      height={40}
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                    <Image
+                      src={getCurrentCharacter(selectedCharacter).avatar}
+                      alt={getCurrentCharacter(selectedCharacter).name}
+                      width={40}
+                      height={40}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                )}
                 <div
                   className={`p-3 rounded-lg ${
                     message.isUser
