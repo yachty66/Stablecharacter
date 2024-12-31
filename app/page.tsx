@@ -384,35 +384,16 @@ export default function MessagingInterface() {
           <form onSubmit={handleSubmit} className="p-4">
             <div className="flex items-center gap-2">
               <Input
-                placeholder="Message"
-                className="bg-muted"
+                placeholder="Type your message..."
+                className="bg-muted h-12 text-base"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />
-              <Button type="submit" size="icon" variant="ghost">
-                <Send className="h-5 w-5 text-muted-foreground" />
+              <Button type="submit" size="icon" className="h-12 w-12">
+                <Send className="h-5 w-5" />
               </Button>
             </div>
           </form>
-
-          <div className="flex justify-between items-center px-4 py-2 text-xs text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <Link href="#" className="hover:underline">
-                friend © 2024
-              </Link>
-              <Link href="#" className="hover:underline">
-                company →
-              </Link>
-            </div>
-            <div className="flex items-center gap-2">
-              <Link href="#" className="hover:underline">
-                terms & conditions →
-              </Link>
-              <Link href="#" className="hover:underline">
-                privacy policy →
-              </Link>
-            </div>
-          </div>
         </footer>
       </div>
 
