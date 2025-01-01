@@ -119,6 +119,7 @@ export default function MessagingInterface() {
   const supabase = createClientComponentClient();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -197,17 +198,15 @@ export default function MessagingInterface() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      // Check if user has reached the message limit
       if (messages.length >= 4 && !user) {
         setShowSettings(true);
         return;
       }
 
       const userMessage = { text: inputValue, isUser: true };
-      // Clear input immediately
-      setInputValue("");
-      // Add user message to chat
+      setInputValue(""); // Clear input immediately
       setMessages((prev) => [...prev, userMessage]);
+      setIsTyping(true); // Show typing indicator
 
       const requestBody = {
         messages: [...messages, userMessage],
@@ -231,6 +230,8 @@ export default function MessagingInterface() {
         setMessages((prev) => [...prev, { text: data.message, isUser: false }]);
       } catch (error) {
         console.error("Error:", error);
+      } finally {
+        setIsTyping(false); // Hide typing indicator
       }
     }
   };
@@ -454,6 +455,27 @@ export default function MessagingInterface() {
                 </div>
               </div>
             ))
+          )}
+          {isTyping && (
+            <div className="flex items-start gap-2 mb-4 max-w-[85%]">
+              <Image
+                src={
+                  getCurrentCharacter(selectedCharacter).avatar ||
+                  "/placeholder.svg"
+                }
+                alt="AI"
+                width={32}
+                height={32}
+                className="rounded-full mt-1"
+              />
+              <div className="p-3 rounded-lg bg-muted">
+                <div className="flex gap-1">
+                  <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.3s]"></span>
+                  <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.15s]"></span>
+                  <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce"></span>
+                </div>
+              </div>
+            </div>
           )}
         </main>
 
