@@ -307,7 +307,10 @@ export default function MessagingInterface() {
               <div className="flex items-center gap-4">
                 <Select
                   value={selectedCharacter}
-                  onValueChange={setSelectedCharacter}
+                  onValueChange={(newCharacter) => {
+                    setSelectedCharacter(newCharacter);
+                    setMessages([]); // Clear messages when character changes
+                  }}
                 >
                   <SelectTrigger className="w-[200px]">
                     <SelectValue>
