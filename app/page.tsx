@@ -286,11 +286,22 @@ export default function MessagingInterface() {
     });
   };
 
+  // Add new ref for input
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Add useEffect for mobile input focus
+  useEffect(() => {
+    // Focus input on mobile when component mounts
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <div className="flex justify-center bg-background min-h-screen">
       <div className="flex flex-col w-full max-w-3xl h-screen">
-        {/* Header */}
-        <header className="flex items-center justify-between px-4 py-2 border-b shrink-0">
+        {/* Make header fixed */}
+        <header className="flex items-center justify-between px-4 py-2 border-b shrink-0 sticky top-0 bg-background z-50">
           {selectedCharacter && (
             <>
               <Button
@@ -298,24 +309,25 @@ export default function MessagingInterface() {
                 size="icon"
                 onClick={() => {
                   setSelectedCharacter(getRandomCharacter());
-                  setMessages([]); // Clear all messages
+                  setMessages([]);
                 }}
               >
                 <RefreshCcw className="h-5 w-5 text-muted-foreground" />
               </Button>
 
+              {/* Make select more mobile-friendly */}
               <div className="flex items-center gap-4">
                 <Select
                   value={selectedCharacter}
                   onValueChange={(newCharacter) => {
                     setSelectedCharacter(newCharacter);
-                    setMessages([]); // Clear messages when character changes
+                    setMessages([]);
                   }}
                 >
-                  <SelectTrigger className="w-[200px]">
+                  <SelectTrigger className="w-[180px] sm:w-[200px]">
                     <SelectValue>
                       {selectedCharacter && (
-                        <span>
+                        <span className="truncate">
                           {
                             characterGroups[
                               getCharacterGroup(selectedCharacter)
@@ -401,8 +413,8 @@ export default function MessagingInterface() {
           )}
         </header>
 
-        {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-4">
+        {/* Add padding-top to main content to account for fixed header */}
+        <main className="flex-1 overflow-y-auto p-4 pt-6">
           <div className="flex flex-col space-y-4">
             {messages.length === 0 && selectedCharacter ? (
               <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
@@ -502,11 +514,12 @@ export default function MessagingInterface() {
           </div>
         </main>
 
-        {/* Footer */}
-        <footer className="border-t mt-auto shrink-0 bg-background">
+        {/* Update footer with ref */}
+        <footer className="border-t mt-auto shrink-0 bg-background sticky bottom-0">
           <form onSubmit={handleSubmit} className="p-4">
             <div className="flex items-center gap-2">
               <Input
+                ref={inputRef}
                 placeholder="Type your message..."
                 className="bg-muted h-12 text-base"
                 value={inputValue}
