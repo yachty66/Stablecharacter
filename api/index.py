@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from .llm import call_llm_arxiv
+from .llm import call_llm
 import json
 import os
 
@@ -43,7 +43,7 @@ async def message_response(request: MessageRequest):
             })
         
         print("Sending to LLM:", formatted_messages)  # Debug log
-        response = call_llm_arxiv(messages=formatted_messages)
+        response = call_llm(messages=formatted_messages)
         print("LLM response:", response)  # Debug log
         
         return {"message": response.choices[0].message.content}

@@ -15,18 +15,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stablecharacter - Chat with MBTI Personalities",
+  title: "Stablecharacter - MBTI Personalities chat",
   description:
     "Have meaningful conversations with AI-powered MBTI personality characters. Explore different personality types and engage in authentic dialogue.",
   openGraph: {
-    title: "StableCharacter - Chat with MBTI Personalities",
+    title: "Stablecharacter - MBTI Personalities chat",
     description:
       "Have meaningful conversations with AI-powered MBTI personality characters.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "StableCharacter - Chat with MBTI Personalities",
+    title: "Stablecharacter - MBTI Personalities chat",
     description:
       "Have meaningful conversations with AI-powered MBTI personality characters.",
   },

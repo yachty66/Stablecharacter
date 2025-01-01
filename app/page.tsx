@@ -196,7 +196,7 @@ export default function MessagingInterface() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim() && selectedCharacter) {
+    if (inputValue.trim()) {
       // Check if user has reached the message limit
       if (messages.length >= 4 && !user) {
         setShowSettings(true);
@@ -204,6 +204,9 @@ export default function MessagingInterface() {
       }
 
       const userMessage = { text: inputValue, isUser: true };
+      // Clear input immediately
+      setInputValue("");
+      // Add user message to chat
       setMessages((prev) => [...prev, userMessage]);
 
       const requestBody = {
@@ -229,8 +232,6 @@ export default function MessagingInterface() {
       } catch (error) {
         console.error("Error:", error);
       }
-
-      setInputValue("");
     }
   };
 
