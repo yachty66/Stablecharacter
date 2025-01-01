@@ -275,9 +275,9 @@ export default function MessagingInterface() {
 
   return (
     <div className="flex justify-center bg-background min-h-screen">
-      <div className="flex flex-col w-full max-w-3xl">
+      <div className="flex flex-col w-full max-w-3xl h-screen">
         {/* Header */}
-        <header className="flex items-center justify-between px-4 py-2 border-b">
+        <header className="flex items-center justify-between px-4 py-2 border-b shrink-0">
           {selectedCharacter && (
             <>
               <Button
@@ -386,7 +386,7 @@ export default function MessagingInterface() {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-4">
+        <main className="flex-1 overflow-y-auto p-4 pb-0">
           {messages.length === 0 && selectedCharacter ? (
             <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
               <div className="max-w-md space-y-2">
@@ -477,10 +477,11 @@ export default function MessagingInterface() {
               </div>
             </div>
           )}
+          <div className="h-4"></div>
         </main>
 
         {/* Footer */}
-        <footer className="border-t">
+        <footer className="border-t mt-auto shrink-0 bg-background">
           <form onSubmit={handleSubmit} className="p-4">
             <div className="flex items-center gap-2">
               <Input
