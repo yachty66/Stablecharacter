@@ -278,10 +278,13 @@ export default function MessagingInterface() {
     localStorage.setItem("pendingInput", inputValue);
     localStorage.setItem("pendingCharacter", selectedCharacter);
 
+    const redirectTo =
+      process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+
     supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: redirectTo,
       },
     });
   };
