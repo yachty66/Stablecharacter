@@ -10,6 +10,7 @@ interface ChatListProps {
   onChatSelect: (character_id: string) => void;
   selectedCharacter: string | null;
   refreshTrigger?: number;
+  onChatDelete?: (character_id: string) => void;
 }
 
 export default function ChatList({
@@ -19,6 +20,7 @@ export default function ChatList({
   onChatSelect,
   selectedCharacter,
   refreshTrigger = 0,
+  onChatDelete,
 }: ChatListProps) {
   const [chats, setChats] = useState<any[]>([]);
 
@@ -123,6 +125,7 @@ export default function ChatList({
 
       if (!deleteError) {
         setChats(chats.filter((chat) => chat.id !== chatId));
+        onChatDelete?.(chatToDelete.character_id);
       }
     } catch (error) {
       console.error("Error in delete operation:", error);

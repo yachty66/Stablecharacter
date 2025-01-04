@@ -424,6 +424,13 @@ export default function MessagingInterface() {
     await handleCharacterChange(newCharacter);
   };
 
+  const handleChatDelete = (deletedCharacterId: string) => {
+    if (selectedCharacter === deletedCharacterId) {
+      setMessages([]);
+      setSelectedCharacter(getRandomCharacter());
+    }
+  };
+
   return (
     <div className="flex h-screen bg-background">
       {user && (
@@ -434,6 +441,7 @@ export default function MessagingInterface() {
           onChatSelect={handleCharacterChange}
           selectedCharacter={selectedCharacter}
           refreshTrigger={chatListRefresh}
+          onChatDelete={handleChatDelete}
         />
       )}
       <div className="flex-1 flex justify-center">
