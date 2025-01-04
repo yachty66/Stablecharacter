@@ -246,10 +246,20 @@ export default function MessagingInterface() {
       return null;
     }
 
-    // If chat exists, return the existing chat without updating
     if (existingChat) {
-      setMessages(existingChat.messages);
-      return existingChat;
+      // Update existing chat with new messages
+      const { error: updateError } = await supabase
+        .from("chats")
+        .update({ messages: chatData.messages })
+        .eq("id", existingChat.id);
+
+      if (updateError) {
+        console.error("Error updating chat:", updateError);
+        return null;
+      }
+
+      setChatListRefresh((prev) => prev + 1);
+      return { ...existingChat, messages: chatData.messages };
     }
 
     // If no existing chat, insert the new one
