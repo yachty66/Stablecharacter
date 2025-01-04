@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 interface ChatListProps {
   supabase: any;
@@ -78,6 +79,14 @@ export default function ChatList({
     return truncated;
   };
 
+  const deleteChat = async (chatId: string) => {
+    const { error } = await supabase.from("chats").delete().eq("id", chatId);
+
+    if (!error) {
+      setChats(chats.filter((chat) => chat.id !== chatId));
+    }
+  };
+
   return (
     <div className="w-80 border-r h-full flex flex-col">
       <div className="p-4 border-b">
@@ -89,40 +98,52 @@ export default function ChatList({
           if (!character) return null;
 
           return (
-            <Button
-              key={chat.id}
-              variant="ghost"
-              className={`w-full justify-start px-4 py-3 h-auto ${
-                selectedCharacter === chat.character_id ? "bg-muted" : ""
-              }`}
-              onClick={() => onChatSelect(chat.character_id)}
-            >
-              <div className="flex items-center gap-3 w-full">
-                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                  <Image
-                    src={character.avatar}
-                    alt={character.name}
-                    width={40}
-                    height={40}
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex flex-col items-start overflow-hidden">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{character.name}</span>
+            <div key={chat.id} className="group relative">
+              <Button
+                variant="ghost"
+                className={`w-full justify-start px-4 py-3 h-auto ${
+                  selectedCharacter === chat.character_id ? "bg-muted" : ""
+                }`}
+                onClick={() => onChatSelect(chat.character_id)}
+              >
+                <div className="flex items-center gap-3 w-full">
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                    <Image
+                      src={character.avatar}
+                      alt={character.name}
+                      width={40}
+                      height={40}
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-col items-start overflow-hidden">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{character.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {chat.character_id.split("_")[0].toUpperCase()}
+                      </span>
+                    </div>
                     <span className="text-xs text-muted-foreground">
-                      {chat.character_id.split("_")[0].toUpperCase()}
+                      {character.occupation}
+                    </span>
+                    <span className="text-sm text-muted-foreground truncate w-full">
+                      {getLastMessage(chat.messages)}
                     </span>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {character.occupation}
-                  </span>
-                  <span className="text-sm text-muted-foreground truncate w-full">
-                    {getLastMessage(chat.messages)}
-                  </span>
                 </div>
-              </div>
-            </Button>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteChat(chat.id);
+                }}
+              >
+                <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
+              </Button>
+            </div>
           );
         })}
       </div>
