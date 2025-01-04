@@ -228,6 +228,11 @@ export default function MessagingInterface() {
   };
 
   const saveChat = async (supabase: any, chatData: ChatData) => {
+    // Don't save empty chats
+    if (!chatData.messages || chatData.messages.length === 0) {
+      return null;
+    }
+
     // First check if chat exists
     const { data: existingChat, error: fetchError } = await supabase
       .from("chats")
@@ -243,7 +248,7 @@ export default function MessagingInterface() {
 
     // If chat exists, return the existing chat without updating
     if (existingChat) {
-      setMessages(existingChat.messages); // Update current messages to match database
+      setMessages(existingChat.messages);
       return existingChat;
     }
 
