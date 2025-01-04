@@ -73,23 +73,59 @@ export default function ChatList({
     try {
       if (!Array.isArray(messages) || messages.length === 0) return "";
       const lastMessage = messages[messages.length - 1];
-      if (!lastMessage || typeof lastMessage.text !== 'string') return "";
-      
-      const truncated = lastMessage.text.length > 35 
-        ? lastMessage.text.substring(0, 35) + "..."
-        : lastMessage.text;
+      if (!lastMessage || typeof lastMessage.text !== "string") return "";
+
+      const truncated =
+        lastMessage.text.length > 35
+          ? lastMessage.text.substring(0, 35) + "..."
+          : lastMessage.text;
       return truncated;
     } catch (error) {
-      console.error('Error in getLastMessage:', error);
+      console.error("Error in getLastMessage:", error);
       return "";
     }
   };
 
   const deleteChat = async (chatId: string) => {
-    const { error } = await supabase.from("chats").delete().eq("id", chatId);
+    try {
+      // First get the chat data
+      const { data: chatToDelete, error: fetchError } = await supabase
+        .from("chats")
+        .select("*")
+        .eq("id", chatId)
+        .single();
 
-    if (!error) {
-      setChats(chats.filter((chat) => chat.id !== chatId));
+      if (fetchError) {
+        console.error("Error fetching chat to delete:", fetchError);
+        return;
+      }
+
+      // Insert into deleted_chats
+      const { error: insertError } = await supabase
+        .from("deleted_chats")
+        .insert({
+          email: chatToDelete.email,
+          messages: chatToDelete.messages,
+          character_id: chatToDelete.character_id,
+          created_at: chatToDelete.created_at,
+        });
+
+      if (insertError) {
+        console.error("Error moving chat to deleted_chats:", insertError);
+        return;
+      }
+
+      // Delete from chats
+      const { error: deleteError } = await supabase
+        .from("chats")
+        .delete()
+        .eq("id", chatId);
+
+      if (!deleteError) {
+        setChats(chats.filter((chat) => chat.id !== chatId));
+      }
+    } catch (error) {
+      console.error("Error in delete operation:", error);
     }
   };
 
