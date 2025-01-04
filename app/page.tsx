@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import ChatList from "@/components/ChatList";
 
 interface Message {
   text: string;
@@ -393,10 +394,20 @@ export default function MessagingInterface() {
   };
 
   return (
-    <div className="flex justify-center bg-background min-h-screen">
-      <div className="flex flex-col w-full max-w-3xl h-screen">
-        {/* Make header fixed */}
-        <header className="flex items-center justify-between px-4 py-2 border-b shrink-0 sticky top-0 bg-background z-50">
+    <div className="flex h-screen bg-background">
+      {user && (
+        <ChatList
+          supabase={supabase}
+          userEmail={user.email}
+          characterGroups={characterGroups}
+          onChatSelect={handleCharacterChange}
+          selectedCharacter={selectedCharacter}
+        />
+      )}
+
+      <div className="flex-1 flex flex-col h-screen">
+        {/* Existing header, main content, and footer */}
+        <header className="flex items-center justify-between px-4 py-2 border-b">
           {selectedCharacter && (
             <>
               <Button
@@ -526,7 +537,7 @@ export default function MessagingInterface() {
         </header>
 
         {/* Add padding-top to main content to account for fixed header */}
-        <main className="flex-1 overflow-y-auto p-4 pt-6">
+        <main className="flex-1 overflow-y-auto p-4">
           <div className="flex flex-col space-y-4">
             {messages.length === 0 && selectedCharacter ? (
               <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
@@ -627,7 +638,7 @@ export default function MessagingInterface() {
         </main>
 
         {/* Update footer with ref */}
-        <footer className="border-t mt-auto shrink-0 bg-background sticky bottom-0">
+        <footer className="border-t">
           <form onSubmit={handleSubmit} className="p-4">
             <div className="flex items-center gap-2">
               <Input
