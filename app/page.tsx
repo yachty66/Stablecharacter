@@ -228,40 +228,35 @@ export default function MessagingInterface() {
   };
 
   const saveChat = async (supabase: any, chatData: ChatData) => {
-    // First check if a chat exists
-    const { data: existingChat } = await supabase
+    // First check if chat exists
+    const { data: existingChat, error: fetchError } = await supabase
       .from("chats")
       .select("*")
       .eq("email", chatData.email)
       .eq("character_id", chatData.character_id)
       .single();
 
+    if (fetchError && fetchError.code !== "PGRST116") {
+      console.error("Error checking existing chat:", fetchError);
+      return null;
+    }
+
+    // If chat exists, return the existing chat without updating
     if (existingChat) {
-      // Update existing chat
-      const { error } = await supabase
-        .from("chats")
-        .update({
-          messages: chatData.messages,
-        })
-        .eq("email", chatData.email)
-        .eq("character_id", chatData.character_id);
+      setMessages(existingChat.messages); // Update current messages to match database
+      return existingChat;
+    }
 
-      if (error) {
-        console.error("Error updating chat:", error);
-        return null;
-      }
-    } else {
-      // Insert new chat
-      const { error } = await supabase.from("chats").insert({
-        email: chatData.email,
-        messages: chatData.messages,
-        character_id: chatData.character_id,
-      });
+    // If no existing chat, insert the new one
+    const { error: insertError } = await supabase.from("chats").insert({
+      email: chatData.email,
+      messages: chatData.messages,
+      character_id: chatData.character_id,
+    });
 
-      if (error) {
-        console.error("Error inserting chat:", error);
-        return null;
-      }
+    if (insertError) {
+      console.error("Error inserting chat:", insertError);
+      return null;
     }
 
     setChatListRefresh((prev) => prev + 1);
