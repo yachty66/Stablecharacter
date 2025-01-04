@@ -329,6 +329,7 @@ export default function MessagingInterface() {
         }
 
         const data = await response.json();
+        setIsTyping(false);
         const newMessages = [
           ...messages,
           userMessage,
@@ -346,7 +347,6 @@ export default function MessagingInterface() {
         }
       } catch (error) {
         console.error("Error:", error);
-      } finally {
         setIsTyping(false);
       }
     }

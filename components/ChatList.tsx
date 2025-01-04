@@ -70,13 +70,19 @@ export default function ChatList({
   };
 
   const getLastMessage = (messages: any[]) => {
-    if (!messages || messages.length === 0) return "";
-    const lastMessage = messages[messages.length - 1];
-    const truncated =
-      lastMessage.text.length > 35
+    try {
+      if (!Array.isArray(messages) || messages.length === 0) return "";
+      const lastMessage = messages[messages.length - 1];
+      if (!lastMessage || typeof lastMessage.text !== 'string') return "";
+      
+      const truncated = lastMessage.text.length > 35 
         ? lastMessage.text.substring(0, 35) + "..."
         : lastMessage.text;
-    return truncated;
+      return truncated;
+    } catch (error) {
+      console.error('Error in getLastMessage:', error);
+      return "";
+    }
   };
 
   const deleteChat = async (chatId: string) => {
