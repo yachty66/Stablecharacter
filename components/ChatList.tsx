@@ -71,7 +71,6 @@ export default function ChatList({
   const getLastMessage = (messages: any[]) => {
     if (!messages || messages.length === 0) return "";
     const lastMessage = messages[messages.length - 1];
-    // Truncate message if it's too long
     const truncated =
       lastMessage.text.length > 35
         ? lastMessage.text.substring(0, 35) + "..."
@@ -109,7 +108,15 @@ export default function ChatList({
                   />
                 </div>
                 <div className="flex flex-col items-start overflow-hidden">
-                  <span className="font-medium">{character.name}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{character.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {chat.character_id.split("_")[0].toUpperCase()}
+                    </span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {character.occupation}
+                  </span>
                   <span className="text-sm text-muted-foreground truncate w-full">
                     {getLastMessage(chat.messages)}
                   </span>
