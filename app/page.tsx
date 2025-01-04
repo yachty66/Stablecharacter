@@ -393,16 +393,25 @@ export default function MessagingInterface() {
     }
   }, []);
 
-  const handleCharacterChange = async (newCharacter: string) => {
-    setSelectedCharacter(newCharacter);
-    setMessages([]);
+  const handleCharacterChange = async (characterId: string) => {
+    setSelectedCharacter(characterId);
 
+    // If user is logged in, try to load existing chat
     if (user?.email) {
-      const existingChat = await loadChat(supabase, user.email, newCharacter);
+      const existingChat = await loadChat(supabase, user.email, characterId);
       if (existingChat) {
         setMessages(existingChat.messages);
+      } else {
+        // Reset messages if no existing chat
+        setMessages([]);
       }
     }
+  };
+
+  // Then use this for both manual selection and random selection
+  const handleRandomCharacter = async () => {
+    const newCharacter = getRandomCharacter();
+    await handleCharacterChange(newCharacter);
   };
 
   return (
@@ -569,9 +578,10 @@ export default function MessagingInterface() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() =>
-                            setSelectedCharacter(getRandomCharacter())
-                          }
+                          onClick={async () => {
+                            const newCharacter = getRandomCharacter();
+                            await handleCharacterChange(newCharacter);
+                          }}
                         >
                           <RefreshCcw className="h-4 w-4 mr-2" />
                           Try another personality
