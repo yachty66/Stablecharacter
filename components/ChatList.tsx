@@ -8,6 +8,7 @@ interface ChatListProps {
   characterGroups: any;
   onChatSelect: (character_id: string) => void;
   selectedCharacter: string | null;
+  refreshTrigger?: number;
 }
 
 export default function ChatList({
@@ -16,24 +17,47 @@ export default function ChatList({
   characterGroups,
   onChatSelect,
   selectedCharacter,
+  refreshTrigger = 0,
 }: ChatListProps) {
   const [chats, setChats] = useState<any[]>([]);
 
+  const loadChats = async () => {
+    const { data, error } = await supabase
+      .from("chats")
+      .select("*")
+      .eq("email", userEmail)
+      .order("created_at", { ascending: false });
+
+    if (!error && data) {
+      setChats(data);
+    }
+  };
+
   useEffect(() => {
-    const loadChats = async () => {
-      const { data, error } = await supabase
-        .from("chats")
-        .select("*")
-        .eq("email", userEmail)
-        .order("created_at", { ascending: false });
-
-      if (!error && data) {
-        setChats(data);
-      }
-    };
-
+    // Initial load
     loadChats();
-  }, [supabase, userEmail]);
+
+    // Subscribe to changes
+    const channel = supabase
+      .channel("chat_changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "chats",
+          filter: `email=eq.${userEmail}`,
+        },
+        () => {
+          loadChats();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, userEmail, refreshTrigger]);
 
   const getCharacterInfo = (character_id: string) => {
     for (const group of Object.values(characterGroups)) {
@@ -56,7 +80,7 @@ export default function ChatList({
 
           return (
             <Button
-              key={chat.character_id}
+              key={chat.id}
               variant="ghost"
               className={`w-full justify-start px-4 py-3 h-auto ${
                 selectedCharacter === chat.character_id ? "bg-muted" : ""

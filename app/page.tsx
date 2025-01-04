@@ -128,6 +128,7 @@ export default function MessagingInterface() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
+  const [chatListRefresh, setChatListRefresh] = useState(0);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -149,15 +150,26 @@ export default function MessagingInterface() {
       } = await supabase.auth.getUser();
       setUser(user);
 
-      // If user just signed in, restore messages, input, and selected character
+      // If user just signed in, restore messages and save to Supabase
       if (user) {
         const pendingMessages = localStorage.getItem("pendingMessages");
         const pendingInput = localStorage.getItem("pendingInput");
         const pendingCharacter = localStorage.getItem("pendingCharacter");
 
-        if (pendingMessages) {
-          setMessages(JSON.parse(pendingMessages));
+        if (pendingMessages && pendingCharacter) {
+          const messages = JSON.parse(pendingMessages);
+          setMessages(messages);
+
+          // Save the pending chat to Supabase
+          await saveChat(supabase, {
+            email: user.email,
+            messages: messages,
+            character_id: pendingCharacter,
+          });
+
+          // Clear localStorage
           localStorage.removeItem("pendingMessages");
+          localStorage.removeItem("pendingCharacter");
         }
 
         if (pendingInput) {
@@ -167,7 +179,6 @@ export default function MessagingInterface() {
 
         if (pendingCharacter) {
           setSelectedCharacter(pendingCharacter);
-          localStorage.removeItem("pendingCharacter");
         } else {
           setSelectedCharacter(getRandomCharacter());
         }
@@ -253,6 +264,7 @@ export default function MessagingInterface() {
       }
     }
 
+    setChatListRefresh((prev) => prev + 1);
     return chatData;
   };
 
@@ -406,6 +418,7 @@ export default function MessagingInterface() {
           characterGroups={characterGroups}
           onChatSelect={handleCharacterChange}
           selectedCharacter={selectedCharacter}
+          refreshTrigger={chatListRefresh}
         />
       )}
 
