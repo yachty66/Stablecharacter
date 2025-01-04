@@ -68,6 +68,17 @@ export default function ChatList({
     return null;
   };
 
+  const getLastMessage = (messages: any[]) => {
+    if (!messages || messages.length === 0) return "";
+    const lastMessage = messages[messages.length - 1];
+    // Truncate message if it's too long
+    const truncated =
+      lastMessage.text.length > 35
+        ? lastMessage.text.substring(0, 35) + "..."
+        : lastMessage.text;
+    return truncated;
+  };
+
   return (
     <div className="w-80 border-r h-full flex flex-col">
       <div className="p-4 border-b">
@@ -87,7 +98,7 @@ export default function ChatList({
               }`}
               onClick={() => onChatSelect(chat.character_id)}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 w-full">
                 <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                   <Image
                     src={character.avatar}
@@ -97,10 +108,10 @@ export default function ChatList({
                     className="object-cover"
                   />
                 </div>
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-start overflow-hidden">
                   <span className="font-medium">{character.name}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {chat.character_id.split("_")[0].toUpperCase()}
+                  <span className="text-sm text-muted-foreground truncate w-full">
+                    {getLastMessage(chat.messages)}
                   </span>
                 </div>
               </div>
