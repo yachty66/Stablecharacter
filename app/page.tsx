@@ -42,6 +42,13 @@ interface CharacterGroups {
   };
 }
 
+interface ChatData {
+  email: string;
+  messages: Message[];
+  character_id: string;
+  created_at?: string;
+}
+
 export default function MessagingInterface() {
   // First define the character groups
   const characterGroups = {
@@ -208,6 +215,65 @@ export default function MessagingInterface() {
     return characterGroups[group].characters[charKey];
   };
 
+  const saveChat = async (supabase: any, chatData: ChatData) => {
+    // First check if a chat exists
+    const { data: existingChat } = await supabase
+      .from("chats")
+      .select("*")
+      .eq("email", chatData.email)
+      .eq("character_id", chatData.character_id)
+      .single();
+
+    if (existingChat) {
+      // Update existing chat
+      const { error } = await supabase
+        .from("chats")
+        .update({
+          messages: chatData.messages,
+        })
+        .eq("email", chatData.email)
+        .eq("character_id", chatData.character_id);
+
+      if (error) {
+        console.error("Error updating chat:", error);
+        return null;
+      }
+    } else {
+      // Insert new chat
+      const { error } = await supabase.from("chats").insert({
+        email: chatData.email,
+        messages: chatData.messages,
+        character_id: chatData.character_id,
+      });
+
+      if (error) {
+        console.error("Error inserting chat:", error);
+        return null;
+      }
+    }
+
+    return chatData;
+  };
+
+  const loadChat = async (
+    supabase: any,
+    email: string,
+    character_id: string
+  ) => {
+    const { data, error } = await supabase
+      .from("chats")
+      .select("*")
+      .eq("email", email)
+      .eq("character_id", character_id)
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      console.error("Error loading chat:", error);
+      return null;
+    }
+    return data;
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
@@ -217,9 +283,9 @@ export default function MessagingInterface() {
       }
 
       const userMessage = { text: inputValue, isUser: true };
-      setInputValue(""); // Clear input immediately
+      setInputValue("");
       setMessages((prev) => [...prev, userMessage]);
-      setIsTyping(true); // Show typing indicator
+      setIsTyping(true);
 
       const requestBody = {
         messages: [...messages, userMessage],
@@ -240,11 +306,25 @@ export default function MessagingInterface() {
         }
 
         const data = await response.json();
-        setMessages((prev) => [...prev, { text: data.message, isUser: false }]);
+        const newMessages = [
+          ...messages,
+          userMessage,
+          { text: data.message, isUser: false },
+        ];
+        setMessages(newMessages);
+
+        // Save chat if user is logged in
+        if (user?.email && selectedCharacter) {
+          await saveChat(supabase, {
+            email: user.email,
+            messages: newMessages,
+            character_id: selectedCharacter,
+          });
+        }
       } catch (error) {
         console.error("Error:", error);
       } finally {
-        setIsTyping(false); // Hide typing indicator
+        setIsTyping(false);
       }
     }
   };
@@ -300,6 +380,18 @@ export default function MessagingInterface() {
     }
   }, []);
 
+  const handleCharacterChange = async (newCharacter: string) => {
+    setSelectedCharacter(newCharacter);
+    setMessages([]);
+
+    if (user?.email) {
+      const existingChat = await loadChat(supabase, user.email, newCharacter);
+      if (existingChat) {
+        setMessages(existingChat.messages);
+      }
+    }
+  };
+
   return (
     <div className="flex justify-center bg-background min-h-screen">
       <div className="flex flex-col w-full max-w-3xl h-screen">
@@ -322,10 +414,7 @@ export default function MessagingInterface() {
               <div className="flex items-center gap-4">
                 <Select
                   value={selectedCharacter}
-                  onValueChange={(newCharacter) => {
-                    setSelectedCharacter(newCharacter);
-                    setMessages([]);
-                  }}
+                  onValueChange={handleCharacterChange}
                 >
                   <SelectTrigger className="w-[180px] sm:w-[200px]">
                     <SelectValue>
