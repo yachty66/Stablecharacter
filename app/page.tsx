@@ -394,7 +394,11 @@ export default function MessagingInterface() {
   };
 
   return (
-    <div className="flex h-screen bg-background">
+    <div
+      className={`flex h-screen bg-background ${
+        !user ? "max-w-2xl mx-auto" : ""
+      }`}
+    >
       {user && (
         <ChatList
           supabase={supabase}
