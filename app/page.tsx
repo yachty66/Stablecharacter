@@ -619,10 +619,10 @@ export default function MessagingInterface() {
             </header>
 
             {/* Add padding-top to main content to account for fixed header */}
-            <main className="flex-1 overflow-y-auto p-2 sm:p-4 flex flex-col justify-center">
+            <main className="flex-1 overflow-y-auto p-2 sm:p-4">
               <div className="flex flex-col space-y-4">
                 {messages.length === 0 && selectedCharacter ? (
-                  <div className="flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
+                  <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
                     <div className="max-w-md space-y-2">
                       <h2 className="text-2xl font-semibold text-foreground">
                         Chat with {getCurrentCharacter(selectedCharacter)?.name}
@@ -647,7 +647,7 @@ export default function MessagingInterface() {
                     </div>
                   </div>
                 ) : (
-                  <>
+                  <div className="flex flex-col">
                     {messages.map((message, index) => (
                       <div
                         key={index}
@@ -717,7 +717,7 @@ export default function MessagingInterface() {
                       </div>
                     )}
                     <div ref={messageEndRef} /> {/* Add scroll anchor */}
-                  </>
+                  </div>
                 )}
               </div>
             </main>
