@@ -7,10 +7,11 @@ interface ChatListProps {
   supabase: any;
   userEmail: string;
   characterGroups: any;
-  onChatSelect: (character_id: string) => void;
+  onChatSelect: (character_id: string | null) => void;
   selectedCharacter: string | null;
   refreshTrigger?: number;
   onChatDelete?: (character_id: string) => void;
+  onClose: () => void;
 }
 
 export default function ChatList({
@@ -21,6 +22,7 @@ export default function ChatList({
   selectedCharacter,
   refreshTrigger = 0,
   onChatDelete,
+  onClose,
 }: ChatListProps) {
   const [chats, setChats] = useState<any[]>([]);
 
@@ -139,8 +141,8 @@ export default function ChatList({
         <Button
           variant="ghost"
           size="icon"
+          onClick={onClose}
           className="sm:hidden"
-          onClick={() => onChatSelect(null)}
         >
           <X className="h-4 w-4" />
         </Button>

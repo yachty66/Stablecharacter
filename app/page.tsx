@@ -138,6 +138,7 @@ export default function MessagingInterface() {
   const [isTyping, setIsTyping] = useState(false);
   const [chatListRefresh, setChatListRefresh] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [showChatList, setShowChatList] = useState(false);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -473,6 +474,12 @@ export default function MessagingInterface() {
             selectedCharacter={selectedCharacter}
             refreshTrigger={chatListRefresh}
             onChatDelete={handleChatDelete}
+            onClose={() => {
+              // Show the current chat by setting showChatList to false
+              if (isMobile) {
+                setSelectedCharacter(selectedCharacter); // Keep the current character
+              }
+            }}
           />
         </div>
       )}
@@ -483,7 +490,7 @@ export default function MessagingInterface() {
           variant="ghost"
           size="icon"
           className="absolute left-2 top-2 z-50 h-8 w-8"
-          onClick={() => setSelectedCharacter(null)}
+          onClick={() => setShowChatList(true)}
         >
           <MessageSquareText className="h-5 w-5" />
         </Button>
@@ -808,6 +815,30 @@ export default function MessagingInterface() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Then update the chat list visibility condition */}
+      {user && ((showChatList && isMobile) || !isMobile) && (
+        <div
+          className={`${isMobile ? "fixed inset-0 z-50 bg-background" : ""}`}
+        >
+          <ChatList
+            supabase={supabase}
+            userEmail={user.email}
+            characterGroups={characterGroups}
+            onChatSelect={(character) => {
+              if (character) {
+                handleCharacterChange(character);
+                setSelectedCharacter(character);
+                setShowChatList(false); // Hide chat list on mobile after selection
+              }
+            }}
+            selectedCharacter={selectedCharacter}
+            refreshTrigger={chatListRefresh}
+            onChatDelete={handleChatDelete}
+            onClose={() => setShowChatList(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }
