@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RefreshCcw, Settings, Send, Share2, Check, Menu } from "lucide-react";
+import { RefreshCcw, Settings, Send, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, FormEvent, useEffect, useRef } from "react";
@@ -129,7 +129,6 @@ export default function MessagingInterface() {
   const [isLoading, setIsLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [chatListRefresh, setChatListRefresh] = useState(0);
-  const [showSidebar, setShowSidebar] = useState(false);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -433,404 +432,346 @@ export default function MessagingInterface() {
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Show/hide sidebar button for mobile */}
+    <div className="flex h-screen bg-background">
       {user && (
-        <div className="lg:hidden fixed top-4 left-4 z-50">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setShowSidebar(!showSidebar)}
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
-        </div>
+        <ChatList
+          supabase={supabase}
+          userEmail={user.email}
+          characterGroups={characterGroups}
+          onChatSelect={handleCharacterChange}
+          selectedCharacter={selectedCharacter}
+          refreshTrigger={chatListRefresh}
+          onChatDelete={handleChatDelete}
+        />
       )}
+      <div className="flex-1 flex justify-center">
+        <div className="w-full max-w-3xl">
+          <div className="h-full flex flex-col">
+            {/* Existing header, main content, and footer */}
+            <header className="flex items-center justify-between px-4 py-2 border-b">
+              {selectedCharacter && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={async () => {
+                      const newCharacter = getRandomCharacter();
+                      await handleCharacterChange(newCharacter);
+                    }}
+                  >
+                    <RefreshCcw className="h-4 w-4" />
+                  </Button>
 
-      {/* Chat list sidebar */}
-      {user && (
-        <div
-          className={`
-          fixed inset-y-0 left-0 z-40 lg:relative
-          transform transition-transform duration-300 ease-in-out
-          ${showSidebar ? "translate-x-0" : "-translate-x-full"}
-          lg:translate-x-0
-        `}
-        >
-          <ChatList
-            supabase={supabase}
-            userEmail={user.email}
-            characterGroups={characterGroups}
-            onChatSelect={(id) => {
-              handleCharacterChange(id);
-              setShowSidebar(false); // Close sidebar on mobile after selection
-            }}
-            selectedCharacter={selectedCharacter}
-            refreshTrigger={chatListRefresh}
-            onChatDelete={handleChatDelete}
-          />
-        </div>
-      )}
-
-      {/* Main chat area */}
-      <div className="flex-1 flex flex-col h-full">
-        <div className="flex h-screen bg-background">
-          {user && (
-            <ChatList
-              supabase={supabase}
-              userEmail={user.email}
-              characterGroups={characterGroups}
-              onChatSelect={handleCharacterChange}
-              selectedCharacter={selectedCharacter}
-              refreshTrigger={chatListRefresh}
-              onChatDelete={handleChatDelete}
-            />
-          )}
-          <div className="flex-1 flex justify-center">
-            <div className="w-full max-w-3xl">
-              <div className="h-full flex flex-col">
-                {/* Existing header, main content, and footer */}
-                <header className="flex items-center justify-between px-4 py-2 border-b">
-                  {selectedCharacter && (
-                    <>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={async () => {
-                          const newCharacter = getRandomCharacter();
-                          await handleCharacterChange(newCharacter);
-                        }}
-                      >
-                        <RefreshCcw className="h-4 w-4" />
-                      </Button>
-
-                      {/* Make select more mobile-friendly */}
-                      <div className="flex items-center gap-4">
-                        <Select
-                          value={selectedCharacter}
-                          onValueChange={handleCharacterChange}
-                        >
-                          <SelectTrigger className="w-[180px] sm:w-[200px]">
-                            <SelectValue>
-                              {selectedCharacter && (
-                                <span className="truncate">
-                                  {
-                                    characterGroups[
-                                      getCharacterGroup(selectedCharacter)
-                                    ].characters[selectedCharacter].name
-                                  }{" "}
-                                  (
-                                  {selectedCharacter
-                                    .split("_")[0]
-                                    .toUpperCase()}
-                                  )
-                                </span>
+                  {/* Make select more mobile-friendly */}
+                  <div className="flex items-center gap-4">
+                    <Select
+                      value={selectedCharacter}
+                      onValueChange={handleCharacterChange}
+                    >
+                      <SelectTrigger className="w-[180px] sm:w-[200px]">
+                        <SelectValue>
+                          {selectedCharacter && (
+                            <span className="truncate">
+                              {
+                                characterGroups[
+                                  getCharacterGroup(selectedCharacter)
+                                ].characters[selectedCharacter].name
+                              }{" "}
+                              ({selectedCharacter.split("_")[0].toUpperCase()})
+                            </span>
+                          )}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(characterGroups).map(
+                          ([groupKey, group]) => (
+                            <SelectGroup key={groupKey}>
+                              <SelectLabel>{group.title}</SelectLabel>
+                              {Object.entries(group.characters).map(
+                                ([charKey, char]) => (
+                                  <SelectItem key={charKey} value={charKey}>
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                                        <Image
+                                          src={char.avatar}
+                                          alt={char.name}
+                                          width={32}
+                                          height={32}
+                                          className="object-cover"
+                                        />
+                                      </div>
+                                      <span>
+                                        {char.name} (
+                                        {charKey.split("_")[0].toUpperCase()})
+                                      </span>
+                                    </div>
+                                  </SelectItem>
+                                )
                               )}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Object.entries(characterGroups).map(
-                              ([groupKey, group]) => (
-                                <SelectGroup key={groupKey}>
-                                  <SelectLabel>{group.title}</SelectLabel>
-                                  {Object.entries(group.characters).map(
-                                    ([charKey, char]) => (
-                                      <SelectItem key={charKey} value={charKey}>
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                                            <Image
-                                              src={char.avatar}
-                                              alt={char.name}
-                                              width={32}
-                                              height={32}
-                                              className="object-cover"
-                                            />
-                                          </div>
-                                          <span>
-                                            {char.name} (
-                                            {charKey
-                                              .split("_")[0]
-                                              .toUpperCase()}
-                                            )
-                                          </span>
-                                        </div>
-                                      </SelectItem>
-                                    )
-                                  )}
-                                </SelectGroup>
-                              )
-                            )}
-                          </SelectContent>
-                        </Select>
-                        {getCurrentCharacter(selectedCharacter)?.avatar && (
-                          <div className="w-10 h-10 rounded-full overflow-hidden">
+                            </SelectGroup>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                    {getCurrentCharacter(selectedCharacter)?.avatar && (
+                      <div className="w-10 h-10 rounded-full overflow-hidden">
+                        <Image
+                          src={getCurrentCharacter(selectedCharacter).avatar}
+                          alt={getCurrentCharacter(selectedCharacter).name}
+                          width={40}
+                          height={40}
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleShare}
+                      className="relative"
+                    >
+                      <span className="sr-only">Share</span>
+                      {showCopied ? (
+                        <Check className="h-5 w-5 text-green-500" />
+                      ) : (
+                        <Share2 className="h-5 w-5 text-muted-foreground" />
+                      )}
+                      {showCopied && (
+                        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-popover px-2 py-1 rounded shadow-sm whitespace-nowrap">
+                          Copied to clipboard!
+                        </span>
+                      )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        if (
+                          confirm(
+                            "Would you like to join our Discord community?"
+                          )
+                        ) {
+                          window.open("https://discord.gg/QtwWZ34A", "_blank");
+                        }
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 -28.5 256 256"
+                        className="h-5 w-5 text-muted-foreground hover:text-[#5865F2]"
+                        fill="currentColor"
+                      >
+                        <path d="M216.856339,16.5966031 C200.285002,8.84328665 182.566144,3.2084988 164.041564,0 C161.766523,4.11318106 159.108624,9.64549908 157.276099,14.0464379 C137.583995,11.0849896 118.072967,11.0849896 98.7430163,14.0464379 C96.9108417,9.64549908 94.1925838,4.11318106 91.8971895,0 C73.3526068,3.2084988 55.6133949,8.86399117 39.0420583,16.6376612 C5.61752293,67.146514 -3.4433191,116.400813 1.08711069,164.955721 C23.2560196,181.510915 44.7403634,191.567697 65.8621325,198.148576 C71.0772151,190.971126 75.7283628,183.341335 79.7352139,175.300261 C72.104019,172.400575 64.7949724,168.822202 57.8887866,164.667963 C59.7209612,163.310589 61.5131304,161.891452 63.2445898,160.431257 C105.36741,180.133187 151.134928,180.133187 192.754523,160.431257 C194.506336,161.891452 196.298154,163.310589 198.110326,164.667963 C191.183787,168.842556 183.854737,172.420929 176.223542,175.320965 C180.230393,183.341335 184.861538,190.991831 190.096624,198.16893 C211.238746,191.588051 232.743023,181.531619 254.911949,164.955721 C260.227747,108.668201 245.831087,59.8662432 216.856339,16.5966031 Z M85.4738752,135.09489 C72.8290281,135.09489 62.4592217,123.290155 62.4592217,108.914901 C62.4592217,94.5396472 72.607595,82.7145587 85.4738752,82.7145587 C98.3405064,82.7145587 108.709962,94.5189427 108.488529,108.914901 C108.508531,123.290155 98.3405064,135.09489 85.4738752,135.09489 Z M170.525237,135.09489 C157.88039,135.09489 147.510584,123.290155 147.510584,108.914901 C147.510584,94.5396472 157.658606,82.7145587 170.525237,82.7145587 C183.391518,82.7145587 193.761324,94.5189427 193.539891,108.914901 C193.539891,123.290155 183.391518,135.09489 170.525237,135.09489 Z" />
+                      </svg>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setShowSettings(true)}
+                    >
+                      <Settings className="h-5 w-5 text-muted-foreground" />
+                    </Button>
+                  </div>
+                </>
+              )}
+            </header>
+
+            {/* Add padding-top to main content to account for fixed header */}
+            <main className="flex-1 overflow-y-auto p-4">
+              <div className="flex flex-col space-y-4">
+                {messages.length === 0 && selectedCharacter ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
+                    <div className="max-w-md space-y-2">
+                      <h2 className="text-2xl font-semibold text-foreground">
+                        Chat with {getCurrentCharacter(selectedCharacter)?.name}
+                      </h2>
+                      <p>
+                        Start a conversation with your MBTI personality match.
+                        Just type your message below and press enter.
+                      </p>
+                      <div className="flex items-center justify-center gap-2 text-sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={async () => {
+                            const newCharacter = getRandomCharacter();
+                            await handleCharacterChange(newCharacter);
+                          }}
+                        >
+                          <RefreshCcw className="h-4 w-4 mr-2" />
+                          Try another personality
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {messages.map((message, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-start gap-2 mb-4 ${
+                          message.isUser ? "ml-auto flex-row-reverse" : ""
+                        } max-w-[85%]`}
+                      >
+                        {message.isUser ? (
+                          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                             <Image
-                              src={
-                                getCurrentCharacter(selectedCharacter).avatar
-                              }
-                              alt={getCurrentCharacter(selectedCharacter).name}
+                              src="/vercel.svg"
+                              alt="User"
                               width={40}
                               height={40}
                               className="object-cover"
                             />
                           </div>
+                        ) : (
+                          selectedCharacter && (
+                            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                              <Image
+                                src={
+                                  getCurrentCharacter(selectedCharacter)
+                                    ?.avatar || ""
+                                }
+                                alt={
+                                  getCurrentCharacter(selectedCharacter)
+                                    ?.name || "AI"
+                                }
+                                width={40}
+                                height={40}
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
+                          )
                         )}
+                        <div
+                          className={`p-3 rounded-lg ${
+                            message.isUser
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted"
+                          }`}
+                        >
+                          <p className="text-sm">{message.text}</p>
+                        </div>
                       </div>
-
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={handleShare}
-                          className="relative"
-                        >
-                          <span className="sr-only">Share</span>
-                          {showCopied ? (
-                            <Check className="h-5 w-5 text-green-500" />
-                          ) : (
-                            <Share2 className="h-5 w-5 text-muted-foreground" />
-                          )}
-                          {showCopied && (
-                            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-popover px-2 py-1 rounded shadow-sm whitespace-nowrap">
-                              Copied to clipboard!
-                            </span>
-                          )}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => {
-                            if (
-                              confirm(
-                                "Would you like to join our Discord community?"
-                              )
-                            ) {
-                              window.open(
-                                "https://discord.gg/QtwWZ34A",
-                                "_blank"
-                              );
-                            }
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 -28.5 256 256"
-                            className="h-5 w-5 text-muted-foreground hover:text-[#5865F2]"
-                            fill="currentColor"
-                          >
-                            <path d="M216.856339,16.5966031 C200.285002,8.84328665 182.566144,3.2084988 164.041564,0 C161.766523,4.11318106 159.108624,9.64549908 157.276099,14.0464379 C137.583995,11.0849896 118.072967,11.0849896 98.7430163,14.0464379 C96.9108417,9.64549908 94.1925838,4.11318106 91.8971895,0 C73.3526068,3.2084988 55.6133949,8.86399117 39.0420583,16.6376612 C5.61752293,67.146514 -3.4433191,116.400813 1.08711069,164.955721 C23.2560196,181.510915 44.7403634,191.567697 65.8621325,198.148576 C71.0772151,190.971126 75.7283628,183.341335 79.7352139,175.300261 C72.104019,172.400575 64.7949724,168.822202 57.8887866,164.667963 C59.7209612,163.310589 61.5131304,161.891452 63.2445898,160.431257 C105.36741,180.133187 151.134928,180.133187 192.754523,160.431257 C194.506336,161.891452 196.298154,163.310589 198.110326,164.667963 C191.183787,168.842556 183.854737,172.420929 176.223542,175.320965 C180.230393,183.341335 184.861538,190.991831 190.096624,198.16893 C211.238746,191.588051 232.743023,181.531619 254.911949,164.955721 C260.227747,108.668201 245.831087,59.8662432 216.856339,16.5966031 Z M85.4738752,135.09489 C72.8290281,135.09489 62.4592217,123.290155 62.4592217,108.914901 C62.4592217,94.5396472 72.607595,82.7145587 85.4738752,82.7145587 C98.3405064,82.7145587 108.709962,94.5189427 108.488529,108.914901 C108.508531,123.290155 98.3405064,135.09489 85.4738752,135.09489 Z M170.525237,135.09489 C157.88039,135.09489 147.510584,123.290155 147.510584,108.914901 C147.510584,94.5396472 157.658606,82.7145587 170.525237,82.7145587 C183.391518,82.7145587 193.761324,94.5189427 193.539891,108.914901 C193.539891,123.290155 183.391518,135.09489 170.525237,135.09489 Z" />
-                          </svg>
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setShowSettings(true)}
-                        >
-                          <Settings className="h-5 w-5 text-muted-foreground" />
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </header>
-
-                {/* Add padding-top to main content to account for fixed header */}
-                <main className="flex-1 overflow-y-auto p-4">
-                  <div className="flex flex-col space-y-4">
-                    {messages.length === 0 && selectedCharacter ? (
-                      <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
-                        <div className="max-w-md space-y-2">
-                          <h2 className="text-2xl font-semibold text-foreground">
-                            Chat with{" "}
-                            {getCurrentCharacter(selectedCharacter)?.name}
-                          </h2>
-                          <p>
-                            Start a conversation with your MBTI personality
-                            match. Just type your message below and press enter.
-                          </p>
-                          <div className="flex items-center justify-center gap-2 text-sm">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={async () => {
-                                const newCharacter = getRandomCharacter();
-                                await handleCharacterChange(newCharacter);
-                              }}
-                            >
-                              <RefreshCcw className="h-4 w-4 mr-2" />
-                              Try another personality
-                            </Button>
+                    ))}
+                    {isTyping && (
+                      <div className="flex items-start gap-2 mb-4 max-w-[85%]">
+                        <Image
+                          src={
+                            getCurrentCharacter(selectedCharacter).avatar ||
+                            "/placeholder.svg"
+                          }
+                          alt="AI"
+                          width={32}
+                          height={32}
+                          className="rounded-full mt-1"
+                        />
+                        <div className="p-3 rounded-lg bg-muted">
+                          <div className="flex gap-1">
+                            <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.3s]"></span>
+                            <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.15s]"></span>
+                            <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce"></span>
                           </div>
                         </div>
                       </div>
-                    ) : (
-                      <>
-                        {messages.map((message, index) => (
-                          <div
-                            key={index}
-                            className={`flex items-start gap-2 mb-4 ${
-                              message.isUser ? "ml-auto flex-row-reverse" : ""
-                            } max-w-[85%]`}
-                          >
-                            {message.isUser ? (
-                              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                                <Image
-                                  src="/vercel.svg"
-                                  alt="User"
-                                  width={40}
-                                  height={40}
-                                  className="object-cover"
-                                />
-                              </div>
-                            ) : (
-                              selectedCharacter && (
-                                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                                  <Image
-                                    src={
-                                      getCurrentCharacter(selectedCharacter)
-                                        ?.avatar || ""
-                                    }
-                                    alt={
-                                      getCurrentCharacter(selectedCharacter)
-                                        ?.name || "AI"
-                                    }
-                                    width={40}
-                                    height={40}
-                                    className="object-cover w-full h-full"
-                                  />
-                                </div>
-                              )
-                            )}
-                            <div
-                              className={`p-3 rounded-lg ${
-                                message.isUser
-                                  ? "bg-primary text-primary-foreground"
-                                  : "bg-muted"
-                              }`}
-                            >
-                              <p className="text-sm">{message.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                        {isTyping && (
-                          <div className="flex items-start gap-2 mb-4 max-w-[85%]">
-                            <Image
-                              src={
-                                getCurrentCharacter(selectedCharacter).avatar ||
-                                "/placeholder.svg"
-                              }
-                              alt="AI"
-                              width={32}
-                              height={32}
-                              className="rounded-full mt-1"
-                            />
-                            <div className="p-3 rounded-lg bg-muted">
-                              <div className="flex gap-1">
-                                <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.3s]"></span>
-                                <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.15s]"></span>
-                                <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce"></span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                        <div ref={messageEndRef} /> {/* Add scroll anchor */}
-                      </>
                     )}
-                  </div>
-                </main>
-
-                {/* Update footer with ref */}
-                <footer className="border-t">
-                  <form onSubmit={handleSubmit} className="p-4">
-                    <div className="flex items-center gap-2">
-                      <Input
-                        ref={inputRef}
-                        placeholder="Type your message..."
-                        className="bg-muted h-12 text-base"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                      />
-                      <Button
-                        type="submit"
-                        size="icon"
-                        className="h-12 w-12"
-                        onClick={(e) => {
-                          if (messages.length >= 4 && !user) {
-                            e.preventDefault();
-                            setShowSettings(true);
-                            return;
-                          }
-                        }}
-                      >
-                        <Send className="h-5 w-5" />
-                      </Button>
-                    </div>
-                  </form>
-                </footer>
+                    <div ref={messageEndRef} /> {/* Add scroll anchor */}
+                  </>
+                )}
               </div>
-            </div>
-          </div>
-        </div>
+            </main>
 
-        <Dialog open={showSettings} onOpenChange={setShowSettings}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Settings</DialogTitle>
-            </DialogHeader>
-            <div className="flex flex-col gap-4 py-4">
-              {user ? (
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-3">
-                    <Image
-                      src={
-                        user?.user_metadata?.avatar_url || "/placeholder.svg"
-                      }
-                      alt={user?.user_metadata?.full_name || "Profile"}
-                      width={40}
-                      height={40}
-                      className="rounded-full"
-                      onError={(e) => {
-                        e.currentTarget.src = "/placeholder.svg";
-                      }}
-                    />
-                    <div>
-                      <p className="font-medium">
-                        {user.user_metadata?.full_name}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {user.email}
-                      </p>
-                    </div>
-                  </div>
+            {/* Update footer with ref */}
+            <footer className="border-t">
+              <form onSubmit={handleSubmit} className="p-4">
+                <div className="flex items-center gap-2">
+                  <Input
+                    ref={inputRef}
+                    placeholder="Type your message..."
+                    className="bg-muted h-12 text-base"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                  />
                   <Button
-                    onClick={async () => {
-                      await supabase.auth.signOut();
-                      setUser(null);
-                      setShowSettings(false);
-                      window.location.reload(); // Force reload to clear all states
+                    type="submit"
+                    size="icon"
+                    className="h-12 w-12"
+                    onClick={(e) => {
+                      if (messages.length >= 4 && !user) {
+                        e.preventDefault();
+                        setShowSettings(true);
+                        return;
+                      }
                     }}
-                    variant="outline"
                   >
-                    Sign out
+                    <Send className="h-5 w-5" />
                   </Button>
                 </div>
-              ) : (
-                <Button
-                  onClick={handleGoogleSignIn}
-                  className="w-full flex items-center justify-center gap-2"
-                >
-                  <Image
-                    src="https://www.google.com/favicon.ico"
-                    alt="Google"
-                    width={20}
-                    height={20}
-                  />
-                  Sign in with Google
-                </Button>
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
+              </form>
+            </footer>
+          </div>
+        </div>
       </div>
+
+      <Dialog open={showSettings} onOpenChange={setShowSettings}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Settings</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-4">
+            {user ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={user?.user_metadata?.avatar_url || "/placeholder.svg"}
+                    alt={user?.user_metadata?.full_name || "Profile"}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder.svg";
+                    }}
+                  />
+                  <div>
+                    <p className="font-medium">
+                      {user.user_metadata?.full_name}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  onClick={async () => {
+                    await supabase.auth.signOut();
+                    setUser(null);
+                    setShowSettings(false);
+                    window.location.reload(); // Force reload to clear all states
+                  }}
+                  variant="outline"
+                >
+                  Sign out
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={handleGoogleSignIn}
+                className="w-full flex items-center justify-center gap-2"
+              >
+                <Image
+                  src="https://www.google.com/favicon.ico"
+                  alt="Google"
+                  width={20}
+                  height={20}
+                />
+                Sign in with Google
+              </Button>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
