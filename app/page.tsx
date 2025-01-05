@@ -459,6 +459,9 @@ export default function MessagingInterface() {
                     variant="ghost"
                     size="icon"
                     onClick={async () => {
+                      // First clear the messages
+                      setMessages([]);
+                      // Then select and set new character
                       const newCharacter = getRandomCharacter();
                       await handleCharacterChange(newCharacter);
                     }}
