@@ -397,11 +397,15 @@ export default function MessagingInterface() {
 
   // Add useEffect for mobile input focus
   useEffect(() => {
-    // Focus input on mobile when component mounts
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+    // Focus input on mobile when component mounts or messages change
+    const timeoutId = setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [messages.length]); // Add messages.length as dependency to refocus after each message
 
   const handleCharacterChange = async (characterId: string) => {
     setSelectedCharacter(characterId);
@@ -448,7 +452,7 @@ export default function MessagingInterface() {
         <div className="w-full max-w-3xl">
           <div className="h-full flex flex-col">
             {/* Existing header, main content, and footer */}
-            <header className="flex items-center justify-between px-4 py-2 border-b">
+            <header className="flex items-center justify-between px-2 sm:px-4 py-2 border-b">
               {selectedCharacter && (
                 <>
                   <Button
@@ -462,22 +466,35 @@ export default function MessagingInterface() {
                     <RefreshCcw className="h-4 w-4" />
                   </Button>
 
-                  {/* Make select more mobile-friendly */}
-                  <div className="flex items-center gap-4">
+                  {/* Update the select container with image */}
+                  <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-center">
                     <Select
                       value={selectedCharacter}
                       onValueChange={handleCharacterChange}
                     >
-                      <SelectTrigger className="w-[180px] sm:w-[200px]">
+                      <SelectTrigger className="w-[180px] sm:w-[200px] flex items-center gap-2">
+                        {selectedCharacter && (
+                          <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+                            <Image
+                              src={
+                                getCurrentCharacter(selectedCharacter)
+                                  ?.avatar || ""
+                              }
+                              alt={
+                                getCurrentCharacter(selectedCharacter)?.name ||
+                                ""
+                              }
+                              width={24}
+                              height={24}
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+                        )}
                         <SelectValue>
                           {selectedCharacter && (
-                            <span className="truncate">
-                              {
-                                characterGroups[
-                                  getCharacterGroup(selectedCharacter)
-                                ].characters[selectedCharacter].name
-                              }{" "}
-                              ({selectedCharacter.split("_")[0].toUpperCase()})
+                            <span className="truncate text-sm sm:text-base">
+                              {getCurrentCharacter(selectedCharacter)?.name} (
+                              {selectedCharacter.split("_")[0].toUpperCase()})
                             </span>
                           )}
                         </SelectValue>
@@ -513,66 +530,43 @@ export default function MessagingInterface() {
                         )}
                       </SelectContent>
                     </Select>
-                    {getCurrentCharacter(selectedCharacter)?.avatar && (
-                      <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <Image
-                          src={getCurrentCharacter(selectedCharacter).avatar}
-                          alt={getCurrentCharacter(selectedCharacter).name}
-                          width={40}
-                          height={40}
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handleShare}
-                      className="relative"
-                    >
-                      <span className="sr-only">Share</span>
+                  {/* Update the buttons container with Share and Discord */}
+                  <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="icon" onClick={handleShare}>
                       {showCopied ? (
-                        <Check className="h-5 w-5 text-green-500" />
+                        <Check className="h-4 w-4" />
                       ) : (
-                        <Share2 className="h-5 w-5 text-muted-foreground" />
-                      )}
-                      {showCopied && (
-                        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-popover px-2 py-1 rounded shadow-sm whitespace-nowrap">
-                          Copied to clipboard!
-                        </span>
+                        <Share2 className="h-4 w-4" />
                       )}
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        if (
-                          confirm(
-                            "Would you like to join our Discord community?"
-                          )
-                        ) {
-                          window.open("https://discord.gg/QtwWZ34A", "_blank");
-                        }
-                      }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 -28.5 256 256"
-                        className="h-5 w-5 text-muted-foreground hover:text-[#5865F2]"
-                        fill="currentColor"
+                    <Button variant="ghost" size="icon" asChild>
+                      <Link
+                        href="https://discord.gg/your-discord"
+                        target="_blank"
                       >
-                        <path d="M216.856339,16.5966031 C200.285002,8.84328665 182.566144,3.2084988 164.041564,0 C161.766523,4.11318106 159.108624,9.64549908 157.276099,14.0464379 C137.583995,11.0849896 118.072967,11.0849896 98.7430163,14.0464379 C96.9108417,9.64549908 94.1925838,4.11318106 91.8971895,0 C73.3526068,3.2084988 55.6133949,8.86399117 39.0420583,16.6376612 C5.61752293,67.146514 -3.4433191,116.400813 1.08711069,164.955721 C23.2560196,181.510915 44.7403634,191.567697 65.8621325,198.148576 C71.0772151,190.971126 75.7283628,183.341335 79.7352139,175.300261 C72.104019,172.400575 64.7949724,168.822202 57.8887866,164.667963 C59.7209612,163.310589 61.5131304,161.891452 63.2445898,160.431257 C105.36741,180.133187 151.134928,180.133187 192.754523,160.431257 C194.506336,161.891452 196.298154,163.310589 198.110326,164.667963 C191.183787,168.842556 183.854737,172.420929 176.223542,175.320965 C180.230393,183.341335 184.861538,190.991831 190.096624,198.16893 C211.238746,191.588051 232.743023,181.531619 254.911949,164.955721 C260.227747,108.668201 245.831087,59.8662432 216.856339,16.5966031 Z M85.4738752,135.09489 C72.8290281,135.09489 62.4592217,123.290155 62.4592217,108.914901 C62.4592217,94.5396472 72.607595,82.7145587 85.4738752,82.7145587 C98.3405064,82.7145587 108.709962,94.5189427 108.488529,108.914901 C108.508531,123.290155 98.3405064,135.09489 85.4738752,135.09489 Z M170.525237,135.09489 C157.88039,135.09489 147.510584,123.290155 147.510584,108.914901 C147.510584,94.5396472 157.658606,82.7145587 170.525237,82.7145587 C183.391518,82.7145587 193.761324,94.5189427 193.539891,108.914901 C193.539891,123.290155 183.391518,135.09489 170.525237,135.09489 Z" />
-                      </svg>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="opacity-75"
+                        >
+                          <path
+                            d="M20.317 4.37c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.038c-.21.375-.444.864-.608 1.25a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.25.077.077 0 0 0-.079-.038A19.496 19.496 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </Link>
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => setShowSettings(true)}
                     >
-                      <Settings className="h-5 w-5 text-muted-foreground" />
+                      <Settings className="h-4 w-4 text-muted-foreground" />
                     </Button>
                   </div>
                 </>
@@ -580,7 +574,7 @@ export default function MessagingInterface() {
             </header>
 
             {/* Add padding-top to main content to account for fixed header */}
-            <main className="flex-1 overflow-y-auto p-4">
+            <main className="flex-1 overflow-y-auto p-2 sm:p-4">
               <div className="flex flex-col space-y-4">
                 {messages.length === 0 && selectedCharacter ? (
                   <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
@@ -685,19 +679,19 @@ export default function MessagingInterface() {
 
             {/* Update footer with ref */}
             <footer className="border-t">
-              <form onSubmit={handleSubmit} className="p-4">
+              <form onSubmit={handleSubmit} className="p-2 sm:p-4">
                 <div className="flex items-center gap-2">
                   <Input
                     ref={inputRef}
                     placeholder="Type your message..."
-                    className="bg-muted h-12 text-base"
+                    className="bg-muted h-10 sm:h-12 text-sm sm:text-base"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                   />
                   <Button
                     type="submit"
                     size="icon"
-                    className="h-12 w-12"
+                    className="h-10 w-10 sm:h-12 sm:w-12"
                     onClick={(e) => {
                       if (messages.length >= 4 && !user) {
                         e.preventDefault();
@@ -706,7 +700,7 @@ export default function MessagingInterface() {
                       }
                     }}
                   >
-                    <Send className="h-5 w-5" />
+                    <Send className="h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </div>
               </form>
