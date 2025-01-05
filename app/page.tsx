@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RefreshCcw, Settings, Send, Share2, Check } from "lucide-react";
+import { RefreshCcw, Settings, Send, Share2, Check, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, FormEvent, useEffect, useRef } from "react";
@@ -129,6 +129,7 @@ export default function MessagingInterface() {
   const [isLoading, setIsLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [chatListRefresh, setChatListRefresh] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -435,19 +436,51 @@ export default function MessagingInterface() {
     }
   };
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <div className="flex h-screen bg-background">
-      {user && (
-        <ChatList
-          supabase={supabase}
-          userEmail={user.email}
-          characterGroups={characterGroups}
-          onChatSelect={handleCharacterChange}
-          selectedCharacter={selectedCharacter}
-          refreshTrigger={chatListRefresh}
-          onChatDelete={handleChatDelete}
-        />
+      {/* Show/hide chat list based on mobile state */}
+      {user && (selectedCharacter === null || !isMobile) && (
+        <div
+          className={`${isMobile ? "fixed inset-0 z-50 bg-background" : ""}`}
+        >
+          <ChatList
+            supabase={supabase}
+            userEmail={user.email}
+            characterGroups={characterGroups}
+            onChatSelect={(character) => {
+              handleCharacterChange(character);
+              setSelectedCharacter(character);
+            }}
+            selectedCharacter={selectedCharacter}
+            refreshTrigger={chatListRefresh}
+            onChatDelete={handleChatDelete}
+          />
+        </div>
       )}
+
+      {/* Add a button to show chat list on mobile */}
+      {user && selectedCharacter && isMobile && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed left-4 top-4 z-50"
+          onClick={() => setSelectedCharacter(null)}
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+      )}
+
       <div className="flex-1 flex justify-center">
         <div className="w-full max-w-3xl">
           <div className="h-full flex flex-col">
@@ -545,10 +578,7 @@ export default function MessagingInterface() {
                       )}
                     </Button>
                     <Button variant="ghost" size="icon" asChild>
-                      <Link
-                        href="https://discord.gg/your-discord"
-                        target="_blank"
-                      >
+                      <Link href="https://discord.gg/QtwWZ34A" target="_blank">
                         <svg
                           width="20"
                           height="20"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 
 interface ChatListProps {
   supabase: any;
@@ -133,9 +133,17 @@ export default function ChatList({
   };
 
   return (
-    <div className="w-80 border-r h-full flex flex-col">
-      <div className="p-4 border-b">
+    <div className="w-full sm:w-80 border-r h-full flex flex-col">
+      <div className="p-4 border-b flex justify-between items-center">
         <h2 className="font-semibold">Your Conversations</h2>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="sm:hidden"
+          onClick={() => onChatSelect(null)}
+        >
+          <X className="h-4 w-4" />
+        </Button>
       </div>
       <div className="flex-1 overflow-y-auto">
         {chats.map((chat) => {
