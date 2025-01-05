@@ -459,7 +459,7 @@ export default function MessagingInterface() {
   return (
     <div className="flex h-screen bg-background">
       {/* Show/hide chat list based on mobile state */}
-      {user && (selectedCharacter === null || !isMobile) && (
+      {user && ((showChatList && isMobile) || !isMobile) && (
         <div
           className={`${isMobile ? "fixed inset-0 z-50 bg-background" : ""}`}
         >
@@ -468,32 +468,18 @@ export default function MessagingInterface() {
             userEmail={user.email}
             characterGroups={characterGroups}
             onChatSelect={(character) => {
-              handleCharacterChange(character);
-              setSelectedCharacter(character);
+              if (character) {
+                handleCharacterChange(character);
+                setSelectedCharacter(character);
+                setShowChatList(false);
+              }
             }}
             selectedCharacter={selectedCharacter}
             refreshTrigger={chatListRefresh}
             onChatDelete={handleChatDelete}
-            onClose={() => {
-              // Show the current chat by setting showChatList to false
-              if (isMobile) {
-                setSelectedCharacter(selectedCharacter); // Keep the current character
-              }
-            }}
+            onClose={() => setShowChatList(false)}
           />
         </div>
-      )}
-
-      {/* Add a button to show chat list on mobile */}
-      {user && selectedCharacter && isMobile && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute left-2 top-2 z-50 h-8 w-8"
-          onClick={() => setShowChatList(true)}
-        >
-          <MessageSquareText className="h-5 w-5" />
-        </Button>
       )}
 
       <div className="flex-1 flex justify-center">
@@ -503,6 +489,16 @@ export default function MessagingInterface() {
             <header className="flex items-center justify-between px-2 sm:px-4 py-2 border-b">
               {selectedCharacter && (
                 <>
+                  {user && isMobile && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setShowChatList(true)}
+                    >
+                      <MessageSquareText className="h-5 w-5" />
+                    </Button>
+                  )}
+
                   {!user && (
                     <Button
                       variant="ghost"
@@ -815,30 +811,6 @@ export default function MessagingInterface() {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Then update the chat list visibility condition */}
-      {user && ((showChatList && isMobile) || !isMobile) && (
-        <div
-          className={`${isMobile ? "fixed inset-0 z-50 bg-background" : ""}`}
-        >
-          <ChatList
-            supabase={supabase}
-            userEmail={user.email}
-            characterGroups={characterGroups}
-            onChatSelect={(character) => {
-              if (character) {
-                handleCharacterChange(character);
-                setSelectedCharacter(character);
-                setShowChatList(false); // Hide chat list on mobile after selection
-              }
-            }}
-            selectedCharacter={selectedCharacter}
-            refreshTrigger={chatListRefresh}
-            onChatDelete={handleChatDelete}
-            onClose={() => setShowChatList(false)}
-          />
-        </div>
-      )}
     </div>
   );
 }

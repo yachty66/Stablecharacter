@@ -5,3 +5,16 @@
 
 
 alright so right now there are no persistent chats. i would like to make a new user interface for the case a user is logged in. it basically should show all the chats on the left side and the current chat in the main field like its the case if you open a chat app in the browser. how can we do this
+
+
+
+- make ads on reddit (should take the spend 500$ get 500$ offer) and enable reddit auth to trace the signups from reddit and then chat with them
+- go through all of the feedback in reddit and implement each of the points in the feedback into the app
+- enable anime version characters in the same color styles like the real mbti types
+    - might need to finetune img gen models here 
+- enable photos in the chat (this is closely related to the previous point)
+- build a monetanization feature, something like $9,99 a month - could include for example the previous points, ie you can get images if you pay 9.99$ bucks
+- store the chats on the left side of the chat
+- make an IOS app - for humans its most natural to have a chat via ios app, thats just the natural way how humans are chatting
+- rebrand to klons.ai and choose the stick figure with black background as an profile image
+- restructure codebase (700 lines in page.tsx is def to long)
