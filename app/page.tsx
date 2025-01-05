@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RefreshCcw, Settings, Send, Share2, Check, Menu } from "lucide-react";
+import {
+  RefreshCcw,
+  Settings,
+  Send,
+  Share2,
+  Check,
+  Menu,
+  MessageSquareText,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, FormEvent, useEffect, useRef } from "react";
@@ -474,10 +482,10 @@ export default function MessagingInterface() {
         <Button
           variant="ghost"
           size="icon"
-          className="fixed left-4 top-4 z-50"
+          className="absolute left-2 top-2 z-50 h-8 w-8"
           onClick={() => setSelectedCharacter(null)}
         >
-          <Menu className="h-4 w-4" />
+          <MessageSquareText className="h-5 w-5" />
         </Button>
       )}
 
@@ -488,21 +496,20 @@ export default function MessagingInterface() {
             <header className="flex items-center justify-between px-2 sm:px-4 py-2 border-b">
               {selectedCharacter && (
                 <>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={async () => {
-                      // First clear the messages
-                      setMessages([]);
-                      // Then select and set new character
-                      const newCharacter = getRandomCharacter();
-                      await handleCharacterChange(newCharacter);
-                    }}
-                  >
-                    <RefreshCcw className="h-4 w-4" />
-                  </Button>
+                  {!user && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={async () => {
+                        setMessages([]);
+                        const newCharacter = getRandomCharacter();
+                        await handleCharacterChange(newCharacter);
+                      }}
+                    >
+                      <RefreshCcw className="h-4 w-4" />
+                    </Button>
+                  )}
 
-                  {/* Update the select container with image */}
                   <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-center">
                     <Select
                       value={selectedCharacter}
@@ -568,7 +575,6 @@ export default function MessagingInterface() {
                     </Select>
                   </div>
 
-                  {/* Update the buttons container with Share and Discord */}
                   <div className="flex items-center gap-1">
                     <Button variant="ghost" size="icon" onClick={handleShare}>
                       {showCopied ? (
@@ -578,7 +584,10 @@ export default function MessagingInterface() {
                       )}
                     </Button>
                     <Button variant="ghost" size="icon" asChild>
-                      <Link href="https://discord.gg/QtwWZ34A" target="_blank">
+                      <Link
+                        href="https://discord.gg/your-discord"
+                        target="_blank"
+                      >
                         <svg
                           width="20"
                           height="20"
