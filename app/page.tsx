@@ -489,6 +489,7 @@ export default function MessagingInterface() {
             <header className="flex items-center justify-between px-2 sm:px-4 py-2 border-b">
               {selectedCharacter && (
                 <>
+                  {/* Mobile chat list button */}
                   {user && isMobile && (
                     <Button
                       variant="ghost"
@@ -499,7 +500,8 @@ export default function MessagingInterface() {
                     </Button>
                   )}
 
-                  {!user && (
+                  {/* Random character button - show on desktop or when not logged in */}
+                  {(!user || !isMobile) && (
                     <Button
                       variant="ghost"
                       size="icon"
