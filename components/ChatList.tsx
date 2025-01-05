@@ -159,7 +159,13 @@ export default function ChatList({
                 className={`w-full justify-start px-4 py-3 h-auto ${
                   selectedCharacter === chat.character_id ? "bg-muted" : ""
                 }`}
-                onClick={() => onChatSelect(chat.character_id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (chat.character_id) {
+                    onChatSelect(chat.character_id);
+                  }
+                }}
               >
                 <div className="flex items-center gap-3 w-full">
                   <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
