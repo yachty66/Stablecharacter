@@ -466,7 +466,7 @@ export default function MessagingInterface() {
   }, []);
 
   return (
-    <div className="flex h-screen bg-background max-w-[100vw] overflow-x-hidden">
+    <div className="flex h-[100dvh] bg-background max-w-[100vw] overflow-hidden">
       {/* Show/hide chat list based on mobile state */}
       {user && ((showChatList && isMobile) || !isMobile) && (
         <div
