@@ -447,7 +447,16 @@ export default function MessagingInterface() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
+      const isMobileView = window.innerWidth < 640;
+      const isTouchDevice =
+        "ontouchstart" in window || navigator.maxTouchPoints > 0;
+      setIsMobile(isMobileView || isTouchDevice);
+      console.log("Device checks:", {
+        width: window.innerWidth,
+        isMobileView,
+        isTouchDevice,
+        userAgent: navigator.userAgent,
+      });
     };
 
     checkMobile();
@@ -457,7 +466,7 @@ export default function MessagingInterface() {
   }, []);
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background max-w-[100vw] overflow-x-hidden">
       {/* Show/hide chat list based on mobile state */}
       {user && ((showChatList && isMobile) || !isMobile) && (
         <div

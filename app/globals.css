@@ -60,6 +60,16 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+  html {
+    -webkit-text-size-adjust: none;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+  }
+
+  input,
+  textarea {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
 }
 
 @layer base {
