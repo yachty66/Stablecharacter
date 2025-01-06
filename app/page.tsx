@@ -599,7 +599,7 @@ export default function MessagingInterface() {
                     </Button>
                     <Button variant="ghost" size="icon" asChild>
                       <Link
-                        href="https://discord.gg/your-discord"
+                        href="https://discord.gg/QtwWZ34A"
                         target="_blank"
                       >
                         <svg
