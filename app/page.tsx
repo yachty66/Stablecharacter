@@ -749,7 +749,7 @@ export default function MessagingInterface() {
                     size="icon"
                     className="h-10 w-10 sm:h-12 sm:w-12"
                     onClick={(e) => {
-                      if (messages.length >= 4 && !user) {
+                      if (messages.length >= 10 && !user) {
                         e.preventDefault();
                         setShowSettings(true);
                         return;
