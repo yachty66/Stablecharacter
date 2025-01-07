@@ -801,7 +801,9 @@ export default function MessagingInterface() {
       <Dialog open={showSettings} onOpenChange={setShowSettings}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Sign in to see your chats!</DialogTitle>
+            <DialogTitle>
+              {user ? "Settings" : "Sign in to see your chats!"}
+            </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
             {user ? (
@@ -826,6 +828,23 @@ export default function MessagingInterface() {
                     </p>
                   </div>
                 </div>
+
+                {/* Add Manage Subscription button for subscribed users */}
+                {isSubscribed && (
+                  <Button
+                    onClick={() => {
+                      window.open(
+                        "https://billing.stripe.com/p/login/test_4gwcN29BlfB8ahWeUU",
+                        "_blank"
+                      );
+                    }}
+                    variant="outline"
+                    className="flex items-center gap-2"
+                  >
+                    Manage Subscription
+                  </Button>
+                )}
+
                 <Button
                   onClick={async () => {
                     await supabase.auth.signOut();
