@@ -141,6 +141,7 @@ export default function MessagingInterface() {
   const [isMobile, setIsMobile] = useState(false);
   const [showChatList, setShowChatList] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -467,6 +468,24 @@ export default function MessagingInterface() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  const checkSubscription = async () => {
+    if (!user?.email) return;
+
+    const { data: subscription } = await supabase
+      .from("subscriptions")
+      .select("*")
+      .eq("email", user.email)
+      .single();
+
+    setIsSubscribed(!!subscription);
+  };
+
+  useEffect(() => {
+    if (user) {
+      checkSubscription();
+    }
+  }, [user]);
+
   return (
     <div className="flex h-[100dvh] bg-background max-w-[100vw] overflow-hidden">
       {/* Show/hide chat list based on mobile state */}
@@ -736,7 +755,7 @@ export default function MessagingInterface() {
             <footer className="border-t">
               <form onSubmit={handleSubmit} className="p-2 sm:p-4">
                 <div className="flex items-center gap-2">
-                  {user && (
+                  {user && !isSubscribed && (
                     <Button
                       type="button"
                       variant="outline"
