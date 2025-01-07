@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import ChatList from "@/components/ChatList";
+import PremiumModal from "@/components/PremiumModal";
 
 interface Message {
   text: string;
@@ -139,6 +140,7 @@ export default function MessagingInterface() {
   const [chatListRefresh, setChatListRefresh] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [showChatList, setShowChatList] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -739,9 +741,7 @@ export default function MessagingInterface() {
                       type="button"
                       variant="outline"
                       className="h-10 sm:h-12 bg-gradient-to-r from-purple-500/10 to-purple-400/20 hover:from-purple-500/20 hover:to-purple-400/30 border-purple-500/50 hover:border-purple-400 transition-all duration-300 gap-1.5"
-                      onClick={() => {
-                        console.log("Premium subscription clicked!");
-                      }}
+                      onClick={() => setShowPremiumModal(true)}
                     >
                       <span className="text-purple-400 hidden sm:inline">
                         ✨
@@ -836,6 +836,11 @@ export default function MessagingInterface() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <PremiumModal
+        open={showPremiumModal}
+        onOpenChange={setShowPremiumModal}
+      />
     </div>
   );
 }
