@@ -598,10 +598,7 @@ export default function MessagingInterface() {
                       )}
                     </Button>
                     <Button variant="ghost" size="icon" asChild>
-                      <Link
-                        href="https://discord.gg/QtwWZ34A"
-                        target="_blank"
-                      >
+                      <Link href="https://discord.gg/QtwWZ34A" target="_blank">
                         <svg
                           width="20"
                           height="20"
@@ -737,6 +734,23 @@ export default function MessagingInterface() {
             <footer className="border-t">
               <form onSubmit={handleSubmit} className="p-2 sm:p-4">
                 <div className="flex items-center gap-2">
+                  {user && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="h-10 sm:h-12 bg-gradient-to-r from-purple-500/10 to-purple-400/20 hover:from-purple-500/20 hover:to-purple-400/30 border-purple-500/50 hover:border-purple-400 transition-all duration-300 gap-1.5"
+                      onClick={() => {
+                        console.log("Premium subscription clicked!");
+                      }}
+                    >
+                      <span className="text-purple-400 hidden sm:inline">
+                        ✨
+                      </span>
+                      <span className="text-sm font-medium bg-gradient-to-r from-purple-500 to-purple-400 text-transparent bg-clip-text">
+                        Upgrade
+                      </span>
+                    </Button>
+                  )}
                   <Input
                     ref={inputRef}
                     placeholder="Type your message..."
