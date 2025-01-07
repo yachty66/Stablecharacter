@@ -197,7 +197,7 @@ export default function MessagingInterface() {
     e.preventDefault();
     if (inputValue.trim()) {
       // Check if user has reached the message limit
-      if (messages.length >= 4 && !user) {
+      if (messages.length >= 10 && !user) {
         setShowSettings(true);
         return;
       }
