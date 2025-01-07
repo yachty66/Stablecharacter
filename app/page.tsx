@@ -768,7 +768,7 @@ export default function MessagingInterface() {
       <Dialog open={showSettings} onOpenChange={setShowSettings}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Settings</DialogTitle>
+            <DialogTitle>Sign in to see your chats!</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
             {user ? (
