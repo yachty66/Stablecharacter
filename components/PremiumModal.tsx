@@ -12,7 +12,10 @@ interface PremiumModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export default function PremiumModal({ open, onOpenChange }: PremiumModalProps) {
+export default function PremiumModal({
+  open,
+  onOpenChange,
+}: PremiumModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -78,8 +81,23 @@ export default function PremiumModal({ open, onOpenChange }: PremiumModalProps) 
 
           <Button
             className="w-full bg-gradient-to-r from-purple-500 to-purple-400 hover:from-purple-600 hover:to-purple-500"
-            onClick={() => {
-              console.log("Subscribe clicked!");
+            onClick={async () => {
+              try {
+                const response = await fetch("/api/create-checkout-session", {
+                  method: "POST",
+                });
+
+                if (!response.ok) {
+                  throw new Error("Failed to create checkout session");
+                }
+
+                const { url } = await response.json();
+
+                // Redirect to Stripe Checkout
+                window.location.href = url;
+              } catch (error) {
+                console.error("Error:", error);
+              }
             }}
           >
             Upgrade Now - $9.99/month
