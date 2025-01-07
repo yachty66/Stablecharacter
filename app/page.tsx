@@ -310,7 +310,7 @@ export default function MessagingInterface() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      if (messages.length >= 4 && !user) {
+      if (messages.length >= 10 && !user) {
         setShowSettings(true);
         return;
       }
