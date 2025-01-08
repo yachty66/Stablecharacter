@@ -834,8 +834,7 @@ export default function MessagingInterface() {
                   <Button
                     onClick={() => {
                       window.open(
-                        "https://billing.stripe.com/p/login/test_4gwcN29BlfB8ahWeUU",
-                        "_blank"
+                        "https://billing.stripe.com/p/login/7sI3dG56y8Wb8OQ3cc"
                       );
                     }}
                     variant="outline"

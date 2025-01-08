@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-11-20.acacia",
 });
 
@@ -21,11 +21,12 @@ export async function POST(request: Request) {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: process.env.STRIPE_PRICE_ID_TEST!,
+          price: process.env.STRIPE_PRICE_ID!,
           quantity: 1,
         },
       ],
       mode: "subscription", // Changed to subscription since it's a recurring payment
+      allow_promotion_codes: true,
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?payment_success=true`,
       cancel_url: process.env.NEXT_PUBLIC_SITE_URL,
       customer_email: session.user.email,
