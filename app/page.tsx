@@ -312,12 +312,20 @@ export default function MessagingInterface() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim()) {
-      if (messages.length >= 10 && !user) {
-        setShowSettings(true);
-        return;
-      }
 
+    // Check if user has reached message limit and is not subscribed
+    if (user && messages.length >= 20 && !isSubscribed) {
+      setShowPremiumModal(true);
+      return;
+    }
+
+    // If not logged in at all, show login modal
+    if (!user && messages.length >= 10) {
+      setShowSettings(true);
+      return;
+    }
+
+    if (inputValue.trim()) {
       const userMessage = { text: inputValue, isUser: true };
       setInputValue("");
       setMessages((prev) => [...prev, userMessage]);
@@ -782,9 +790,14 @@ export default function MessagingInterface() {
                     size="icon"
                     className="h-10 w-10 sm:h-12 sm:w-12"
                     onClick={(e) => {
-                      if (messages.length >= 10 && !user) {
+                      if (!user && messages.length >= 10) {
                         e.preventDefault();
                         setShowSettings(true);
+                        return;
+                      }
+                      if (user && messages.length >= 20 && !isSubscribed) {
+                        e.preventDefault();
+                        setShowPremiumModal(true);
                         return;
                       }
                     }}
