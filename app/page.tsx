@@ -767,28 +767,25 @@ export default function MessagingInterface() {
                     <Button
                       type="button"
                       variant="outline"
-                      className="h-10 sm:h-12 bg-gradient-to-r from-purple-500/10 to-purple-400/20 hover:from-purple-500/20 hover:to-purple-400/30 border-purple-500/50 hover:border-purple-400 transition-all duration-300 gap-1.5"
+                      className="h-10 w-auto sm:h-12 px-3 sm:px-4 shrink-0 bg-gradient-to-r from-purple-500/10 to-purple-400/20 hover:from-purple-500/20 hover:to-purple-400/30 border-purple-500/50 hover:border-purple-400 transition-all duration-300"
                       onClick={() => setShowPremiumModal(true)}
                     >
-                      <span className="text-purple-400 hidden sm:inline">
-                        ✨
-                      </span>
                       <span className="text-sm font-medium bg-gradient-to-r from-purple-500 to-purple-400 text-transparent bg-clip-text">
-                        Upgrade
+                        Pro
                       </span>
                     </Button>
                   )}
                   <Input
                     ref={inputRef}
                     placeholder="Type your message..."
-                    className="bg-muted h-10 sm:h-12 text-sm sm:text-base"
+                    className="bg-muted h-10 sm:h-12 text-sm sm:text-base min-w-0"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                   />
                   <Button
                     type="submit"
                     size="icon"
-                    className="h-10 w-10 sm:h-12 sm:w-12"
+                    className="h-10 w-10 sm:h-12 sm:w-12 shrink-0"
                     onClick={(e) => {
                       if (!user && messages.length >= 10) {
                         e.preventDefault();
