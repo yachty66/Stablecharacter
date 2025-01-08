@@ -37,7 +37,7 @@ export default function PremiumModal({
 
             <div className="space-y-3">
               <div className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-purple-500 mt-0.5" />
+                <span className="text-purple-500 text-xl">✓</span>
                 <div>
                   <p className="font-medium">Unlimited messages</p>
                   <p className="text-sm text-muted-foreground">
@@ -47,7 +47,7 @@ export default function PremiumModal({
               </div>
 
               <div className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-purple-500 mt-0.5" />
+                <span className="text-purple-500 text-xl">✓</span>
                 <div>
                   <p className="font-medium">Memory</p>
                   <p className="text-sm text-muted-foreground">
@@ -57,7 +57,7 @@ export default function PremiumModal({
               </div>
 
               <div className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-purple-500 mt-0.5" />
+                <span className="text-purple-500 text-xl">✓</span>
                 <div>
                   <p className="font-medium">Priority access</p>
                   <p className="text-sm text-muted-foreground">
@@ -68,7 +68,7 @@ export default function PremiumModal({
               </div>
 
               <div className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-purple-500 mt-0.5" />
+                <span className="text-purple-500 text-xl">✓</span>
                 <div>
                   <p className="font-medium">& more!</p>
                   <p className="text-sm text-muted-foreground">
