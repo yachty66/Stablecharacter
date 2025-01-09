@@ -398,6 +398,7 @@ export default function MessagingInterface() {
         setMessages([
           { text: character?.first_message || "Hi", isUser: false },
         ]);
+        setAuthorNote(""); // Clear the author's note
       }
     };
     getUser();
@@ -650,6 +651,7 @@ export default function MessagingInterface() {
       const character = getCurrentCharacter(characterId);
       setMessages([{ text: character?.first_message || "Hi", isUser: false }]);
     }
+    setAuthorNote(""); // Clear author's note
   };
 
   // Then use this for both manual selection and random selection
@@ -826,13 +828,7 @@ export default function MessagingInterface() {
                       variant="ghost"
                       size="icon"
                       className="h-9 w-9"
-                      onClick={() => {
-                        if (messages.length > 2) {
-                          setShowAuthorNoteWarning(true);
-                        } else {
-                          setShowAuthorNote(true);
-                        }
-                      }}
+                      onClick={() => setShowAuthorNote(true)}
                     >
                       <FileText className="h-5 w-5" />
                     </Button>

@@ -23,6 +23,7 @@ class MessageRequest(BaseModel):
 @app.post("/api/py/message_response")
 async def message_response(request: MessageRequest):
     print("Received request:", request)  # Debug log
+    print("Author note:", request.authorNote)  
     
     try:
         # Get character data
@@ -37,8 +38,6 @@ async def message_response(request: MessageRequest):
         # Format messages for LLM
         formatted_messages = [{"role": "system", "content": system_prompt}]
         
-        # Insert author's note after first user message if it exists
-        first_user_found = False
         for msg in request.messages:
             role = "user" if msg.isUser else "assistant"
             formatted_messages.append({
@@ -46,9 +45,8 @@ async def message_response(request: MessageRequest):
                 "content": msg.text
             })
             
-            # Insert author's note after first user message
-            if role == "user" and not first_user_found and request.authorNote:
-                first_user_found = True
+            # Insert author's note after every user message
+            if role == "user" and request.authorNote:
                 formatted_messages.append({
                     "role": "system",
                     "content": f"the following authors note is injected into the situation: *{request.authorNote}*"
