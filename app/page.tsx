@@ -43,6 +43,7 @@ interface Character {
   name: string;
   occupation: string;
   avatar: string;
+  first_message: string;
 }
 
 interface CharacterGroups {
@@ -351,11 +352,17 @@ export default function MessagingInterface() {
 
         if (pendingCharacter) {
           setSelectedCharacter(pendingCharacter);
-          setMessages([{ text: "Hi", isUser: false }]);
+          const character = getCurrentCharacter(pendingCharacter);
+          setMessages([
+            { text: character?.first_message || "Hi", isUser: false },
+          ]);
         } else {
           const newCharacter = getRandomCharacter();
           setSelectedCharacter(newCharacter);
-          setMessages([{ text: "Hi", isUser: false }]);
+          const character = getCurrentCharacter(newCharacter);
+          setMessages([
+            { text: character?.first_message || "Hi", isUser: false },
+          ]);
         }
       } else {
         // If no user is logged in, select a random character
@@ -602,11 +609,15 @@ export default function MessagingInterface() {
         setMessages(existingChat.messages);
       } else {
         // Reset messages if no existing chat and add initial message
-        setMessages([{ text: "Hi", isUser: false }]);
+        const character = getCurrentCharacter(characterId);
+        setMessages([
+          { text: character?.first_message || "Hi", isUser: false },
+        ]);
       }
     } else {
       // If no user is logged in, just show initial message
-      setMessages([{ text: "Hi", isUser: false }]);
+      const character = getCurrentCharacter(characterId);
+      setMessages([{ text: character?.first_message || "Hi", isUser: false }]);
     }
   };
 
