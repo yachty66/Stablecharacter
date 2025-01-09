@@ -327,6 +327,12 @@ export default function MessagingInterface() {
       } = await supabase.auth.getUser();
       setUser(user);
 
+      // Restore author's note from localStorage
+      const savedNote = localStorage.getItem("authorNote");
+      if (savedNote) {
+        setAuthorNote(savedNote);
+      }
+
       // If user just signed in, restore messages and save to Supabase
       if (user) {
         const pendingMessages = localStorage.getItem("pendingMessages");
@@ -1081,7 +1087,14 @@ export default function MessagingInterface() {
               onChange={(e) => setAuthorNote(e.target.value)}
               className="min-h-[100px]"
             />
-            <Button onClick={() => setShowAuthorNote(false)}>Save</Button>
+            <Button
+              onClick={() => {
+                localStorage.setItem("authorNote", authorNote);
+                setShowAuthorNote(false);
+              }}
+            >
+              Save
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
