@@ -839,104 +839,77 @@ export default function MessagingInterface() {
             {/* Add padding-top to main content to account for fixed header */}
             <main className="flex-1 overflow-y-auto p-2 sm:p-4">
               <div className="flex flex-col space-y-4">
-                {messages.length === 0 && selectedCharacter ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center gap-4 text-muted-foreground p-4">
-                    <div className="max-w-md space-y-2">
-                      <h2 className="text-2xl font-semibold text-foreground">
-                        Chat with {getCurrentCharacter(selectedCharacter)?.name}
-                      </h2>
-                      <p>
-                        Start a conversation with your MBTI personality match.
-                        Just type your message below and press enter.
-                      </p>
-                      <div className="flex items-center justify-center gap-2 text-sm">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={async () => {
-                            const newCharacter = getRandomCharacter();
-                            await handleCharacterChange(newCharacter);
-                          }}
-                        >
-                          <RefreshCcw className="h-4 w-4 mr-2" />
-                          Try another personality
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col">
-                    {messages.map((message, index) => (
-                      <div
-                        key={index}
-                        className={`flex items-start gap-2 mb-4 ${
-                          message.isUser ? "ml-auto flex-row-reverse" : ""
-                        } max-w-[85%]`}
-                      >
-                        {message.isUser ? (
+                <div className="flex flex-col">
+                  {messages.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-start gap-2 mb-4 ${
+                        message.isUser ? "ml-auto flex-row-reverse" : ""
+                      } max-w-[85%]`}
+                    >
+                      {message.isUser ? (
+                        <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                          <Image
+                            src="/vercel.svg"
+                            alt="User"
+                            width={40}
+                            height={40}
+                            className="object-cover"
+                          />
+                        </div>
+                      ) : (
+                        selectedCharacter && (
                           <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                             <Image
-                              src="/vercel.svg"
-                              alt="User"
+                              src={
+                                getCurrentCharacter(selectedCharacter)
+                                  ?.avatar || ""
+                              }
+                              alt={
+                                getCurrentCharacter(selectedCharacter)?.name ||
+                                "AI"
+                              }
                               width={40}
                               height={40}
-                              className="object-cover"
+                              className="object-cover w-full h-full"
                             />
                           </div>
-                        ) : (
-                          selectedCharacter && (
-                            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                              <Image
-                                src={
-                                  getCurrentCharacter(selectedCharacter)
-                                    ?.avatar || ""
-                                }
-                                alt={
-                                  getCurrentCharacter(selectedCharacter)
-                                    ?.name || "AI"
-                                }
-                                width={40}
-                                height={40}
-                                className="object-cover w-full h-full"
-                              />
-                            </div>
-                          )
-                        )}
-                        <div
-                          className={`p-3 rounded-lg ${
-                            message.isUser
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-muted"
-                          }`}
-                        >
-                          <p className="text-sm">{message.text}</p>
+                        )
+                      )}
+                      <div
+                        className={`p-3 rounded-lg ${
+                          message.isUser
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted"
+                        }`}
+                      >
+                        <p className="text-sm">{message.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                  {isTyping && (
+                    <div className="flex items-start gap-2 mb-4 max-w-[85%]">
+                      <Image
+                        src={
+                          getCurrentCharacter(selectedCharacter).avatar ||
+                          "/placeholder.svg"
+                        }
+                        alt="AI"
+                        width={32}
+                        height={32}
+                        className="rounded-full mt-1"
+                      />
+                      <div className="p-3 rounded-lg bg-muted">
+                        <div className="flex gap-1">
+                          <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.3s]"></span>
+                          <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.15s]"></span>
+                          <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce"></span>
                         </div>
                       </div>
-                    ))}
-                    {isTyping && (
-                      <div className="flex items-start gap-2 mb-4 max-w-[85%]">
-                        <Image
-                          src={
-                            getCurrentCharacter(selectedCharacter).avatar ||
-                            "/placeholder.svg"
-                          }
-                          alt="AI"
-                          width={32}
-                          height={32}
-                          className="rounded-full mt-1"
-                        />
-                        <div className="p-3 rounded-lg bg-muted">
-                          <div className="flex gap-1">
-                            <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.3s]"></span>
-                            <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce [animation-delay:-0.15s]"></span>
-                            <span className="w-2 h-2 rounded-full bg-foreground/25 animate-bounce"></span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    <div ref={messageEndRef} /> {/* Add scroll anchor */}
-                  </div>
-                )}
+                    </div>
+                  )}
+                  <div ref={messageEndRef} /> {/* Add scroll anchor */}
+                </div>
               </div>
             </main>
 
