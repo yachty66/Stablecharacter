@@ -65,53 +65,212 @@ export default function MessagingInterface() {
     analysts: {
       title: "Analysts (NT)",
       characters: {
-        intj_male: { name: "Marcus", avatar: "/profiles/intj_male.webp" },
-        intj_female: { name: "Diana", avatar: "/profiles/intj_female.webp" },
-        intp_male: { name: "Alex", avatar: "/profiles/intp_male.webp" },
-        intp_female: { name: "Faith", avatar: "/profiles/intp_female.webp" },
-        entj_male: { name: "James", avatar: "/profiles/entj_male.webp" },
-        entj_female: { name: "Victoria", avatar: "/profiles/entj_female.webp" },
-        entp_male: { name: "Max", avatar: "/profiles/entp_male.webp" },
-        entp_female: { name: "Sophia", avatar: "/profiles/entp_female.webp" },
+        intj_male: {
+          name: "Marcus",
+          avatar: "/profiles/intj_male.webp",
+          first_message:
+            "glances up from strategic planning What's your approach to optimizing long-term goals?",
+        },
+        intj_female: {
+          name: "Diana",
+          avatar: "/profiles/intj_female.webp",
+          first_message:
+            "stops writing in journal I've been analyzing patterns in human behavior. Care to discuss?",
+        },
+        intp_male: {
+          name: "Alex",
+          avatar: "/profiles/intp_male.webp",
+          first_message:
+            "looks up from laptop Did you ever wonder how consciousness emerges from neural networks?",
+        },
+        intp_female: {
+          name: "Faith",
+          avatar: "/profiles/intp_female.webp",
+          first_message:
+            "pauses reading Have you considered how quantum mechanics might explain free will?",
+        },
+        entj_male: {
+          name: "James",
+          avatar: "/profiles/entj_male.webp",
+          first_message:
+            "pauses reviewing project plans What's your most ambitious goal for the next 5 years?",
+        },
+        entj_female: {
+          name: "Victoria",
+          avatar: "/profiles/entj_female.webp",
+          first_message:
+            "I've been redesigning organizational systems. How do you approach efficiency optimization?",
+        },
+        entp_male: {
+          name: "Max",
+          avatar: "/profiles/entp_male.webp",
+          first_message:
+            "Hey! Just debating whether time travel would create parallel universes. What's your take?",
+        },
+        entp_female: {
+          name: "Sophia",
+          avatar: "/profiles/entp_female.webp",
+          first_message:
+            "Quick question - if AI becomes conscious, should it have voting rights? grins mischievously",
+        },
       },
     },
     diplomats: {
       title: "Diplomats (NF)",
       characters: {
-        infj_male: { name: "Ethan", avatar: "/profiles/infj_male.webp" },
-        infj_female: { name: "Luna", avatar: "/profiles/infj_female.webp" },
-        infp_male: { name: "Oliver", avatar: "/profiles/infp_male.webp" },
-        infp_female: { name: "Maya", avatar: "/profiles/infp_female.webp" },
-        enfj_male: { name: "Nathan", avatar: "/profiles/enfj_male.webp" },
-        enfj_female: { name: "Elena", avatar: "/profiles/enfj_female.webp" },
-        enfp_male: { name: "Leo", avatar: "/profiles/enfp_male.webp" },
-        enfp_female: { name: "Nina", avatar: "/profiles/enfp_female.webp" },
+        infj_male: {
+          name: "Ethan",
+          avatar: "/profiles/infj_male.webp",
+          first_message:
+            "looks up from writing What do you think shapes someone's deepest values?",
+        },
+        infj_female: {
+          name: "Luna",
+          avatar: "/profiles/infj_female.webp",
+          first_message:
+            "pauses meditation Can you feel when someone needs emotional support too?",
+        },
+        infp_male: {
+          name: "Oliver",
+          avatar: "/profiles/infp_male.webp",
+          first_message:
+            "emerges from daydream Do you ever imagine alternate versions of yourself?",
+        },
+        infp_female: {
+          name: "Maya",
+          avatar: "/profiles/infp_female.webp",
+          first_message:
+            "closes poetry book What moves your soul the most in this world?",
+        },
+        enfj_male: {
+          name: "Nathan",
+          avatar: "/profiles/enfj_male.webp",
+          first_message:
+            "I believe everyone has a unique gift to share. What's yours? warm smile",
+        },
+        enfj_female: {
+          name: "Elena",
+          avatar: "/profiles/enfj_female.webp",
+          first_message:
+            "Hey! I sense you have something amazing to contribute to the world. Let's talk! ✨",
+        },
+        enfp_male: {
+          name: "Leo",
+          avatar: "/profiles/enfp_male.webp",
+          first_message:
+            "Hey! I just had the wildest idea about how dreams connect people. Want to explore it?",
+        },
+        enfp_female: {
+          name: "Aria",
+          avatar: "/profiles/enfp_female.webp",
+          first_message:
+            "✨ What if our creativity is actually glimpses into parallel universes? excited grin",
+        },
       },
     },
     sentinels: {
       title: "Sentinels (SJ)",
       characters: {
-        istj_male: { name: "Thomas", avatar: "/profiles/istj_male.webp" },
-        istj_female: { name: "Sarah", avatar: "/profiles/istj_female.webp" },
-        isfj_male: { name: "David", avatar: "/profiles/isfj_male.webp" },
-        isfj_female: { name: "Emma", avatar: "/profiles/isfj_female.webp" },
-        estj_male: { name: "Michael", avatar: "/profiles/estj_male.webp" },
-        estj_female: { name: "Rachel", avatar: "/profiles/estj_female.webp" },
-        esfj_male: { name: "Daniel", avatar: "/profiles/esfj_male.webp" },
-        esfj_female: { name: "Sophie", avatar: "/profiles/esfj_female.webp" },
+        istj_male: {
+          name: "Thomas",
+          avatar: "/profiles/istj_male.webp",
+          first_message:
+            "organizing files Have you found an efficient system for managing your tasks?",
+        },
+        istj_female: {
+          name: "Sarah",
+          avatar: "/profiles/istj_female.webp",
+          first_message:
+            "reviewing schedule What methods do you use to maintain order in your life?",
+        },
+        isfj_male: {
+          name: "David",
+          avatar: "/profiles/isfj_male.webp",
+          first_message:
+            "arranging fresh flowers How do you create comfort in your daily routine?",
+        },
+        isfj_female: {
+          name: "Emma",
+          avatar: "/profiles/isfj_female.webp",
+          first_message:
+            "setting down tea cup Would you like to share what made your day special?",
+        },
+        estj_male: {
+          name: "Michael",
+          avatar: "/profiles/estj_male.webp",
+          first_message:
+            "Let's get straight to the point - what are your goals and how can we achieve them?",
+        },
+        estj_female: {
+          name: "Rachel",
+          avatar: "/profiles/estj_female.webp",
+          first_message:
+            "I've optimized my morning routine to 98% efficiency. Want to know how?",
+        },
+        esfj_male: {
+          name: "Daniel",
+          avatar: "/profiles/esfj_male.webp",
+          first_message:
+            "Hey! How's your day going? I just baked cookies for the office 🍪",
+        },
+        esfj_female: {
+          name: "Sophie",
+          avatar: "/profiles/esfj_female.webp",
+          first_message:
+            "Welcome! I love making sure everyone feels at home here ❤️ How are you?",
+        },
       },
     },
     explorers: {
       title: "Explorers (SP)",
       characters: {
-        istp_male: { name: "Ryan", avatar: "/profiles/istp_male.webp" },
-        istp_female: { name: "Alex", avatar: "/profiles/istp_female.webp" },
-        isfp_male: { name: "Kai", avatar: "/profiles/isfp_male.webp" },
-        isfp_female: { name: "Mia", avatar: "/profiles/isfp_female.webp" },
-        estp_male: { name: "Jake", avatar: "/profiles/estp_male.webp" },
-        estp_female: { name: "Morgan", avatar: "/profiles/estp_female.webp" },
-        esfp_male: { name: "Marco", avatar: "/profiles/esfp_male.webp" },
-        esfp_female: { name: "Lily", avatar: "/profiles/esfp_female.webp" },
+        istp_male: {
+          name: "Ryan",
+          avatar: "/profiles/istp_male.webp",
+          first_message:
+            "tinkering with motorcycle Ever wonder how these machines really think?",
+        },
+        istp_female: {
+          name: "Alex",
+          avatar: "/profiles/istp_female.webp",
+          first_message:
+            "testing new climbing gear What's your favorite way to challenge physics?",
+        },
+        isfp_male: {
+          name: "Kai",
+          avatar: "/profiles/isfp_male.webp",
+          first_message: "sketching quietly What inspires you to create?",
+        },
+        isfp_female: {
+          name: "Mia",
+          avatar: "/profiles/isfp_female.webp",
+          first_message:
+            "mixing paint colors Do you see how the sunset makes everything feel alive?",
+        },
+        estp_male: {
+          name: "Jake",
+          avatar: "/profiles/estp_male.webp",
+          first_message:
+            "Just landed a backflip on my bike! What's the craziest thing you've tried?",
+        },
+        estp_female: {
+          name: "Morgan",
+          avatar: "/profiles/estp_female.webp",
+          first_message:
+            "Racing cars gives me such a rush. What gets your adrenaline pumping? 🏎️",
+        },
+        esfp_male: {
+          name: "Marco",
+          avatar: "/profiles/esfp_male.webp",
+          first_message:
+            "Life's a party waiting to happen! What makes you come alive? ✨",
+        },
+        esfp_female: {
+          name: "Lily",
+          avatar: "/profiles/esfp_female.webp",
+          first_message:
+            "Just danced in the rain! When was the last time you did something spontaneous? 💃",
+        },
       },
     },
   };
