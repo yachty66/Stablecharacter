@@ -192,12 +192,17 @@ export default function MessagingInterface() {
 
         if (pendingCharacter) {
           setSelectedCharacter(pendingCharacter);
+          setMessages([{ text: "Hi", isUser: false }]);
         } else {
-          setSelectedCharacter(getRandomCharacter());
+          const newCharacter = getRandomCharacter();
+          setSelectedCharacter(newCharacter);
+          setMessages([{ text: "Hi", isUser: false }]);
         }
       } else {
         // If no user is logged in, select a random character
-        setSelectedCharacter(getRandomCharacter());
+        const newCharacter = getRandomCharacter();
+        setSelectedCharacter(newCharacter);
+        setMessages([{ text: "Hi", isUser: false }]);
       }
     };
     getUser();
@@ -437,9 +442,12 @@ export default function MessagingInterface() {
       if (existingChat) {
         setMessages(existingChat.messages);
       } else {
-        // Reset messages if no existing chat
-        setMessages([]);
+        // Reset messages if no existing chat and add initial message
+        setMessages([{ text: "Hi", isUser: false }]);
       }
+    } else {
+      // If no user is logged in, just show initial message
+      setMessages([{ text: "Hi", isUser: false }]);
     }
   };
 
