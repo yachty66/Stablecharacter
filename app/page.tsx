@@ -34,6 +34,7 @@ import {
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import ChatList from "@/components/ChatList";
 import PremiumModal from "@/components/PremiumModal";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Message {
   text: string;
@@ -303,6 +304,8 @@ export default function MessagingInterface() {
   const [showChatList, setShowChatList] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [showAuthorNote, setShowAuthorNote] = useState(false);
+  const [authorNote, setAuthorNote] = useState("");
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -805,9 +808,7 @@ export default function MessagingInterface() {
                       variant="ghost"
                       size="icon"
                       className="h-9 w-9"
-                      onClick={() => {
-                        // Add author's note functionality here
-                      }}
+                      onClick={() => setShowAuthorNote(true)}
                     >
                       <FileText className="h-5 w-5" />
                     </Button>
@@ -999,10 +1000,7 @@ export default function MessagingInterface() {
                 {/* Add Discord button */}
                 <Button
                   onClick={() =>
-                    window.open(
-                      "https://discord.gg/QtwWZ34A",
-                      "_blank"
-                    )
+                    window.open("https://discord.gg/QtwWZ34A", "_blank")
                   }
                   variant="outline"
                   className="flex items-center gap-2"
@@ -1070,6 +1068,23 @@ export default function MessagingInterface() {
         open={showPremiumModal}
         onOpenChange={setShowPremiumModal}
       />
+
+      <Dialog open={showAuthorNote} onOpenChange={setShowAuthorNote}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Author's Note</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-4">
+            <Textarea
+              placeholder="Add context or specific instructions for the character..."
+              value={authorNote}
+              onChange={(e) => setAuthorNote(e.target.value)}
+              className="min-h-[100px]"
+            />
+            <Button onClick={() => setShowAuthorNote(false)}>Save</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
