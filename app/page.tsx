@@ -365,10 +365,13 @@ export default function MessagingInterface() {
           ]);
         }
       } else {
-        // If no user is logged in, select a random character
+        // If no user is logged in, select a random character and use their first message
         const newCharacter = getRandomCharacter();
         setSelectedCharacter(newCharacter);
-        setMessages([{ text: "Hi", isUser: false }]);
+        const character = getCurrentCharacter(newCharacter);
+        setMessages([
+          { text: character?.first_message || "Hi", isUser: false },
+        ]);
       }
     };
     getUser();
