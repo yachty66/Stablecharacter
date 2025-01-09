@@ -518,6 +518,7 @@ export default function MessagingInterface() {
       const requestBody = {
         messages: [...messages, userMessage],
         selectedCharacter: selectedCharacter,
+        authorNote: localStorage.getItem("authorNote") || "",
       };
 
       try {
@@ -653,12 +654,6 @@ export default function MessagingInterface() {
       const isTouchDevice =
         "ontouchstart" in window || navigator.maxTouchPoints > 0;
       setIsMobile(isMobileView || isTouchDevice);
-      console.log("Device checks:", {
-        width: window.innerWidth,
-        isMobileView,
-        isTouchDevice,
-        userAgent: navigator.userAgent,
-      });
     };
 
     checkMobile();
