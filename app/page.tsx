@@ -70,31 +70,31 @@ export default function MessagingInterface() {
           name: "Marcus",
           avatar: "/profiles/intj_male.webp",
           first_message:
-            "glances up from strategic planning What's your approach to optimizing long-term goals?",
+            "*glances up from strategic planning* What's your approach to optimizing long-term goals?",
         },
         intj_female: {
           name: "Diana",
           avatar: "/profiles/intj_female.webp",
           first_message:
-            "stops writing in journal I've been analyzing patterns in human behavior. Care to discuss?",
+            "*stops writing in journal* I've been analyzing patterns in human behavior. Care to discuss?",
         },
         intp_male: {
           name: "Alex",
           avatar: "/profiles/intp_male.webp",
           first_message:
-            "looks up from laptop Did you ever wonder how consciousness emerges from neural networks?",
+            "*looks up from laptop* Did you ever wonder how consciousness emerges from neural networks?",
         },
         intp_female: {
           name: "Faith",
           avatar: "/profiles/intp_female.webp",
           first_message:
-            "pauses reading Have you considered how quantum mechanics might explain free will?",
+            "*pauses reading* Have you considered how quantum mechanics might explain free will?",
         },
         entj_male: {
           name: "James",
           avatar: "/profiles/entj_male.webp",
           first_message:
-            "pauses reviewing project plans What's your most ambitious goal for the next 5 years?",
+            "*pauses reviewing project plans* What's your most ambitious goal for the next 5 years?",
         },
         entj_female: {
           name: "Victoria",
@@ -123,37 +123,37 @@ export default function MessagingInterface() {
           name: "Ethan",
           avatar: "/profiles/infj_male.webp",
           first_message:
-            "looks up from writing What do you think shapes someone's deepest values?",
+            "*looks up from writing* What do you think shapes someone's deepest values?",
         },
         infj_female: {
           name: "Luna",
           avatar: "/profiles/infj_female.webp",
           first_message:
-            "pauses meditation Can you feel when someone needs emotional support too?",
+            "*pauses meditation* Can you feel when someone needs emotional support too?",
         },
         infp_male: {
           name: "Oliver",
           avatar: "/profiles/infp_male.webp",
           first_message:
-            "emerges from daydream Do you ever imagine alternate versions of yourself?",
+            "*emerges from daydream* Do you ever imagine alternate versions of yourself?",
         },
         infp_female: {
           name: "Maya",
           avatar: "/profiles/infp_female.webp",
           first_message:
-            "closes poetry book What moves your soul the most in this world?",
+            "*closes poetry book* What moves your soul the most in this world?",
         },
         enfj_male: {
           name: "Nathan",
           avatar: "/profiles/enfj_male.webp",
           first_message:
-            "I believe everyone has a unique gift to share. What's yours? warm smile",
+            "I believe everyone has a unique gift to share. What's yours? *warm smile*",
         },
         enfj_female: {
           name: "Elena",
           avatar: "/profiles/enfj_female.webp",
           first_message:
-            "Hey! I sense you have something amazing to contribute to the world. Let's talk! ✨",
+            "Hey! I sense you have something amazing to contribute to the world* Let's talk! ✨",
         },
         enfp_male: {
           name: "Leo",
@@ -165,7 +165,7 @@ export default function MessagingInterface() {
           name: "Aria",
           avatar: "/profiles/enfp_female.webp",
           first_message:
-            "✨ What if our creativity is actually glimpses into parallel universes? excited grin",
+            "✨ What if our creativity is actually glimpses into parallel universes? *excited grin*",
         },
       },
     },
@@ -176,25 +176,25 @@ export default function MessagingInterface() {
           name: "Thomas",
           avatar: "/profiles/istj_male.webp",
           first_message:
-            "organizing files Have you found an efficient system for managing your tasks?",
+            "*organizing files* Have you found an efficient system for managing your tasks?",
         },
         istj_female: {
           name: "Sarah",
           avatar: "/profiles/istj_female.webp",
           first_message:
-            "reviewing schedule What methods do you use to maintain order in your life?",
+            "*reviewing schedule* What methods do you use to maintain order in your life?",
         },
         isfj_male: {
           name: "David",
           avatar: "/profiles/isfj_male.webp",
           first_message:
-            "arranging fresh flowers How do you create comfort in your daily routine?",
+            "*arranging fresh flowers* How do you create comfort in your daily routine?",
         },
         isfj_female: {
           name: "Emma",
           avatar: "/profiles/isfj_female.webp",
           first_message:
-            "setting down tea cup Would you like to share what made your day special?",
+            "*setting down tea cup* Would you like to share what made your day special?",
         },
         estj_male: {
           name: "Michael",
@@ -229,24 +229,24 @@ export default function MessagingInterface() {
           name: "Ryan",
           avatar: "/profiles/istp_male.webp",
           first_message:
-            "tinkering with motorcycle Ever wonder how these machines really think?",
+            "*tinkering with motorcycle* Ever wonder how these machines really think?",
         },
         istp_female: {
           name: "Alex",
           avatar: "/profiles/istp_female.webp",
           first_message:
-            "testing new climbing gear What's your favorite way to challenge physics?",
+            "*testing new climbing gear* What's your favorite way to challenge physics?",
         },
         isfp_male: {
           name: "Kai",
           avatar: "/profiles/isfp_male.webp",
-          first_message: "sketching quietly What inspires you to create?",
+          first_message: "*sketching quietly* What inspires you to create?",
         },
         isfp_female: {
           name: "Mia",
           avatar: "/profiles/isfp_female.webp",
           first_message:
-            "mixing paint colors Do you see how the sunset makes everything feel alive?",
+            "*mixing paint colors* Do you see how the sunset makes everything feel alive?",
         },
         estp_male: {
           name: "Jake",
