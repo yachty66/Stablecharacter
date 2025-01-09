@@ -361,12 +361,27 @@ export default function MessagingInterface() {
           localStorage.removeItem("pendingInput");
         }
 
+        console.log("pendingCharacter", pendingCharacter);
+
         if (pendingCharacter) {
+          // First check if there's an existing chat in the database
+          const existingChat = await loadChat(
+            supabase,
+            user.email,
+            pendingCharacter
+          );
           setSelectedCharacter(pendingCharacter);
-          const character = getCurrentCharacter(pendingCharacter);
-          setMessages([
-            { text: character?.first_message || "Hi", isUser: false },
-          ]);
+
+          if (existingChat) {
+            // If chat exists in database, use that
+            setMessages(existingChat.messages);
+          } else {
+            // Only set initial message if no existing chat
+            const character = getCurrentCharacter(pendingCharacter);
+            setMessages([
+              { text: character?.first_message || "Hi", isUser: false },
+            ]);
+          }
         } else {
           const newCharacter = getRandomCharacter();
           setSelectedCharacter(newCharacter);
@@ -620,6 +635,7 @@ export default function MessagingInterface() {
     // If user is logged in, try to load existing chat
     if (user?.email) {
       const existingChat = await loadChat(supabase, user.email, characterId);
+      console.log("existingChat", existingChat);
       if (existingChat) {
         setMessages(existingChat.messages);
       } else {
