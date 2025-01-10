@@ -659,19 +659,36 @@ export default function MessagingInterface() {
       console.log("existingChat", existingChat);
       if (existingChat) {
         setMessages(existingChat.messages);
+
+        // Get the most recent author's note if it exists
+        if (existingChat.authors_note) {
+          const timestamps = Object.keys(existingChat.authors_note).sort();
+          const mostRecentNote =
+            timestamps.length > 0
+              ? existingChat.authors_note[timestamps[timestamps.length - 1]]
+              : "";
+          setAuthorNote(mostRecentNote);
+          localStorage.setItem("authorNote", mostRecentNote);
+        } else {
+          setAuthorNote("");
+          localStorage.setItem("authorNote", "");
+        }
       } else {
         // Reset messages if no existing chat and add initial message
         const character = getCurrentCharacter(characterId);
         setMessages([
           { text: character?.first_message || "Hi", isUser: false },
         ]);
+        setAuthorNote("");
+        localStorage.setItem("authorNote", "");
       }
     } else {
       // If no user is logged in, just show initial message
       const character = getCurrentCharacter(characterId);
       setMessages([{ text: character?.first_message || "Hi", isUser: false }]);
+      setAuthorNote("");
+      localStorage.setItem("authorNote", "");
     }
-    setAuthorNote(""); // Clear author's note
   };
 
   // Then use this for both manual selection and random selection
