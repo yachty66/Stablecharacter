@@ -306,7 +306,6 @@ export default function MessagingInterface() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showAuthorNote, setShowAuthorNote] = useState(false);
   const [authorNote, setAuthorNote] = useState("");
-  const [showAuthorNoteWarning, setShowAuthorNoteWarning] = useState(false);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -1109,26 +1108,6 @@ export default function MessagingInterface() {
               }}
             >
               Save
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={showAuthorNoteWarning}
-        onOpenChange={setShowAuthorNoteWarning}
-      >
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Cannot Modify Author's Note</DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col gap-4 py-4">
-            <p>
-              Author's note can only be modified in new chats. Please start a
-              new chat to set an author's note.
-            </p>
-            <Button onClick={() => setShowAuthorNoteWarning(false)}>
-              Okay
             </Button>
           </div>
         </DialogContent>
