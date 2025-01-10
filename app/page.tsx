@@ -835,16 +835,17 @@ export default function MessagingInterface() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-9 w-9"
+                      className="h-9 w-9 relative"
                       onClick={() => {
                         navigator.clipboard.writeText(window.location.href);
                         setShowCopied(true);
                         setTimeout(() => setShowCopied(false), 2000);
                       }}
                     >
-                      <Share2 className="h-5 w-5" />
-                      {showCopied && (
-                        <Check className="absolute h-3 w-3 text-green-500" />
+                      {showCopied ? (
+                        <Check className="h-5 w-5" />
+                      ) : (
+                        <Share2 className="h-5 w-5" />
                       )}
                     </Button>
                     <Button
