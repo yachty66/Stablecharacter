@@ -459,11 +459,27 @@ export default function MessagingInterface() {
       return null;
     }
 
+    const currentTime = new Date().toISOString();
+    const newAuthorNote = authorNote.trim()
+      ? {
+          [currentTime]: authorNote.trim(),
+        }
+      : {};
+
     if (existingChat) {
-      // Update existing chat with new messages
+      // Merge existing author notes with new one if it exists
+      const updatedAuthorNotes = {
+        ...(existingChat.authors_note || {}),
+        ...(authorNote.trim() ? newAuthorNote : {}),
+      };
+
+      // Update existing chat with new messages and author notes
       const { error: updateError } = await supabase
         .from("chats")
-        .update({ messages: chatData.messages })
+        .update({
+          messages: chatData.messages,
+          authors_note: updatedAuthorNotes,
+        })
         .eq("id", existingChat.id);
 
       if (updateError) {
@@ -472,7 +488,11 @@ export default function MessagingInterface() {
       }
 
       setChatListRefresh((prev) => prev + 1);
-      return { ...existingChat, messages: chatData.messages };
+      return {
+        ...existingChat,
+        messages: chatData.messages,
+        authors_note: updatedAuthorNotes,
+      };
     }
 
     // If no existing chat, insert the new one
@@ -480,6 +500,7 @@ export default function MessagingInterface() {
       email: chatData.email,
       messages: chatData.messages,
       character_id: chatData.character_id,
+      authors_note: newAuthorNote,
     });
 
     if (insertError) {
@@ -1102,8 +1123,16 @@ export default function MessagingInterface() {
               className="min-h-[100px]"
             />
             <Button
-              onClick={() => {
+              onClick={async () => {
                 localStorage.setItem("authorNote", authorNote);
+                if (user?.email && selectedCharacter) {
+                  // Save to database if user is logged in
+                  await saveChat(supabase, {
+                    email: user.email,
+                    messages: messages,
+                    character_id: selectedCharacter,
+                  });
+                }
                 setShowAuthorNote(false);
               }}
             >
