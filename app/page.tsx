@@ -374,8 +374,6 @@ export default function MessagingInterface() {
           localStorage.removeItem("pendingInput");
         }
 
-        console.log("pendingCharacter", pendingCharacter);
-
         if (pendingCharacter) {
           // First check if there's an existing chat in the database
           const existingChat = await loadChat(
@@ -670,7 +668,6 @@ export default function MessagingInterface() {
     // If user is logged in, try to load existing chat
     if (user?.email) {
       const existingChat = await loadChat(supabase, user.email, characterId);
-      console.log("existingChat", existingChat);
       if (existingChat) {
         setMessages(existingChat.messages);
 
