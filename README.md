@@ -23,4 +23,14 @@ a few things i am considering to add is a way to track retention of a user and a
 
 - [ ] make a way to track retention
 - [ ] find a good number of total messages send for monetanisation
-- [ ] add anime characters to the app  
+- [ ] add anime characters to the app 
+
+
+top prio list of features i have to implement:
+
+i do wanna add a paywall at 20 total messages send to be able to make some cash
+
+- user retention
+- make commercial after 20 messages 
+- make reddit marketing
+- make reddit ads 

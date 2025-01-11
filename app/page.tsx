@@ -116,6 +116,17 @@ export default function MessagingInterface() {
       } = await supabase.auth.getUser();
       setUser(user);
 
+      // Add visit log if user is logged in
+      if (user?.email) {
+        try {
+          await supabase.from("logs").insert({
+            email: user.email,
+          });
+        } catch (error) {
+          console.error("Error logging visit:", error);
+        }
+      }
+
       // Restore author's note from localStorage
       const savedNote = localStorage.getItem("authorNote");
       if (savedNote) {
@@ -348,6 +359,33 @@ export default function MessagingInterface() {
     }
 
     if (inputValue.trim()) {
+      // If user is logged in, update or create their message counter
+      if (user?.email) {
+        try {
+          // First check if user exists
+          const { data: existingUser } = await supabase
+            .from("chat_counter")
+            .select("counter")
+            .eq("email", user.email)
+            .single();
+
+          if (existingUser) {
+            // Update existing counter
+            await supabase
+              .from("chat_counter")
+              .update({ counter: existingUser.counter + 1 })
+              .eq("email", user.email);
+          } else {
+            // Insert new user with counter = 1
+            await supabase
+              .from("chat_counter")
+              .insert({ email: user.email, counter: 1 });
+          }
+        } catch (error) {
+          console.error("Error updating message counter:", error);
+        }
+      }
+
       const userMessage = { text: inputValue, isUser: true };
       setInputValue("");
       setMessages((prev) => [...prev, userMessage]);
