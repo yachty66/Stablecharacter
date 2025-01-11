@@ -94,6 +94,7 @@ export default function MessagingInterface() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [showAuthorNote, setShowAuthorNote] = useState(false);
   const [authorNote, setAuthorNote] = useState("");
+  const [showAnime, setShowAnime] = useState(false);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -535,6 +536,17 @@ export default function MessagingInterface() {
     }
   }, [user]);
 
+  // Add this helper function
+  const getFilteredCharacters = (characters: Record<string, Character>) => {
+    return Object.entries(characters).reduce((acc, [id, character]) => {
+      const isAnime = id.includes("_anime");
+      if ((showAnime && isAnime) || (!showAnime && !isAnime)) {
+        acc[id] = character;
+      }
+      return acc;
+    }, {} as Record<string, Character>);
+  };
+
   return (
     <div className="flex h-[100dvh] bg-background max-w-[100vw] overflow-hidden">
       {/* Show/hide chat list based on mobile state */}
@@ -627,31 +639,62 @@ export default function MessagingInterface() {
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
+                        <div className="p-2 border-b border-gray-200/10">
+                          <div className="flex items-center justify-between px-2 py-1.5">
+                            <span className="text-sm text-gray-400 font-medium">
+                              {showAnime ? "Anime" : "Regular"}
+                            </span>
+                            <div
+                              onClick={() => setShowAnime(!showAnime)}
+                              className={`
+                                relative inline-flex h-7 w-12 cursor-pointer rounded-full 
+                                transition-colors duration-200 ease-in-out
+                                ${
+                                  showAnime ? "bg-purple-600/25" : "bg-gray-700"
+                                }
+                              `}
+                            >
+                              <span
+                                className={`
+                                  absolute top-1 left-1 inline-block h-5 w-5 
+                                  transform rounded-full bg-white shadow-lg 
+                                  transition-transform duration-200 ease-in-out
+                                  ${
+                                    showAnime
+                                      ? "translate-x-5"
+                                      : "translate-x-0"
+                                  }
+                                  ${showAnime ? "bg-purple-500" : "bg-gray-200"}
+                                `}
+                              />
+                            </div>
+                          </div>
+                        </div>
                         {Object.entries(characterGroups).map(
                           ([groupKey, group]) => (
                             <SelectGroup key={groupKey}>
                               <SelectLabel>{group.title}</SelectLabel>
-                              {Object.entries(group.characters).map(
-                                ([charKey, char]) => (
-                                  <SelectItem key={charKey} value={charKey}>
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                                        <Image
-                                          src={char.avatar}
-                                          alt={char.name}
-                                          width={32}
-                                          height={32}
-                                          className="object-cover"
-                                        />
-                                      </div>
-                                      <span>
-                                        {char.name} (
-                                        {charKey.split("_")[0].toUpperCase()})
-                                      </span>
+                              {Object.entries(
+                                getFilteredCharacters(group.characters)
+                              ).map(([charKey, char]) => (
+                                <SelectItem key={charKey} value={charKey}>
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                                      <Image
+                                        src={char.avatar}
+                                        alt={char.name}
+                                        width={32}
+                                        height={32}
+                                        className="object-cover"
+                                      />
                                     </div>
-                                  </SelectItem>
-                                )
-                              )}
+                                    <span>
+                                      {char.name} (
+                                      {charKey.split("_")[0].toUpperCase()})
+                                    </span>
+                                  </div>
+                                </SelectItem>
+                              ))}
                             </SelectGroup>
                           )
                         )}
