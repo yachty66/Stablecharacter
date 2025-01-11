@@ -38,19 +38,20 @@ async def message_response(request: MessageRequest):
         # Format messages for LLM
         formatted_messages = [{"role": "system", "content": system_prompt}]
         
+        # First add all messages without author's note
         for msg in request.messages:
             role = "user" if msg.isUser else "assistant"
             formatted_messages.append({
                 "role": role,
                 "content": msg.text
             })
-            
-            # Insert author's note after every user message
-            if role == "user" and request.authorNote:
-                formatted_messages.append({
-                    "role": "system",
-                    "content": f"the following authors note is injected into the situation: *{request.authorNote}*"
-                })
+        
+        # Then add author's note only after the last message if it was from user
+        if request.messages and request.messages[-1].isUser and request.authorNote:
+            formatted_messages.append({
+                "role": "system",
+                "content": f"the following authors note is injected into the situation: *{request.authorNote}*"
+            })
         
         print("Sending to LLM:", formatted_messages)  # Debug log
         response = call_llm(messages=formatted_messages)
