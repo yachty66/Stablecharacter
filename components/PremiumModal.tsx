@@ -20,80 +20,84 @@ export default function PremiumModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">
+          <DialogTitle className="text-xl font-semibold">
             Upgrade to Premium
           </DialogTitle>
         </DialogHeader>
-
-        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 mb-4">
-          <p className="text-yellow-500 font-medium">
-            You've reached the free message limit!
-          </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            Free users are limited to 20 messages. Upgrade to Premium for
-            unlimited messaging.
-          </p>
-        </div>
-
-        <div className="space-y-6">
-          <h3 className="text-xl">
-            Unlock the full potential of your MBTI characters
-          </h3>
-
-          <p className="text-muted-foreground">
-            Get access to premium features and enhance your chat experience
-          </p>
-
+        <div className="flex flex-col gap-6 py-4">
           <div className="space-y-4">
-            <div className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-500 mt-1" />
-              <div>
-                <h4 className="font-medium">Unlimited messages</h4>
-                <p className="text-sm text-muted-foreground">
-                  Chat as much as you want with your character
-                </p>
-              </div>
+            <div className="space-y-2">
+              <h3 className="font-medium text-lg">
+                Unlock the full potential of your MBTI characters
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Get access to premium features and enhance your chat experience
+              </p>
             </div>
 
-            <div className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-500 mt-1" />
-              <div>
-                <h4 className="font-medium">Memory</h4>
-                <p className="text-sm text-muted-foreground">
-                  The character will have memory of the entire chat history
-                </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <span className="text-purple-500 text-xl">✓</span>
+                <div>
+                  <p className="font-medium">Unlimited messages</p>
+                  <p className="text-sm text-muted-foreground">
+                    Chat as much as you want with your character
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-500 mt-1" />
-              <div>
-                <h4 className="font-medium">Priority access</h4>
-                <p className="text-sm text-muted-foreground">
-                  Priority access to all future feature releases (support for
-                  character image generation)
-                </p>
+              <div className="flex items-start gap-2">
+                <span className="text-purple-500 text-xl">✓</span>
+                <div>
+                  <p className="font-medium">Memory</p>
+                  <p className="text-sm text-muted-foreground">
+                    The character will have memory of the entire chat history
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-500 mt-1" />
-              <div>
-                <h4 className="font-medium">& more!</h4>
-                <p className="text-sm text-muted-foreground">
-                  New features added regularly
-                </p>
+              <div className="flex items-start gap-2">
+                <span className="text-purple-500 text-xl">✓</span>
+                <div>
+                  <p className="font-medium">Priority access</p>
+                  <p className="text-sm text-muted-foreground">
+                    Priority access to all future feature releases (support for
+                    character image generation)
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <span className="text-purple-500 text-xl">✓</span>
+                <div>
+                  <p className="font-medium">& more!</p>
+                  <p className="text-sm text-muted-foreground">
+                    New features added regularly
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           <Button
-            className="w-full bg-purple-500 hover:bg-purple-600 text-white py-6 text-lg"
-            onClick={() => {
-              window.open(
-                "https://buy.stripe.com/test_28o29Z7Mj0Xt6pG4gg",
-                "_blank"
-              );
+            className="w-full bg-gradient-to-r from-purple-500 to-purple-400 hover:from-purple-600 hover:to-purple-500"
+            onClick={async () => {
+              try {
+                const response = await fetch("/api/create-checkout-session", {
+                  method: "POST",
+                });
+
+                if (!response.ok) {
+                  throw new Error("Failed to create checkout session");
+                }
+
+                const { url } = await response.json();
+
+                // Redirect to Stripe Checkout
+                window.location.href = url;
+              } catch (error) {
+                console.error("Error:", error);
+              }
             }}
           >
             Upgrade Now - $9.99/month
