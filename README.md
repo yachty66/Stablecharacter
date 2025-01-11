@@ -18,3 +18,9 @@ alright so right now there are no persistent chats. i would like to make a new u
 - make an IOS app - for humans its most natural to have a chat via ios app, thats just the natural way how humans are chatting
 - rebrand to klons.ai and choose the stick figure with black background as an profile image
 - restructure codebase (700 lines in page.tsx is def to long)
+
+a few things i am considering to add is a way to track retention of a user and another thing is to make user upgrade to upgrade to paid plan at a combined of 20 messages maybe
+
+- [ ] make a way to track retention
+- [ ] find a good number of total messages send for monetanisation
+- [ ] add anime characters to the app  
