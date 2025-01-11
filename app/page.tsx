@@ -346,20 +346,33 @@ export default function MessagingInterface() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Check if user has reached message limit and is not subscribed
-    if (user && messages.length >= 20 && !isSubscribed) {
-      setShowPremiumModal(true);
-      return;
-    }
-
-    // If not logged in at all, show login modal
+    // If not logged in at all, show login modal after 10 messages
     if (!user && messages.length >= 10) {
       setShowSettings(true);
       return;
     }
 
     if (inputValue.trim()) {
-      // If user is logged in, update or create their message counter
+      // If user is logged in, check their total message count
+      if (user?.email && !isSubscribed) {
+        try {
+          const { data: userCounter } = await supabase
+            .from("chat_counter")
+            .select("counter")
+            .eq("email", user.email)
+            .single();
+
+          // Show paywall if total messages exceed 20
+          if (userCounter && userCounter.counter >= 20) {
+            setShowPremiumModal(true);
+            return;
+          }
+        } catch (error) {
+          console.error("Error checking message counter:", error);
+        }
+      }
+
+      // Rest of the message handling code...
       if (user?.email) {
         try {
           // First check if user exists
