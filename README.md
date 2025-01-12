@@ -1,12 +1,12 @@
+model we are using is gemini/gemini-2.0-flash-exp, rate limits are documented here https://ai.google.dev/gemini-api/docs/models/gemini#gemini-2.0-flash
+
+
 - [ ] simple system where user can choose between 32 mbti options
 - [ ] after the user has send 3 messages in current session he has to login with google to continue (for now no paywall in order to build the product well)
 - [ ] store messages in db 
 - [ ] make it pretty and ship
 
-
 alright so right now there are no persistent chats. i would like to make a new user interface for the case a user is logged in. it basically should show all the chats on the left side and the current chat in the main field like its the case if you open a chat app in the browser. how can we do this
-
-
 
 - make ads on reddit (should take the spend 500$ get 500$ offer) and enable reddit auth to trace the signups from reddit and then chat with them
 - go through all of the feedback in reddit and implement each of the points in the feedback into the app
@@ -25,7 +25,6 @@ a few things i am considering to add is a way to track retention of a user and a
 - [ ] find a good number of total messages send for monetanisation
 - [ ] add anime characters to the app 
 
-
 top prio list of features i have to implement:
 
 i do wanna add a paywall at 20 total messages send to be able to make some cash
@@ -34,3 +33,7 @@ i do wanna add a paywall at 20 total messages send to be able to make some cash
 - make commercial after 20 messages 
 - make reddit marketing
 - make reddit ads 
+
+before getting into marketing and probably getting dozens of new user i should figure out how to handle the case
+
+i probably need to do some kind of marketing for that stuff now. the question is what is the best way of doing marketing for this now. i probably can do some kind of 
