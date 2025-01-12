@@ -977,7 +977,7 @@ export default function MessagingInterface() {
                 {/* Add Discord button */}
                 <Button
                   onClick={() =>
-                    window.open("https://discord.gg/QtwWZ34A", "_blank")
+                    window.open("https://discord.gg/mrSkBn9F", "_blank")
                   }
                   variant="outline"
                   className="flex items-center gap-2"
