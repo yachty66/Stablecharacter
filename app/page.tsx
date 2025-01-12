@@ -151,28 +151,50 @@ export default function MessagingInterface() {
             ? { [currentTime]: pendingNote }
             : {};
 
-          // Delete any existing chat for this character
-          await supabase
-            .from("chats")
-            .delete()
-            .match({ email: user.email, character_id: pendingCharacter });
+          try {
+            // First get the existing chat if it exists
+            const { data: existingChat } = await supabase
+              .from("chats")
+              .select("*")
+              .match({ email: user.email, character_id: pendingCharacter })
+              .single();
 
-          // Insert the current chat state
-          await supabase
-            .from("chats")
-            .insert({
-              email: user.email,
-              messages: messages,
-              character_id: pendingCharacter,
-              authors_note: authorNoteObj,
-            });
+            // If there was an existing chat, move it to deleted_chats
+            if (existingChat) {
+              await supabase.from("deleted_chats").insert({
+                email: existingChat.email,
+                messages: existingChat.messages,
+                character_id: existingChat.character_id,
+                created_at: existingChat.created_at,
+                authors_note: existingChat.authors_note || {}
+              });
 
-          // Trigger chat list refresh
-          setChatListRefresh((prev) => prev + 1);
+              // Then delete the existing chat
+              await supabase
+                .from("chats")
+                .delete()
+                .match({ email: user.email, character_id: pendingCharacter });
+            }
 
-          // Clear localStorage
-          localStorage.removeItem("pendingMessages");
-          localStorage.removeItem("pendingCharacter");
+            // Insert the current chat state
+            await supabase
+              .from("chats")
+              .insert({
+                email: user.email,
+                messages: messages,
+                character_id: pendingCharacter,
+                authors_note: authorNoteObj,
+              });
+
+            // Trigger chat list refresh
+            setChatListRefresh((prev) => prev + 1);
+
+            // Clear localStorage
+            localStorage.removeItem("pendingMessages");
+            localStorage.removeItem("pendingCharacter");
+          } catch (error) {
+            console.error("Error handling chat update:", error);
+          }
         }
 
         if (pendingInput) {
