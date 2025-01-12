@@ -138,31 +138,37 @@ export default function MessagingInterface() {
         const pendingMessages = localStorage.getItem("pendingMessages");
         const pendingInput = localStorage.getItem("pendingInput");
         const pendingCharacter = localStorage.getItem("pendingCharacter");
-        const pendingNote = localStorage.getItem("authorNote"); // Get the pending author's note
+        const pendingNote = localStorage.getItem("authorNote");
 
         if (pendingMessages && pendingCharacter) {
           const messages = JSON.parse(pendingMessages);
           setMessages(messages);
+          setSelectedCharacter(pendingCharacter);
 
-          // Create the initial author's note object with timestamp if there's a pending note
+          // Create the initial author's note object
           const currentTime = new Date().toISOString();
           const authorNoteObj = pendingNote
-            ? {
-                [currentTime]: pendingNote,
-              }
+            ? { [currentTime]: pendingNote }
             : {};
 
-          // Save both the pending chat and author's note to Supabase
-          const { data: existingChat } = await supabase
+          // Delete any existing chat for this character
+          await supabase
+            .from("chats")
+            .delete()
+            .match({ email: user.email, character_id: pendingCharacter });
+
+          // Insert the current chat state
+          await supabase
             .from("chats")
             .insert({
               email: user.email,
               messages: messages,
               character_id: pendingCharacter,
-              authors_note: authorNoteObj, // Include the author's note in the initial save
-            })
-            .select()
-            .single();
+              authors_note: authorNoteObj,
+            });
+
+          // Trigger chat list refresh
+          setChatListRefresh((prev) => prev + 1);
 
           // Clear localStorage
           localStorage.removeItem("pendingMessages");

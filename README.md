@@ -37,3 +37,9 @@ i do wanna add a paywall at 20 total messages send to be able to make some cash
 before getting into marketing and probably getting dozens of new user i should figure out how to handle the case
 
 i probably need to do some kind of marketing for that stuff now. the question is what is the best way of doing marketing for this now. i probably can do some kind of 
+
+
+bugs to tackle in the project:
+
+- when user uses chat in landing page interface happens and he logs in after this the chat is not getting transferred
+- its possible that the same type appears in the notifications sidebar
