@@ -166,7 +166,7 @@ export default function MessagingInterface() {
                 messages: existingChat.messages,
                 character_id: existingChat.character_id,
                 created_at: existingChat.created_at,
-                authors_note: existingChat.authors_note || {}
+                authors_note: existingChat.authors_note || {},
               });
 
               // Then delete the existing chat
@@ -177,14 +177,12 @@ export default function MessagingInterface() {
             }
 
             // Insert the current chat state
-            await supabase
-              .from("chats")
-              .insert({
-                email: user.email,
-                messages: messages,
-                character_id: pendingCharacter,
-                authors_note: authorNoteObj,
-              });
+            await supabase.from("chats").insert({
+              email: user.email,
+              messages: messages,
+              character_id: pendingCharacter,
+              authors_note: authorNoteObj,
+            });
 
             // Trigger chat list refresh
             setChatListRefresh((prev) => prev + 1);
