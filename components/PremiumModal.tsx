@@ -27,8 +27,7 @@ export default function PremiumModal({
         <div className="flex flex-col gap-6 py-4">
           <div className="p-4 bg-purple-500/10 rounded-lg border border-purple-500/20">
             <p className="text-sm text-purple-600 dark:text-purple-400">
-              You've reached the free message limit (20 messages). Upgrade to
-              Premium to continue chatting with unlimited messages!
+              You've reached the free message limit (20 messages).
             </p>
           </div>
 
