@@ -224,37 +224,38 @@ export default function BigFive() {
                 the average in society for each personality dimension.
               </p>
               <div className="space-y-6 max-w-md mx-auto">
-                {Object.entries(scores).map(([type, score]) => (
-                  <div key={type} className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">
-                          {
-                            traitDescriptions[
-                              type as keyof typeof traitDescriptions
-                            ].title
-                          }
-                        </span>
-                        <span className="text-muted-foreground">
+                {Object.entries(scores).map(([type, score]) => {
+                  const trait =
+                    traitDescriptions[type as keyof typeof traitDescriptions];
+                  return (
+                    <div
+                      key={type}
+                      className="mb-8 p-6 bg-white rounded-xl shadow-sm"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                        <h3 className="text-xl font-semibold text-gray-900">
+                          {trait.title}
+                        </h3>
+                        <div className="mt-2 sm:mt-0 text-lg font-medium text-primary">
                           Score: {score} / 50
-                        </span>
+                        </div>
                       </div>
-                      <div className="w-full bg-secondary rounded-full h-2.5">
-                        <div
-                          className="bg-primary h-2.5 rounded-full"
-                          style={{ width: `${(score / 50) * 100}%` }}
-                        ></div>
+
+                      <div className="mb-4">
+                        <div className="w-full bg-gray-100 rounded-full h-3">
+                          <div
+                            className="bg-primary h-3 rounded-full transition-all duration-500 ease-out"
+                            style={{ width: `${(score / 50) * 100}%` }}
+                          ></div>
+                        </div>
                       </div>
+
+                      <p className="text-gray-600 leading-relaxed">
+                        {trait.description}
+                      </p>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {
-                        traitDescriptions[
-                          type as keyof typeof traitDescriptions
-                        ].description
-                      }
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div className="mt-8 text-center">
                 <Link
