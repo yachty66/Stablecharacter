@@ -15,8 +15,6 @@ interface Question extends AssessmentQuestion {
 const questions: Question[] = assessment.map((q, index) => ({
   ...q,
   id: index + 1,
-  factor:
-    traitDescriptions[q.type as keyof typeof traitDescriptions].toLowerCase(),
 }));
 
 export default function BigFive() {
@@ -227,25 +225,34 @@ export default function BigFive() {
               </p>
               <div className="space-y-6 max-w-md mx-auto">
                 {Object.entries(scores).map(([type, score]) => (
-                  <div key={type} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">
-                        {
-                          traitDescriptions[
-                            type as unknown as keyof typeof traitDescriptions
-                          ]
-                        }
-                      </span>
-                      <span className="text-muted-foreground">
-                        Score: {score} / 50
-                      </span>
+                  <div key={type} className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">
+                          {
+                            traitDescriptions[
+                              type as keyof typeof traitDescriptions
+                            ].title
+                          }
+                        </span>
+                        <span className="text-muted-foreground">
+                          Score: {score} / 50
+                        </span>
+                      </div>
+                      <div className="w-full bg-secondary rounded-full h-2.5">
+                        <div
+                          className="bg-primary h-2.5 rounded-full"
+                          style={{ width: `${(score / 50) * 100}%` }}
+                        ></div>
+                      </div>
                     </div>
-                    <div className="w-full bg-secondary rounded-full h-2.5">
-                      <div
-                        className="bg-primary h-2.5 rounded-full"
-                        style={{ width: `${(score / 50) * 100}%` }}
-                      ></div>
-                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {
+                        traitDescriptions[
+                          type as keyof typeof traitDescriptions
+                        ].description
+                      }
+                    </p>
                   </div>
                 ))}
               </div>
