@@ -147,37 +147,50 @@ export default function BigFive() {
 
   // Add this function to determine MBTI compatibility based on Big Five scores
   const getMBTICompatibility = (scores: { [key: number]: number }) => {
-    // Example compatibility logic (you'll need to adjust these thresholds and logic based on your needs)
-    const compatibilityMap = {
-      // High Extraversion (type 1) -> E types
-      // High Agreeableness (type 2) -> F types
-      // High Conscientiousness (type 3) -> J types
-      // Low Emotional Stability (type 4) -> N types
-      // High Intellect (type 5) -> N types
-      isExtraverted: scores[1] > 35,
-      isFeeling: scores[2] > 35,
-      isJudging: scores[3] > 35,
-      isIntuitive: scores[4] < 25 || scores[5] > 35,
+    // Map Big Five scores to MBTI preferences
+    const preferences = {
+      // Extraversion (Type 1) maps to E/I preference
+      E: scores[1] > 35,
+      // Agreeableness (Type 2) contributes to F/T preference
+      F: scores[2] > 35,
+      // Conscientiousness (Type 3) maps to J/P preference
+      J: scores[3] > 35,
+      // Emotional Stability (Type 4) and Intellect (Type 5) contribute to N/S preference
+      N: scores[4] < 25 || scores[5] > 35,
     };
 
-    // Example character recommendations based on traits
-    const recommendations = [];
+    // Determine likely MBTI types
+    const types = [];
 
-    if (compatibilityMap.isExtraverted && compatibilityMap.isFeeling) {
-      recommendations.push("Naruto (ENFP)");
+    if (preferences.E) {
+      if (preferences.N) {
+        if (preferences.F) {
+          if (preferences.J) types.push("ENFJ");
+          else types.push("ENFP");
+        } else {
+          if (preferences.J) types.push("ENTJ");
+          else types.push("ENTP");
+        }
+      }
+    } else {
+      if (preferences.N) {
+        if (preferences.F) {
+          if (preferences.J) types.push("INFJ");
+          else types.push("INFP");
+        } else {
+          if (preferences.J) types.push("INTJ");
+          else types.push("INTP");
+        }
+      }
     }
-    if (!compatibilityMap.isExtraverted && compatibilityMap.isIntuitive) {
-      recommendations.push("L from Death Note (INTP)");
-    }
-    // Add more character recommendations based on combinations
 
-    return recommendations;
+    return types;
   };
 
   const renderResults = () => {
     if (!showResults) return null;
 
-    const compatibleCharacters = getMBTICompatibility(scores);
+    const compatibleTypes = getMBTICompatibility(scores);
 
     return (
       <div className="bg-muted/50 rounded-lg p-8">
@@ -217,16 +230,16 @@ export default function BigFive() {
 
         <div className="mt-12 border-t pt-8">
           <h3 className="text-xl font-semibold text-center mb-4">
-            Similar MBTI Characters
+            Compatible MBTI Types
           </h3>
           <p className="text-muted-foreground text-center mb-6">
-            Based on your Big Five personality traits, these characters are
-            similar to you:
+            Based on your Big Five personality traits, you are most similar to
+            this MBTI type:
           </p>
           <div className="flex flex-col items-center gap-4">
-            {compatibleCharacters.map((character, index) => (
+            {compatibleTypes.map((type, index) => (
               <div key={index} className="text-lg font-medium">
-                {character}
+                {type}
               </div>
             ))}
           </div>
@@ -234,12 +247,10 @@ export default function BigFive() {
 
         <div className="mt-8 text-center">
           <Link
-            href={`/chat?characters=${encodeURIComponent(
-              compatibleCharacters.join(",")
-            )}`}
+            href="/"
             className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
           >
-            <span>Chat with Compatible Characters</span>
+            <span>Chat with similar Types</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
