@@ -174,10 +174,8 @@ export default function BigFive() {
                   strokeLinejoin="round"
                   className="mr-2 h-4 w-4"
                 >
-                  <path d="M3 7v4c0 1.1.9 2 2 2h4" />
-                  <path d="M7 3h4c1.1 0 2 .9 2 2v4" />
-                  <path d="M21 17v-4c0-1.1-.9-2-2-2h-4" />
-                  <path d="M17 21h-4c-1.1 0-2-.9-2-2v-4" />
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                 </svg>
                 100% Free
               </div>
