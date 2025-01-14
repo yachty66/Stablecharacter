@@ -2,99 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import {
+  assessment,
+  AssessmentQuestion,
+  traitDescriptions,
+} from "@/app/data/bigFiveAssessment";
 
-interface Question {
+interface Question extends AssessmentQuestion {
   id: number;
-  text: string;
-  factor: string;
 }
 
-const questions: Question[] = [
-  // Extraversion (E)
-  {
-    id: 1,
-    text: "I am the life of the party",
-    factor: "extraversion",
-  },
-  {
-    id: 2,
-    text: "I feel comfortable around people",
-    factor: "extraversion",
-  },
-  {
-    id: 3,
-    text: "I start conversations",
-    factor: "extraversion",
-  },
-
-  // Agreeableness (A)
-  {
-    id: 4,
-    text: "I feel others' emotions",
-    factor: "agreeableness",
-  },
-  {
-    id: 5,
-    text: "I make people feel at ease",
-    factor: "agreeableness",
-  },
-  {
-    id: 6,
-    text: "I take time out for others",
-    factor: "agreeableness",
-  },
-
-  // Conscientiousness (C)
-  {
-    id: 7,
-    text: "I am always prepared",
-    factor: "conscientiousness",
-  },
-  {
-    id: 8,
-    text: "I pay attention to details",
-    factor: "conscientiousness",
-  },
-  {
-    id: 9,
-    text: "I follow a schedule",
-    factor: "conscientiousness",
-  },
-
-  // Neuroticism (N)
-  {
-    id: 10,
-    text: "I get stressed out easily",
-    factor: "neuroticism",
-  },
-  {
-    id: 11,
-    text: "I worry about things",
-    factor: "neuroticism",
-  },
-  {
-    id: 12,
-    text: "I change my mood a lot",
-    factor: "neuroticism",
-  },
-
-  // Openness (O)
-  {
-    id: 13,
-    text: "I have a vivid imagination",
-    factor: "openness",
-  },
-  {
-    id: 14,
-    text: "I have excellent ideas",
-    factor: "openness",
-  },
-  {
-    id: 15,
-    text: "I spend time reflecting on things",
-    factor: "openness",
-  },
-];
+const questions: Question[] = assessment.map((q, index) => ({
+  ...q,
+  id: index + 1,
+  factor:
+    traitDescriptions[q.type as keyof typeof traitDescriptions].toLowerCase(),
+}));
 
 export default function BigFive() {
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
