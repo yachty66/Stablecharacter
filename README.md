@@ -43,3 +43,17 @@ bugs to tackle in the project:
 
 - when user uses chat in landing page interface happens and he logs in after this the chat is not getting transferred
 - its possible that the same type appears in the notifications sidebar
+
+todo for SEO and backlinks:
+
+- make a page for each of the types and do at the bottom of it provide a link to the mbti chat
+- add a mbti test and in the end forward user to chat about the results
+
+for the test what 
+
+for the integration of the big five test i need to have the test and thne 
+
+1. get the data for the personality test
+2. figure what happens in the end when the user is finishing the test, ie how is going to be linked to the chat in the end
+3. figure out how i have to deploy it for optimal SEO results
+4. wrap it up and share it with people on reddit
