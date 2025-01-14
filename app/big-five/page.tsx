@@ -10,6 +10,7 @@ interface Question {
 }
 
 const questions: Question[] = [
+  // Extraversion (E)
   {
     id: 1,
     text: "I am the life of the party",
@@ -17,15 +18,95 @@ const questions: Question[] = [
   },
   {
     id: 2,
-    text: "I feel little concern for others",
+    text: "I feel comfortable around people",
+    factor: "extraversion",
+  },
+  {
+    id: 3,
+    text: "I start conversations",
+    factor: "extraversion",
+  },
+
+  // Agreeableness (A)
+  {
+    id: 4,
+    text: "I feel others' emotions",
     factor: "agreeableness",
   },
-  // Add more questions here
+  {
+    id: 5,
+    text: "I make people feel at ease",
+    factor: "agreeableness",
+  },
+  {
+    id: 6,
+    text: "I take time out for others",
+    factor: "agreeableness",
+  },
+
+  // Conscientiousness (C)
+  {
+    id: 7,
+    text: "I am always prepared",
+    factor: "conscientiousness",
+  },
+  {
+    id: 8,
+    text: "I pay attention to details",
+    factor: "conscientiousness",
+  },
+  {
+    id: 9,
+    text: "I follow a schedule",
+    factor: "conscientiousness",
+  },
+
+  // Neuroticism (N)
+  {
+    id: 10,
+    text: "I get stressed out easily",
+    factor: "neuroticism",
+  },
+  {
+    id: 11,
+    text: "I worry about things",
+    factor: "neuroticism",
+  },
+  {
+    id: 12,
+    text: "I change my mood a lot",
+    factor: "neuroticism",
+  },
+
+  // Openness (O)
+  {
+    id: 13,
+    text: "I have a vivid imagination",
+    factor: "openness",
+  },
+  {
+    id: 14,
+    text: "I have excellent ideas",
+    factor: "openness",
+  },
+  {
+    id: 15,
+    text: "I spend time reflecting on things",
+    factor: "openness",
+  },
 ];
 
 export default function BigFive() {
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
   const [showResults, setShowResults] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const questionsPerPage = 5;
+  const totalPages = Math.ceil(questions.length / questionsPerPage);
+  const currentQuestions = questions.slice(
+    currentPage * questionsPerPage,
+    (currentPage + 1) * questionsPerPage
+  );
 
   const handleAnswer = (questionId: number, value: number) => {
     setAnswers((prev) => ({
@@ -34,9 +115,25 @@ export default function BigFive() {
     }));
   };
 
-  const calculateResults = () => {
-    setShowResults(true);
+  const handleNext = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prev) => prev + 1);
+      window.scrollTo(0, 0);
+    }
   };
+
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const isPageComplete = () => {
+    return currentQuestions.every((q) => answers[q.id] !== undefined);
+  };
+
+  const isLastPage = currentPage === totalPages - 1;
 
   return (
     <div className="min-h-[100dvh] bg-background flex flex-col">
@@ -75,7 +172,16 @@ export default function BigFive() {
         <div className="max-w-4xl mx-auto px-4">
           {!showResults ? (
             <div className="space-y-8">
-              {questions.map((question) => (
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-sm text-muted-foreground">
+                  Page {currentPage + 1} of {totalPages}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {questions.length} questions total
+                </span>
+              </div>
+
+              {currentQuestions.map((question) => (
                 <div key={question.id} className="bg-muted/50 rounded-lg p-6">
                   <p className="text-lg mb-4">{question.text}</p>
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between">
@@ -105,13 +211,46 @@ export default function BigFive() {
                 </div>
               ))}
 
-              <div className="flex justify-center pt-8">
+              <div className="flex justify-between items-center pt-8">
                 <button
-                  onClick={calculateResults}
-                  className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                  onClick={handlePrevious}
+                  className={`px-6 py-2 rounded-lg font-medium transition-opacity
+                    ${
+                      currentPage > 0
+                        ? "bg-secondary text-secondary-foreground hover:opacity-90"
+                        : "invisible"
+                    }`}
                 >
-                  See Results
+                  Previous
                 </button>
+
+                {isLastPage ? (
+                  <button
+                    onClick={() => setShowResults(true)}
+                    disabled={!isPageComplete()}
+                    className={`bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium transition-opacity
+                      ${
+                        isPageComplete()
+                          ? "hover:opacity-90"
+                          : "opacity-50 cursor-not-allowed"
+                      }`}
+                  >
+                    See Results
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleNext}
+                    disabled={!isPageComplete()}
+                    className={`bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium transition-opacity
+                      ${
+                        isPageComplete()
+                          ? "hover:opacity-90"
+                          : "opacity-50 cursor-not-allowed"
+                      }`}
+                  >
+                    Next
+                  </button>
+                )}
               </div>
             </div>
           ) : (
