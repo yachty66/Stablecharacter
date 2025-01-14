@@ -20,10 +20,27 @@ const questions: Question[] = assessment.map((q, index) => ({
 }));
 
 export default function BigFive() {
-  const [answers, setAnswers] = useState<{ [key: number]: number }>({});
-  const [showResults, setShowResults] = useState(false);
+  // Initialize answers with all 5s
+  const initialAnswers = questions.reduce((acc, question) => {
+    acc[question.id] = 5;
+    return acc;
+  }, {} as { [key: number]: number });
+
+  const [answers, setAnswers] = useState<{ [key: number]: number }>(
+    initialAnswers
+  );
+  // Set showResults to true initially
+  const [showResults, setShowResults] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-  const [scores, setScores] = useState<{ [key: number]: number }>({});
+  // Calculate initial scores
+  const initialScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  questions.forEach((question) => {
+    const score = question.math === "+" ? 5 : 6 - 5;
+    initialScores[question.type] += score;
+  });
+  const [scores, setScores] = useState<{ [key: number]: number }>(
+    initialScores
+  );
 
   const questionsPerPage = 5;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
