@@ -18,27 +18,16 @@ const questions: Question[] = assessment.map((q, index) => ({
 }));
 
 export default function BigFive() {
-  // Initialize answers with all 5s
-  const initialAnswers = questions.reduce((acc, question) => {
-    acc[question.id] = 5;
-    return acc;
-  }, {} as { [key: number]: number });
+  // Initialize with empty answers instead of all 5s
+  const [answers, setAnswers] = useState<{ [key: number]: number }>({});
 
-  const [answers, setAnswers] = useState<{ [key: number]: number }>(
-    initialAnswers
-  );
-  // Set showResults to true initially
-  const [showResults, setShowResults] = useState(true);
+  // Start with showResults as false
+  const [showResults, setShowResults] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(0);
-  // Calculate initial scores
-  const initialScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-  questions.forEach((question) => {
-    const score = question.math === "+" ? 5 : 6 - 5;
-    initialScores[question.type] += score;
-  });
-  const [scores, setScores] = useState<{ [key: number]: number }>(
-    initialScores
-  );
+
+  // Initialize with empty scores
+  const [scores, setScores] = useState<{ [key: number]: number }>({});
 
   const questionsPerPage = 5;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -49,20 +38,27 @@ export default function BigFive() {
 
   const calculateScores = () => {
     // Initialize scores for each trait type
-    const newScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    const typeScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
-    // Calculate scores for each question
+    // Calculate scores following Python logic exactly
     questions.forEach((question) => {
       const answer = answers[question.id];
       if (answer !== undefined) {
-        // For positive questions (+), use the answer value directly
-        // For negative questions (-), reverse the score (6 - answer)
-        const score = question.math === "+" ? answer : 6 - answer;
-        newScores[question.type] += score;
+        if (question.math === "+") {
+          // For positive questions, use answer directly
+          typeScores[question.type] += answer;
+        } else {
+          // For negative questions: 6 - answer
+          // This matches Python's 5 - (answer-1) logic
+          typeScores[question.type] += 6 - answer;
+        }
       }
     });
 
-    setScores(newScores);
+    // Log scores for debugging
+    console.log("Raw scores:", typeScores);
+
+    setScores(typeScores);
     setShowResults(true);
   };
 
@@ -198,31 +194,35 @@ export default function BigFive() {
               </div>
 
               {currentQuestions.map((question) => (
-                <div key={question.id} className="bg-muted/50 rounded-lg p-6">
-                  <p className="text-lg mb-4">{question.text}</p>
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Strongly Disagree
-                    </span>
-                    <div className="flex gap-2 sm:gap-4">
-                      {[1, 2, 3, 4, 5].map((value) => (
-                        <button
-                          key={value}
-                          onClick={() => handleAnswer(question.id, value)}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors
-                            ${
-                              answers[question.id] === value
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-background hover:bg-muted border"
-                            }`}
-                        >
-                          {value}
-                        </button>
-                      ))}
+                <div key={question.id} className="space-y-6">
+                  <h3 className="text-lg font-medium text-center max-w-2xl mx-auto">
+                    {question.question}
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between max-w-xl mx-auto">
+                      <span className="text-sm text-muted-foreground min-w-[100px] text-right">
+                        Strongly Disagree
+                      </span>
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map((value) => (
+                          <button
+                            key={value}
+                            onClick={() => handleAnswer(question.id, value)}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors
+                              ${
+                                answers[question.id] === value
+                                  ? "bg-primary text-primary-foreground"
+                                  : "bg-background hover:bg-muted border"
+                              }`}
+                          >
+                            {value}
+                          </button>
+                        ))}
+                      </div>
+                      <span className="text-sm text-muted-foreground min-w-[100px] text-left">
+                        Strongly Agree
+                      </span>
                     </div>
-                    <span className="text-sm text-muted-foreground">
-                      Strongly Agree
-                    </span>
                   </div>
                 </div>
               ))}
