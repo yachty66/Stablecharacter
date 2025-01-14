@@ -218,6 +218,13 @@ export default function BigFive() {
               <h2 className="text-2xl font-bold mb-6 text-center">
                 Your Results
               </h2>
+              <p className="text-center text-muted-foreground mb-8">
+                Your Big Five personality assessment results are shown below.
+                Each score indicates your position relative to the general
+                population, with higher scores showing where you rank compared
+                to others. The scores range from 0 to 50, with 25 representing
+                the average in society for each personality dimension.
+              </p>
               <div className="space-y-6 max-w-md mx-auto">
                 {Object.entries(scores).map(([type, score]) => (
                   <div key={type} className="space-y-2">
