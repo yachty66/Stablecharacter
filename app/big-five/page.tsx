@@ -23,6 +23,7 @@ export default function BigFive() {
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
   const [showResults, setShowResults] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [scores, setScores] = useState<{ [key: number]: number }>({});
 
   const questionsPerPage = 5;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -30,6 +31,25 @@ export default function BigFive() {
     currentPage * questionsPerPage,
     (currentPage + 1) * questionsPerPage
   );
+
+  const calculateScores = () => {
+    // Initialize scores for each trait type
+    const newScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    // Calculate scores for each question
+    questions.forEach((question) => {
+      const answer = answers[question.id];
+      if (answer !== undefined) {
+        // For positive questions (+), use the answer value directly
+        // For negative questions (-), reverse the score (6 - answer)
+        const score = question.math === "+" ? answer : 6 - answer;
+        newScores[question.type] += score;
+      }
+    });
+
+    setScores(newScores);
+    setShowResults(true);
+  };
 
   const handleAnswer = (questionId: number, value: number) => {
     setAnswers((prev) => ({
@@ -149,7 +169,7 @@ export default function BigFive() {
 
                 {isLastPage ? (
                   <button
-                    onClick={() => setShowResults(true)}
+                    onClick={calculateScores}
                     disabled={!isPageComplete()}
                     className={`bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium transition-opacity
                       ${
@@ -177,15 +197,42 @@ export default function BigFive() {
               </div>
             </div>
           ) : (
-            <div className="bg-muted/50 rounded-lg p-8 text-center">
-              <h2 className="text-2xl font-bold mb-4">Your Results</h2>
-              {/* Display results here */}
-              <Link
-                href="/"
-                className="inline-block mt-6 bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
-              >
-                Chat with MBTI Characters
-              </Link>
+            <div className="bg-muted/50 rounded-lg p-8">
+              <h2 className="text-2xl font-bold mb-6 text-center">
+                Your Results
+              </h2>
+              <div className="space-y-6 max-w-md mx-auto">
+                {Object.entries(scores).map(([type, score]) => (
+                  <div key={type} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">
+                        {
+                          traitDescriptions[
+                            type as unknown as keyof typeof traitDescriptions
+                          ]
+                        }
+                      </span>
+                      <span className="text-muted-foreground">
+                        Score: {score} / 50
+                      </span>
+                    </div>
+                    <div className="w-full bg-secondary rounded-full h-2.5">
+                      <div
+                        className="bg-primary h-2.5 rounded-full"
+                        style={{ width: `${(score / 50) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 text-center">
+                <Link
+                  href="/"
+                  className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                >
+                  Chat with MBTI Characters
+                </Link>
+              </div>
             </div>
           )}
         </div>
