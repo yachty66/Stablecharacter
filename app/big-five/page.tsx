@@ -8,6 +8,8 @@ import {
   traitDescriptions,
 } from "@/app/data/bigFiveAssessment";
 
+//the scores from https://ipip.ori.org/new_ipip-50-item-scale.htm are used
+
 interface Question extends AssessmentQuestion {
   id: number;
 }
@@ -40,33 +42,78 @@ export default function BigFive() {
     // Initialize scores for each trait type
     const typeScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
-    // Calculate scores following Python logic exactly
+    // Log each question's details
+    console.log("Question Details:");
     questions.forEach((question) => {
       const answer = answers[question.id];
       if (answer !== undefined) {
-        if (question.math === "+") {
-          // For positive questions, use answer directly
-          typeScores[question.type] += answer;
-        } else {
-          // For negative questions: 6 - answer
-          // This matches Python's 5 - (answer-1) logic
-          typeScores[question.type] += 6 - answer;
-        }
+        const score = question.math === "+" ? answer : 5 - (answer - 1);
+
+        console.log({
+          questionId: question.id,
+          question: question.question,
+          userAnswer: answer,
+          calculatedScore: score,
+          traitType: question.type,
+          mathType: question.math,
+        });
+
+        typeScores[question.type] += score;
       }
     });
 
-    // Log scores for debugging
-    console.log("Raw scores:", typeScores);
+    // Log final trait scores
+    console.log("Final Trait Scores:", typeScores);
 
     setScores(typeScores);
     setShowResults(true);
   };
 
+  const calculateRunningScores = () => {
+    const runningScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    questions.forEach((question, index) => {
+      const answer = answers[index + 1];
+      if (answer !== undefined) {
+        // For + keyed items: use value directly (1,2,3,4,5)
+        // For - keyed items: reverse the value (5,4,3,2,1)
+        const score = question.math === "+" ? answer : 6 - answer;
+
+        runningScores[question.type] += score;
+      }
+    });
+
+    return runningScores;
+  };
+
   const handleAnswer = (questionId: number, value: number) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [questionId]: value,
-    }));
+    //get the value from my data
+    const question = questions.find((q) => q.id === questionId);
+    //calculate the score
+    const score = question?.math === "+" ? value : 6 - value;
+    //store the id of the question, value of the user and the score
+    const questionPoints = {
+      id: questionId,
+      value: value,
+      score: score,
+    };
+    //next we need to make the store the value
+    setAnswers((prev) => {
+      const newAnswers = { ...prev, [questionId]: value };
+      return newAnswers;
+    });
+
+    setAnswers((prev) => {
+      const newAnswers = { ...prev, [questionId]: value };
+
+      const currentQuestion = questions.find((q) => q.id === questionId);
+      if (currentQuestion) {
+        const score = currentQuestion.math === "+" ? value : 6 - value;
+        const scores = calculateRunningScores();
+      }
+      // console.log("newAnswers", newAnswers);
+      return newAnswers;
+    });
   };
 
   const handleNext = () => {
@@ -88,6 +135,81 @@ export default function BigFive() {
   };
 
   const isLastPage = currentPage === totalPages - 1;
+
+  const renderResults = () => {
+    if (!showResults) return null;
+
+    // Define the correct order and mapping
+    const traitOrder = [
+      { number: 1, name: "Extraversion" },
+      { number: 2, name: "Emotional Stability" },
+      { number: 3, name: "Agreeableness" },
+      { number: 4, name: "Conscientiousness" },
+      { number: 5, name: "Intellect/Imagination" },
+    ];
+
+    return (
+      <div className="bg-muted/50 rounded-lg p-8">
+        <h2 className="text-2xl font-bold text-center mb-6">Your Results</h2>
+
+        <p className="text-muted-foreground mb-8 text-center">
+          Your Big Five personality assessment results are shown below. Each
+          score indicates your position relative to the general population, with
+          higher scores showing where you rank compared to others.
+        </p>
+
+        <div className="space-y-8">
+          {traitOrder.map(({ number, name }) => {
+            const trait =
+              traitDescriptions[number as keyof typeof traitDescriptions];
+            const score = scores[number];
+
+            return (
+              <div key={number} className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-semibold">{name}</h3>
+                  <span className="text-lg">Score: {score} / 50</span>
+                </div>
+
+                <div className="w-full bg-muted rounded-full h-4">
+                  <div
+                    className="bg-primary h-4 rounded-full transition-all duration-500"
+                    style={{ width: `${(score / 50) * 100}%` }}
+                  />
+                </div>
+
+                <p className="text-muted-foreground">{trait.description}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link
+            href="/chat"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+          >
+            <span>Chat with MBTI Characters</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="ml-2 h-4 w-4"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-[100dvh] bg-background flex flex-col">
@@ -270,60 +392,7 @@ export default function BigFive() {
               </div>
             </div>
           ) : (
-            <div className="bg-muted/50 rounded-lg p-8">
-              <h2 className="text-2xl font-bold mb-6 text-center">
-                Your Results
-              </h2>
-              <p className="text-center text-muted-foreground mb-8">
-                Your Big Five personality assessment results are shown below.
-                Each score indicates your position relative to the general
-                population, with higher scores showing where you rank compared
-                to others. The scores range from 0 to 50, with 25 representing
-                the average in society for each personality dimension.
-              </p>
-              <div className="space-y-6 max-w-md mx-auto">
-                {Object.entries(scores).map(([type, score]) => {
-                  const trait =
-                    traitDescriptions[type as keyof typeof traitDescriptions];
-                  return (
-                    <div
-                      key={type}
-                      className="mb-8 p-6 bg-white rounded-xl shadow-sm"
-                    >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold text-gray-900">
-                          {trait.title}
-                        </h3>
-                        <div className="mt-2 sm:mt-0 text-lg font-medium text-primary">
-                          Score: {score} / 50
-                        </div>
-                      </div>
-
-                      <div className="mb-4">
-                        <div className="w-full bg-gray-100 rounded-full h-3">
-                          <div
-                            className="bg-primary h-3 rounded-full transition-all duration-500 ease-out"
-                            style={{ width: `${(score / 50) * 100}%` }}
-                          ></div>
-                        </div>
-                      </div>
-
-                      <p className="text-gray-600 leading-relaxed">
-                        {trait.description}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="mt-8 text-center">
-                <Link
-                  href="/"
-                  className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
-                >
-                  Chat with MBTI Characters
-                </Link>
-              </div>
-            </div>
+            renderResults()
           )}
         </div>
       </main>
