@@ -20,6 +20,15 @@ const questions: Question[] = assessment.map((q, index) => ({
 }));
 
 export default function BigFive() {
+  // Add this trait order definition
+  const traitOrder = [
+    { number: 1, name: "Extraversion" },
+    { number: 4, name: "Emotional Stability" },
+    { number: 2, name: "Agreeableness" },
+    { number: 3, name: "Conscientiousness" },
+    { number: 5, name: "Intellect/Imagination" },
+  ];
+
   // Initialize with empty answers instead of all 5s
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
 
@@ -136,17 +145,39 @@ export default function BigFive() {
 
   const isLastPage = currentPage === totalPages - 1;
 
+  // Add this function to determine MBTI compatibility based on Big Five scores
+  const getMBTICompatibility = (scores: { [key: number]: number }) => {
+    // Example compatibility logic (you'll need to adjust these thresholds and logic based on your needs)
+    const compatibilityMap = {
+      // High Extraversion (type 1) -> E types
+      // High Agreeableness (type 2) -> F types
+      // High Conscientiousness (type 3) -> J types
+      // Low Emotional Stability (type 4) -> N types
+      // High Intellect (type 5) -> N types
+      isExtraverted: scores[1] > 35,
+      isFeeling: scores[2] > 35,
+      isJudging: scores[3] > 35,
+      isIntuitive: scores[4] < 25 || scores[5] > 35,
+    };
+
+    // Example character recommendations based on traits
+    const recommendations = [];
+
+    if (compatibilityMap.isExtraverted && compatibilityMap.isFeeling) {
+      recommendations.push("Naruto (ENFP)");
+    }
+    if (!compatibilityMap.isExtraverted && compatibilityMap.isIntuitive) {
+      recommendations.push("L from Death Note (INTP)");
+    }
+    // Add more character recommendations based on combinations
+
+    return recommendations;
+  };
+
   const renderResults = () => {
     if (!showResults) return null;
 
-    // Define the correct order and mapping
-    const traitOrder = [
-      { number: 1, name: "Extraversion" },
-      { number: 2, name: "Emotional Stability" },
-      { number: 3, name: "Agreeableness" },
-      { number: 4, name: "Conscientiousness" },
-      { number: 5, name: "Intellect/Imagination" },
-    ];
+    const compatibleCharacters = getMBTICompatibility(scores);
 
     return (
       <div className="bg-muted/50 rounded-lg p-8">
@@ -184,12 +215,31 @@ export default function BigFive() {
           })}
         </div>
 
+        <div className="mt-12 border-t pt-8">
+          <h3 className="text-xl font-semibold text-center mb-4">
+            Similar MBTI Characters
+          </h3>
+          <p className="text-muted-foreground text-center mb-6">
+            Based on your Big Five personality traits, these characters are
+            similar to you:
+          </p>
+          <div className="flex flex-col items-center gap-4">
+            {compatibleCharacters.map((character, index) => (
+              <div key={index} className="text-lg font-medium">
+                {character}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="mt-8 text-center">
           <Link
-            href="/chat"
+            href={`/chat?characters=${encodeURIComponent(
+              compatibleCharacters.join(",")
+            )}`}
             className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
           >
-            <span>Chat with MBTI Characters</span>
+            <span>Chat with Compatible Characters</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
