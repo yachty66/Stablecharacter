@@ -410,34 +410,36 @@ export default function BigFive() {
               </div>
 
               {currentQuestions.map((question) => (
-                <div key={question.id} className="space-y-4 sm:space-y-6">
+                <div key={question.id} className="space-y-4">
                   <h3 className="text-base sm:text-lg font-medium text-center max-w-2xl mx-auto px-4">
                     {question.question}
                   </h3>
-                  <div className="space-y-3">
-                    <div className="flex flex-col sm:flex-row items-center justify-between max-w-xl mx-auto px-4">
-                      <span className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-0 sm:min-w-[100px] sm:text-right">
-                        Strongly Disagree
-                      </span>
-                      <div className="flex gap-2 sm:gap-3">
-                        {[1, 2, 3, 4, 5].map((value) => (
-                          <button
-                            key={value}
-                            onClick={() => handleAnswer(question.id, value)}
-                            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-colors text-sm sm:text-base
-                              ${
-                                answers[question.id] === value
-                                  ? "bg-primary text-primary-foreground"
-                                  : "bg-background hover:bg-muted border"
-                              }`}
-                          >
+                  <div className="flex flex-col items-center space-y-4">
+                    {/* Scale labels and buttons */}
+                    <div className="w-full max-w-md space-y-2">
+                      {[
+                        { value: 1, label: "Strongly Disagree" },
+                        { value: 2, label: "Disagree" },
+                        { value: 3, label: "Neutral" },
+                        { value: 4, label: "Agree" },
+                        { value: 5, label: "Strongly Agree" },
+                      ].map(({ value, label }) => (
+                        <button
+                          key={value}
+                          onClick={() => handleAnswer(question.id, value)}
+                          className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors
+                            ${
+                              answers[question.id] === value
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-background hover:bg-muted border"
+                            }`}
+                        >
+                          <span className="text-sm sm:text-base">{label}</span>
+                          <span className="text-sm sm:text-base font-medium">
                             {value}
-                          </button>
-                        ))}
-                      </div>
-                      <span className="text-xs sm:text-sm text-muted-foreground mt-2 sm:mt-0 sm:min-w-[100px] sm:text-left">
-                        Strongly Agree
-                      </span>
+                          </span>
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>
