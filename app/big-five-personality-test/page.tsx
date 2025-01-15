@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   assessment,
@@ -20,6 +21,8 @@ const questions: Question[] = assessment.map((q, index) => ({
 }));
 
 export default function BigFive() {
+  const supabase = createClientComponentClient();
+
   // Add this trait order definition
   const traitOrder = [
     { number: 1, name: "Extraversion" },
@@ -47,41 +50,60 @@ export default function BigFive() {
     (currentPage + 1) * questionsPerPage
   );
 
-  const calculateScores = () => {
+  const calculateScores = async () => {
     // Initialize scores for each trait type
     const typeScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
-    // Log each question's details
-    console.log("Question Details:");
     questions.forEach((question) => {
       const answer = answers[question.id];
       if (answer !== undefined) {
         const score = question.math === "+" ? answer : 5 - (answer - 1);
-
-        console.log({
-          questionId: question.id,
-          question: question.question,
-          userAnswer: answer,
-          calculatedScore: score,
-          traitType: question.type,
-          mathType: question.math,
-        });
-
         typeScores[question.type] += score;
       }
     });
 
-    // Log final trait scores
-    console.log("Final Trait Scores:", typeScores);
+    // Get compatible MBTI types
+    const compatibleTypes = getMBTICompatibility(typeScores);
 
+    // Create result object
+    const result = {
+      scores: typeScores,
+      answers: answers,
+      compatibleTypes: compatibleTypes,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      // Save to Supabase
+      const { data, error } = await supabase
+        .from("big_five_results")
+        .insert([{ result }]);
+
+      if (error) {
+        console.error("Error saving results:", error);
+      } else {
+        console.log("Results saved successfully:", data);
+      }
+    } catch (error) {
+      console.error("Error saving results:", error);
+    }
+
+    // Update state and scroll to top
     setScores(typeScores);
     setShowResults(true);
-
-    // Add explicit scroll to top
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+
+    // Track completion in Google Analytics
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "test_completed", {
+        event_category: "Engagement",
+        event_label: "Big Five Test",
+        compatible_types: compatibleTypes.join(","),
+      });
+    }
   };
 
   const calculateRunningScores = () => {
