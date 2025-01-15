@@ -9,7 +9,7 @@ import {
   traitDescriptions,
 } from "@/app/data/bigFiveAssessment";
 
-//the scores from https://ipip.ori.org/new_ipip-50-item-scale.htm are used
+//the scores from https://ipip.ori.org/new_ipip-50-item-scale.html are used
 
 interface Question extends AssessmentQuestion {
   id: number;
@@ -524,7 +524,15 @@ export default function BigFive() {
       <footer className="border-t">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <p className="text-sm text-muted-foreground text-center">
-            Based on the scientific Big Five personality model
+            Based on the scientific Big Five personality model.{" "}
+            <a
+              href="https://ipip.ori.org/new_ipip-50-item-scale.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground transition-colors"
+            >
+              Source: IPIP 50-Item Scale
+            </a>
           </p>
         </div>
       </footer>
