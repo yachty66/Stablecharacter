@@ -147,48 +147,79 @@ export default function BigFive() {
 
   // Add this function to determine MBTI compatibility based on Big Five scores
   const getMBTICompatibility = (scores: { [key: number]: number }) => {
-    // Map Big Five scores to MBTI preferences
+    // Middle point is 30 (average of min 10 and max 50)
+    const MIDDLE_SCORE = 30;
+
     const preferences = {
-      // Extraversion (Type 1) maps to E/I preference
-      E: scores[1] > 35,
-      // Agreeableness (Type 2) contributes to F/T preference
-      F: scores[2] > 35,
-      // Conscientiousness (Type 3) maps to J/P preference
-      J: scores[3] > 35,
-      // Emotional Stability (Type 4) and Intellect (Type 5) contribute to N/S preference
-      N: scores[4] < 25 || scores[5] > 35,
+      E: scores[1] > MIDDLE_SCORE, // Extraversion vs Introversion
+      F: scores[2] > MIDDLE_SCORE, // Feeling vs Thinking
+      J: scores[3] > MIDDLE_SCORE, // Judging vs Perceiving
+      N: scores[5] > MIDDLE_SCORE, // Intuition vs Sensing
     };
 
-    // Determine likely MBTI types
     const types = [];
 
-    if (preferences.E) {
-      if (preferences.N) {
-        if (preferences.F) {
-          if (preferences.J) types.push("ENFJ");
-          else types.push("ENFP");
-        } else {
-          if (preferences.J) types.push("ENTJ");
-          else types.push("ENTP");
-        }
+    // Helper function to count matching preferences
+    const countMatches = (type: string) => {
+      let matches = 0;
+      if (
+        (type.includes("E") && preferences.E) ||
+        (type.includes("I") && !preferences.E)
+      )
+        matches++;
+      if (
+        (type.includes("N") && preferences.N) ||
+        (type.includes("S") && !preferences.N)
+      )
+        matches++;
+      if (
+        (type.includes("F") && preferences.F) ||
+        (type.includes("T") && !preferences.F)
+      )
+        matches++;
+      if (
+        (type.includes("J") && preferences.J) ||
+        (type.includes("P") && !preferences.J)
+      )
+        matches++;
+      return matches;
+    };
+
+    // All possible MBTI types
+    const allTypes = [
+      "ENFJ",
+      "ENFP",
+      "ENTJ",
+      "ENTP",
+      "ESFJ",
+      "ESFP",
+      "ESTJ",
+      "ESTP",
+      "INFJ",
+      "INFP",
+      "INTJ",
+      "INTP",
+      "ISFJ",
+      "ISFP",
+      "ISTJ",
+      "ISTP",
+    ];
+
+    // Add types that match at least 2 preferences
+    allTypes.forEach((type) => {
+      if (countMatches(type) >= 2) {
+        types.push(type);
       }
-    } else {
-      if (preferences.N) {
-        if (preferences.F) {
-          if (preferences.J) types.push("INFJ");
-          else types.push("INFP");
-        } else {
-          if (preferences.J) types.push("INTJ");
-          else types.push("INTP");
-        }
-      }
-    }
+    });
 
     return types;
   };
 
   const renderResults = () => {
     if (!showResults) return null;
+
+    const MIDDLE_SCORE = 30;
+    const getLevel = (score: number) => (score > MIDDLE_SCORE ? "High" : "Low");
 
     const compatibleTypes = getMBTICompatibility(scores);
 
@@ -198,43 +229,41 @@ export default function BigFive() {
 
         <p className="text-muted-foreground mb-8 text-center">
           Your Big Five personality assessment results are shown below. Each
-          score indicates your position relative to the general population, with
-          higher scores showing where you rank compared to others.
+          trait is scored on a scale from 10 to 50, where 10 represents the
+          lowest possible score and 50 represents the highest possible score.
         </p>
 
         <div className="space-y-8">
-          {traitOrder.map(({ number, name }) => {
-            const trait =
-              traitDescriptions[number as keyof typeof traitDescriptions];
-            const score = scores[number];
-
-            return (
-              <div key={number} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-semibold">{name}</h3>
-                  <span className="text-lg">Score: {score} / 50</span>
-                </div>
-
-                <div className="w-full bg-muted rounded-full h-4">
-                  <div
-                    className="bg-primary h-4 rounded-full transition-all duration-500"
-                    style={{ width: `${(score / 50) * 100}%` }}
-                  />
-                </div>
-
-                <p className="text-muted-foreground">{trait.description}</p>
+          {traitOrder.map(({ number, name }) => (
+            <div key={number} className="space-y-2">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-medium">{name}</h3>
+                <span className="text-sm font-medium">
+                  Score: {scores[number]} ({getLevel(scores[number])})
+                </span>
               </div>
-            );
-          })}
+              <div className="h-2 bg-muted rounded-full">
+                <div
+                  className="h-full bg-primary rounded-full"
+                  style={{
+                    width: `${((scores[number] - 10) / 40) * 100}%`,
+                  }}
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {traitDescriptions[number].description}
+              </p>
+            </div>
+          ))}
         </div>
 
+        {/* Compatible Types Section */}
         <div className="mt-12 border-t pt-8">
           <h3 className="text-xl font-semibold text-center mb-4">
             Compatible MBTI Types
           </h3>
           <p className="text-muted-foreground text-center mb-6">
-            Based on your Big Five personality traits, you are most similar to
-            this MBTI type:
+            This MBTI types scored in at least 2 categories in the same way as you:
           </p>
           <div className="flex flex-col items-center gap-4">
             {compatibleTypes.map((type, index) => (
