@@ -242,11 +242,14 @@ export default function BigFive() {
                   Score: {scores[number]} ({getLevel(scores[number])})
                 </span>
               </div>
-              <div className="h-2 bg-muted rounded-full">
+              <div className="h-2 bg-secondary rounded-full">
                 <div
-                  className="h-full bg-primary rounded-full"
+                  className="h-full bg-primary rounded-full transition-all"
                   style={{
-                    width: `${((scores[number] - 10) / 40) * 100}%`,
+                    width: `${Math.max(
+                      ((scores[number] - 10) / 40) * 100,
+                      0
+                    )}%`,
                   }}
                 />
               </div>
@@ -263,7 +266,8 @@ export default function BigFive() {
             Compatible MBTI Types
           </h3>
           <p className="text-muted-foreground text-center mb-6">
-            This MBTI types scored in at least 2 categories in the same way as you:
+            This MBTI types scored in at least 2 categories in the same way (high or low) as
+            you:
           </p>
           <div className="flex flex-col items-center gap-4">
             {compatibleTypes.map((type, index) => (
