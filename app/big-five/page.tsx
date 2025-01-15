@@ -266,8 +266,8 @@ export default function BigFive() {
             Compatible MBTI Types
           </h3>
           <p className="text-muted-foreground text-center mb-6">
-            This MBTI types scored in at least 2 categories in the same way (high or low) as
-            you:
+            This MBTI types scored in at least 2 categories in the same way
+            (high or low) as you:
           </p>
           <div className="flex flex-col items-center gap-4">
             {compatibleTypes.map((type, index) => (
@@ -410,21 +410,21 @@ export default function BigFive() {
               </div>
 
               {currentQuestions.map((question) => (
-                <div key={question.id} className="space-y-6">
-                  <h3 className="text-lg font-medium text-center max-w-2xl mx-auto">
+                <div key={question.id} className="space-y-4 sm:space-y-6">
+                  <h3 className="text-base sm:text-lg font-medium text-center max-w-2xl mx-auto px-4">
                     {question.question}
                   </h3>
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between max-w-xl mx-auto">
-                      <span className="text-sm text-muted-foreground min-w-[100px] text-right">
+                    <div className="flex flex-col sm:flex-row items-center justify-between max-w-xl mx-auto px-4">
+                      <span className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-0 sm:min-w-[100px] sm:text-right">
                         Strongly Disagree
                       </span>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 sm:gap-3">
                         {[1, 2, 3, 4, 5].map((value) => (
                           <button
                             key={value}
                             onClick={() => handleAnswer(question.id, value)}
-                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors
+                            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-colors text-sm sm:text-base
                               ${
                                 answers[question.id] === value
                                   ? "bg-primary text-primary-foreground"
@@ -435,7 +435,7 @@ export default function BigFive() {
                           </button>
                         ))}
                       </div>
-                      <span className="text-sm text-muted-foreground min-w-[100px] text-left">
+                      <span className="text-xs sm:text-sm text-muted-foreground mt-2 sm:mt-0 sm:min-w-[100px] sm:text-left">
                         Strongly Agree
                       </span>
                     </div>
@@ -443,10 +443,10 @@ export default function BigFive() {
                 </div>
               ))}
 
-              <div className="flex justify-between items-center pt-8">
+              <div className="flex justify-between items-center pt-8 px-4">
                 <button
                   onClick={handlePrevious}
-                  className={`px-6 py-2 rounded-lg font-medium transition-opacity
+                  className={`px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base font-medium transition-opacity
                     ${
                       currentPage > 0
                         ? "bg-secondary text-secondary-foreground hover:opacity-90"
@@ -460,7 +460,7 @@ export default function BigFive() {
                   <button
                     onClick={calculateScores}
                     disabled={!isPageComplete()}
-                    className={`bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium transition-opacity
+                    className={`bg-primary text-primary-foreground px-6 sm:px-8 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium transition-opacity
                       ${
                         isPageComplete()
                           ? "hover:opacity-90"
@@ -473,7 +473,7 @@ export default function BigFive() {
                   <button
                     onClick={handleNext}
                     disabled={!isPageComplete()}
-                    className={`bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium transition-opacity
+                    className={`bg-primary text-primary-foreground px-6 sm:px-8 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium transition-opacity
                       ${
                         isPageComplete()
                           ? "hover:opacity-90"
