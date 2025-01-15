@@ -84,19 +84,19 @@ export const traitDescriptions = {
       "Extraversion reflects a tendency to seek social interaction and stimulation. High scorers tend to be outgoing, energetic, and assertive in social situations. They typically enjoy being around others and actively seek out social experiences. Lower scorers tend to be more reserved and may prefer smaller social gatherings or solitary activities.",
   },
   2: {
-    title: "Emotional Stability",
-    description:
-      "Emotional Stability (opposite of Neuroticism) indicates how one manages emotions and stress. High scorers tend to be calm, resilient, and even-tempered, handling stress well and maintaining emotional balance. Lower scorers may experience more emotional ups and downs and be more sensitive to stress.",
-  },
-  3: {
     title: "Agreeableness",
     description:
       "Agreeableness reflects how people interact with others. High scorers tend to be cooperative, compassionate, and considerate of others' feelings. They typically value harmony and maintain positive relationships. Lower scorers may be more competitive and skeptical in their interactions.",
   },
-  4: {
+  3: {
     title: "Conscientiousness",
     description:
       "Conscientiousness shows how organized and goal-directed someone is. High scorers tend to be responsible, organized, and thorough in their tasks. They usually plan ahead and pay attention to details. Lower scorers tend to be more flexible and spontaneous but might be less structured.",
+  },
+  4: {
+    title: "Emotional Stability",
+    description:
+      "Emotional Stability (opposite of Neuroticism) indicates how one manages emotions and stress. High scorers tend to be calm, resilient, and even-tempered, handling stress well and maintaining emotional balance. Lower scorers may experience more emotional ups and downs and be more sensitive to stress.",
   },
   5: {
     title: "Intellect/Imagination",
