@@ -76,6 +76,12 @@ export default function BigFive() {
 
     setScores(typeScores);
     setShowResults(true);
+
+    // Add explicit scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const calculateRunningScores = () => {
