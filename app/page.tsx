@@ -389,7 +389,7 @@ export default function MessagingInterface() {
             .single();
 
           // Show paywall if total messages exceed 20
-          if (userCounter && userCounter.counter >= 20) {
+          if (userCounter && userCounter.counter >= 15) {
             setShowPremiumModal(true);
             return;
           }
@@ -927,7 +927,7 @@ export default function MessagingInterface() {
                         setShowSettings(true);
                         return;
                       }
-                      if (user && messages.length >= 20 && !isSubscribed) {
+                      if (user && messages.length >= 15 && !isSubscribed) {
                         e.preventDefault();
                         setShowPremiumModal(true);
                         return;

@@ -26,9 +26,9 @@ export default function BigFive() {
   // Add this trait order definition
   const traitOrder = [
     { number: 1, name: "Extraversion" },
-    { number: 4, name: "Emotional Stability" },
     { number: 2, name: "Agreeableness" },
     { number: 3, name: "Conscientiousness" },
+    { number: 4, name: "Emotional Stability" },
     { number: 5, name: "Intellect/Imagination" },
   ];
 

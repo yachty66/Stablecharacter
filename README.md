@@ -57,3 +57,15 @@ for the integration of the big five test i need to have the test and thne
 2. figure what happens in the end when the user is finishing the test, ie how is going to be linked to the chat in the end
 3. figure out how i have to deploy it for optimal SEO results
 4. wrap it up and share it with people on reddit
+
+things i wanna implement:
+
+- personality database (ai version)?
+- add functionality to send voice messages via the chat
+- add function so that the bot can send voice message too
+- function for reading image 
+- function for sending image
+
+the personality data
+
+
