@@ -68,4 +68,6 @@ things i wanna implement:
 
 the personality data
 
-
+- after one message was send switch into chat in sidebar mode (no saving in sb yet only when login)
+- adjust landing page to claude style 
+- make landing pretty and add logo on too also 
