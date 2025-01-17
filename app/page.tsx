@@ -828,34 +828,22 @@ export default function MessagingInterface() {
                         message.isUser ? "ml-auto flex-row-reverse" : ""
                       } max-w-[85%]`}
                     >
-                      {message.isUser ? (
+                      {!message.isUser && selectedCharacter && (
                         <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                           <Image
-                            src="/vercel.svg"
-                            alt="User"
+                            src={
+                              getCurrentCharacter(selectedCharacter)?.avatar ||
+                              ""
+                            }
+                            alt={
+                              getCurrentCharacter(selectedCharacter)?.name ||
+                              "AI"
+                            }
                             width={40}
                             height={40}
-                            className="object-cover"
+                            className="object-cover w-full h-full"
                           />
                         </div>
-                      ) : (
-                        selectedCharacter && (
-                          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                            <Image
-                              src={
-                                getCurrentCharacter(selectedCharacter)
-                                  ?.avatar || ""
-                              }
-                              alt={
-                                getCurrentCharacter(selectedCharacter)?.name ||
-                                "AI"
-                              }
-                              width={40}
-                              height={40}
-                              className="object-cover w-full h-full"
-                            />
-                          </div>
-                        )
                       )}
                       <div
                         className={`p-3 rounded-lg ${
