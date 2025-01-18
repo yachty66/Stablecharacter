@@ -1,7 +1,5 @@
 ## Installation 
 
-Based on the provided codebase, I'll create a step-by-step guide for setting up the project locally. Here's what someone needs to do:
-
 ### 1. Prerequisites
 - Node.js installed
 - Python installed
@@ -38,3 +36,9 @@ npm run dev
 ```
 
 !!! Attention also the dev mode is connected to the supabase database which is the same as the production database.
+
+## Tests
+
+For now we only have manual tests. Major things to check after big updates:
+
+- chat is getting transferred from non to login area

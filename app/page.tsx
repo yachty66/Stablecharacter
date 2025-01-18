@@ -95,6 +95,7 @@ export default function MessagingInterface() {
   const [showAuthorNote, setShowAuthorNote] = useState(false);
   const [authorNote, setAuthorNote] = useState("");
   const [showAnime, setShowAnime] = useState(false);
+  const [shouldShowSidebar, setShouldShowSidebar] = useState(false);
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -115,6 +116,15 @@ export default function MessagingInterface() {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
+
+      // Check if there are any existing messages in localStorage
+      const existingMessages = localStorage.getItem("pendingMessages");
+      if (existingMessages) {
+        const messages = JSON.parse(existingMessages);
+        if (messages.length > 0) {
+          setShouldShowSidebar(true);
+        }
+      }
 
       // Add visit log if user is logged in
       if (user?.email) {
@@ -372,6 +382,12 @@ export default function MessagingInterface() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    // If first message, show sidebar
+    if (messages.length === 1) {
+      // Only the initial AI message
+      setShouldShowSidebar(true);
+    }
+
     // If not logged in at all, show login modal after 10 messages
     if (!user && messages.length >= 10) {
       setShowSettings(true);
@@ -626,34 +642,33 @@ export default function MessagingInterface() {
 
   return (
     <div className="flex h-[100dvh] bg-background max-w-[100vw] overflow-hidden">
-      {/* Show/hide chat list based on mobile state */}
-      {user && ((showChatList && isMobile) || !isMobile) && (
-        <div
-          className={`${isMobile ? "fixed inset-0 z-50 bg-background" : ""}`}
-        >
-          <ChatList
-            supabase={supabase}
-            userEmail={user.email}
-            characterGroups={characterGroups}
-            onChatSelect={(character) => {
-              if (character) {
-                handleCharacterChange(character);
-                setSelectedCharacter(character);
-                setShowChatList(false);
-              }
-            }}
-            selectedCharacter={selectedCharacter}
-            refreshTrigger={chatListRefresh}
-            onChatDelete={handleChatDelete}
-            onClose={() => setShowChatList(false)}
-          />
-        </div>
-      )}
+      {(user || shouldShowSidebar) &&
+        ((showChatList && isMobile) || !isMobile) && (
+          <div
+            className={`${isMobile ? "fixed inset-0 z-50 bg-background" : ""}`}
+          >
+            <ChatList
+              supabase={supabase}
+              userEmail={user?.email}
+              characterGroups={characterGroups}
+              onChatSelect={(character) => {
+                if (character) {
+                  handleCharacterChange(character);
+                  setSelectedCharacter(character);
+                  setShowChatList(false);
+                }
+              }}
+              selectedCharacter={selectedCharacter}
+              refreshTrigger={chatListRefresh}
+              onChatDelete={handleChatDelete}
+              onClose={() => setShowChatList(false)}
+            />
+          </div>
+        )}
 
       <div className="flex-1 flex justify-center">
         <div className="w-full max-w-3xl">
           <div className="h-full flex flex-col">
-            {/* Existing header, main content, and footer */}
             <header className="flex items-center justify-between px-2 sm:px-4 py-2 border-b">
               {selectedCharacter && (
                 <>
@@ -817,7 +832,6 @@ export default function MessagingInterface() {
               )}
             </header>
 
-            {/* Add padding-top to main content to account for fixed header */}
             <main className="flex-1 overflow-y-auto p-2 sm:p-4">
               <div className="flex flex-col space-y-4">
                 <div className="flex flex-col">
@@ -877,12 +891,11 @@ export default function MessagingInterface() {
                       </div>
                     </div>
                   )}
-                  <div ref={messageEndRef} /> {/* Add scroll anchor */}
+                  <div ref={messageEndRef} />
                 </div>
               </div>
             </main>
 
-            {/* Update footer with ref */}
             <footer className="border-t">
               <form onSubmit={handleSubmit} className="p-2 sm:p-4">
                 <div className="flex items-center gap-2">
@@ -962,7 +975,6 @@ export default function MessagingInterface() {
                   </div>
                 </div>
 
-                {/* Add Discord button */}
                 <Button
                   onClick={() =>
                     window.open("https://discord.gg/mrSkBn9F", "_blank")
@@ -984,7 +996,6 @@ export default function MessagingInterface() {
                   Join our Discord
                 </Button>
 
-                {/* Add Manage Subscription button for subscribed users */}
                 {isSubscribed && (
                   <Button
                     onClick={() => {
