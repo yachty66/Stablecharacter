@@ -662,6 +662,7 @@ export default function MessagingInterface() {
               refreshTrigger={chatListRefresh}
               onChatDelete={handleChatDelete}
               onClose={() => setShowChatList(false)}
+              currentMessages={messages}
             />
           </div>
         )}
