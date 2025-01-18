@@ -1402,5 +1402,20 @@ export default function MessagingInterface() {
     );
   };
 
+  useEffect(() => {
+    // Reset scroll position
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0; // For Safari
+
+    // Prevent body from having any initial scroll
+    document.body.style.position = "fixed";
+    document.body.style.width = "100%";
+
+    return () => {
+      document.body.style.position = "";
+      document.body.style.width = "";
+    };
+  }, []);
+
   return renderLandingContent();
 }
