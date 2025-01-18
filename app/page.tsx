@@ -644,25 +644,26 @@ export default function MessagingInterface() {
   const renderLandingContent = () => {
     if (!user && !shouldShowSidebar) {
       return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-          <div className="w-full max-w-3xl mx-auto text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4">
+        <div className="flex flex-col min-h-screen bg-background">
+          {/* Header section - reduced padding for mobile */}
+          <div className="w-full max-w-3xl mx-auto text-center px-4 pt-6 pb-4">
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2">
               Chat with MBTI Personalities
             </h1>
-            <p className="text-lg text-muted-foreground mb-8">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Explore different personality types through meaningful
               conversations.
             </p>
           </div>
 
-          {/* Centered Chat Interface */}
-          <div className="w-full max-w-3xl mx-auto mb-16 rounded-lg border shadow-lg">
-            <div className="h-[500px] flex flex-col">
+          {/* Chat Interface - adjusted height and padding */}
+          <div className="w-full max-w-3xl mx-auto px-4 mb-8 flex-1">
+            <div className="h-[calc(100vh-220px)] flex flex-col rounded-lg border shadow-lg">
               {/* Chat header */}
-              <header className="flex items-center justify-between px-4 py-3 border-b">
+              <header className="flex items-center justify-between px-3 py-2 border-b">
                 {selectedCharacter && (
                   <>
-                    <div className="flex items-center gap-4 flex-1 justify-center">
+                    <div className="flex items-center gap-2 flex-1 justify-center">
                       <Select
                         value={selectedCharacter}
                         onValueChange={handleCharacterChange}
@@ -802,7 +803,7 @@ export default function MessagingInterface() {
               </header>
 
               {/* Chat messages */}
-              <main className="flex-1 overflow-y-auto p-4">
+              <main className="flex-1 overflow-y-auto p-3">
                 <div className="flex flex-col space-y-4">
                   <div className="flex flex-col">
                     {messages.map((message, index) => (
@@ -867,7 +868,7 @@ export default function MessagingInterface() {
               </main>
 
               {/* Chat input */}
-              <footer className="border-t p-4">
+              <footer className="border-t p-3">
                 <form onSubmit={handleSubmit} className="p-2 sm:p-4">
                   <div className="flex items-center gap-2">
                     {user && !isSubscribed && (
@@ -914,32 +915,32 @@ export default function MessagingInterface() {
             </div>
           </div>
 
-          {/* Features Section */}
-          <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+          {/* Features Section - hidden initially on mobile, shown after scroll */}
+          <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 px-4 pb-6">
             {/* Premium Characters */}
-            <div className="p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold mb-3">Premium Characters</h3>
-              <p className="text-muted-foreground">
+            <div className="p-4 rounded-lg border bg-card">
+              <h3 className="text-lg font-semibold mb-2">Premium Characters</h3>
+              <p className="text-sm text-muted-foreground">
                 Access a diverse range of MBTI personalities, each with unique
                 traits and conversation styles.
               </p>
             </div>
 
             {/* Personality Tests */}
-            <div className="p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold mb-3">Personality Tests</h3>
-              <p className="text-muted-foreground">
+            <div className="p-4 rounded-lg border bg-card">
+              <h3 className="text-lg font-semibold mb-2">Personality Tests</h3>
+              <p className="text-sm text-muted-foreground">
                 Discover your own personality type through comprehensive MBTI
                 and Big Five assessments.
               </p>
             </div>
 
             {/* Personality Database */}
-            <div className="p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold mb-3">
+            <div className="p-4 rounded-lg border bg-card">
+              <h3 className="text-lg font-semibold mb-2">
                 Personality Database
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Explore detailed profiles and insights about different
                 personality types and their characteristics.
               </p>
