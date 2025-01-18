@@ -1,3 +1,48 @@
+## Installation 
+
+Based on the provided codebase, I'll create a step-by-step guide for setting up the project locally. Here's what someone needs to do:
+
+### 1. Prerequisites
+- Node.js installed
+- Python installed
+
+### 2. Installation Steps
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/yachty66/Stablecharacter.git
+cd Stablecharacter
+```
+
+2. **Install Node.js dependencies**
+```bash
+npm install
+```
+
+3. **Install Python dependencies**
+From the requirements.txt file (lines 1-4), they need to run:
+```bash
+pip install -r requirements.txt
+```
+
+4. **Environment Setup**
+
+Ask yachty66 for the data for the env file
+
+5. **Running the Development Server**
+Based on the package.json (lines 6-9), there are two ways to run the project:
+
+```bash
+# Run both frontend and backend concurrently
+npm run dev
+```
+
+!!! Attention also the dev mode is connected to the supabase database which is the same as the production database.
+
+
+-------------
+
+
 model we are using is gemini/gemini-2.0-flash-exp, rate limits are documented here https://ai.google.dev/gemini-api/docs/models/gemini#gemini-2.0-flash
 
 
