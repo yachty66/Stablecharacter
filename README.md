@@ -1,43 +1,62 @@
-## Installation 
-
-Based on the provided codebase, I'll create a step-by-step guide for setting up the project locally. Here's what someone needs to do:
+# Local setup
 
 ### 1. Prerequisites
 - Node.js installed
-- Python installed
+- Python installed (3.10+ recommended)
+- [Gemini API key](https://ai.google.dev/gemini-api/docs/api-key)
+- [Supabase](https://supabase.com/) account if you want to keep online storage of your conversations.
 
-### 2. Installation Steps
+#### Note that you can't message more than some 10-15 messages as google verification doesn't work in local version.
+Possible workaround is to delete lines of code that checks for `messages.length`
+
+### 2. Install Steps
 
 1. **Clone the repository**
+
+In a directory of your choice
 ```bash
 git clone https://github.com/yachty66/Stablecharacter.git
 cd Stablecharacter
 ```
 
-2. **Install Node.js dependencies**
+2. **Create Python Env & activate env**
 ```bash
-npm install
+python -m venv mbti16env
+mbti16env\Scripts\activate
 ```
 
-3. **Install Python dependencies**
-From the requirements.txt file (lines 1-4), they need to run:
+3. **Install Node.js & Python dependencies**
 ```bash
+npm install
 pip install -r requirements.txt
 ```
 
 4. **Environment Setup**
 
-Ask yachty66 for the data for the env file
-
-5. **Running the Development Server**
-Based on the package.json (lines 6-9), there are two ways to run the project:
-
+Create .env file in project folder with following contents (gemini api key is in quotes and supabase aren't.):
 ```bash
-# Run both frontend and backend concurrently
-npm run dev
+GEMINI_API_KEY="YOURAPIKEYKEEPINGQUOTES..."
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
-!!! Attention also the dev mode is connected to the supabase database which is the same as the production database.
+5. **Launch**
+
+You need two seperate terminals to launch the project as concurrently, the default way to start fails "no module named distro"
+Also included are two ps1 files to allow you to launch easily.
+
+Start backend
+```bash
+# Run both frontend and backend concurrently
+mbti16env\Scripts\activate
+uvicorn api.index:app --reload
+```
+
+Start frontend
+```bash
+mbti16env\Scripts\activate
+npm run next-dev
+```
 
 
 -------------
