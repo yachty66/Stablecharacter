@@ -1,5 +1,2 @@
-- make landing work on mobile too
-- for each section of what we offer add a section with an explainer
-- add customer reviews from reddit
-- link socials on the page
-- think about how i am going to do this with personality tests and personality database, ie addd actual test
+- want to take top characters and celebrities from https://www.personality-database.com/profile?pid=2&cid=27 
+but before i add directly dozens of characters i add two and then based on that i scale them up
