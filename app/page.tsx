@@ -669,18 +669,40 @@ export default function MessagingInterface() {
             {/* Add a second, more focused gradient with reduced height */}
             <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
 
-            {/* Logo and brand name */}
-            <div className="flex items-center gap-2 relative z-10">
-              <Image
-                src="/logo.png"
-                alt="Stablecharacter Logo"
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-              <span className="font-medium tracking-tight text-lg bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                Stablecharacter
-              </span>
+            {/* Add container with flex justify-between */}
+            <div className="relative z-10 flex justify-between items-center">
+              {/* Logo and brand name */}
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/logo.png"
+                  alt="Stablecharacter Logo"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+                <span className="font-medium tracking-tight text-lg bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                  Stablecharacter
+                </span>
+              </div>
+
+              {/* Login button */}
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: "google",
+                    options: {
+                      redirectTo: `${window.location.origin}/auth/callback`,
+                    },
+                  });
+                  if (error) {
+                    console.error("Error:", error.message);
+                  }
+                }}
+                className="gap-2"
+              >
+                Sign in
+              </Button>
             </div>
           </div>
 
