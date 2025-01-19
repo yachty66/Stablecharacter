@@ -661,6 +661,22 @@ export default function MessagingInterface() {
     if (!user && !shouldShowSidebar) {
       return (
         <div className="flex flex-col min-h-screen bg-background">
+          {/* Add logo and brand name at the top */}
+          <div className="w-full px-4 py-4">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/logo.png"
+                alt="Stablecharacter Logo"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+              <span className="font-medium tracking-tight text-lg bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Stablecharacter
+              </span>
+            </div>
+          </div>
+
           {/* Header section - reduced padding for mobile */}
           <div className="w-full max-w-3xl mx-auto text-center px-4 pt-6 pb-4">
             <h1 className="text-3xl sm:text-4xl font-bold mb-2">
