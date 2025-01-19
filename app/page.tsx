@@ -47,7 +47,8 @@ import { characterGroups } from "@/app/data/characterGroups";
 import { useRouter } from "next/navigation";
 import PersonalityTests from "@/components/PersonalityTests";
 import PremiumCharacters from "@/components/PremiumCharacters";
-
+import PersonalityDatabase from "@/components/PersonalityDatabase";
+import CustomerReviews from "@/components/CustomerReviews";
 interface Message {
   text: string;
   isUser: boolean;
@@ -988,6 +989,12 @@ export default function MessagingInterface() {
 
           {/* Personality Tests Section */}
           <PersonalityTests />
+
+          {/* Personality Database Section */}
+          <PersonalityDatabase />
+
+          {/* Customer Reviews Section */}
+          <CustomerReviews />
         </div>
       );
     }
