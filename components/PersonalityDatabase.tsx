@@ -10,7 +10,8 @@ export default function PersonalityDatabase() {
             Personality Database
           </h2>
           <p className="text-muted-foreground text-lg">
-            Chat with famous personalities and characters, each with their authentic MBTI type
+            Chat with famous personalities and characters, each with their
+            authentic MBTI type
           </p>
         </div>
 
@@ -18,13 +19,16 @@ export default function PersonalityDatabase() {
         <div className="grid sm:grid-cols-2 gap-6 mt-8">
           <div className="p-6 rounded-xl border bg-card hover:bg-card/80 transition-colors">
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-foreground/10">
-                <BookOpen className="w-6 h-6 text-foreground" />
+              <div className="p-2 rounded-lg bg-purple-500/10">
+                <BookOpen className="w-6 h-6 text-purple-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Historical Figures</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Historical Figures
+                </h3>
                 <p className="text-muted-foreground">
-                  Engage with great minds from history - from philosophers to scientists, each with their documented personality type
+                  Engage with great minds from history - from philosophers to
+                  scientists, each with their documented personality type
                 </p>
               </div>
             </div>
@@ -32,13 +36,16 @@ export default function PersonalityDatabase() {
 
           <div className="p-6 rounded-xl border bg-card hover:bg-card/80 transition-colors">
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-foreground/10">
-                <Star className="w-6 h-6 text-foreground" />
+              <div className="p-2 rounded-lg bg-purple-500/10">
+                <Star className="w-6 h-6 text-purple-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Fictional Characters</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Fictional Characters
+                </h3>
                 <p className="text-muted-foreground">
-                  Chat with your favorite characters from movies, books, and shows, accurately portrayed with their MBTI types
+                  Chat with your favorite characters from movies, books, and
+                  shows, accurately portrayed with their MBTI types
                 </p>
               </div>
             </div>
@@ -46,13 +53,16 @@ export default function PersonalityDatabase() {
 
           <div className="p-6 rounded-xl border bg-card hover:bg-card/80 transition-colors">
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-foreground/10">
-                <Users2 className="w-6 h-6 text-foreground" />
+              <div className="p-2 rounded-lg bg-purple-500/10">
+                <Users2 className="w-6 h-6 text-purple-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Personality Matches</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Personality Matches
+                </h3>
                 <p className="text-muted-foreground">
-                  Find and chat with characters that match your personality type for deeper connections
+                  Find and chat with characters that match your personality type
+                  for deeper connections
                 </p>
               </div>
             </div>
@@ -60,13 +70,14 @@ export default function PersonalityDatabase() {
 
           <div className="p-6 rounded-xl border bg-card hover:bg-card/80 transition-colors">
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-foreground/10">
-                <Sparkles className="w-6 h-6 text-foreground" />
+              <div className="p-2 rounded-lg bg-purple-500/10">
+                <Sparkles className="w-6 h-6 text-purple-500" />
               </div>
               <div>
                 <h3 className="font-semibold text-lg mb-2">Type Exploration</h3>
                 <p className="text-muted-foreground">
-                  Learn about different personality types through authentic interactions with well-known personalities
+                  Learn about different personality types through authentic
+                  interactions with well-known personalities
                 </p>
               </div>
             </div>
@@ -89,7 +100,7 @@ export default function PersonalityDatabase() {
             </div>
             <div className="text-center p-4 rounded-lg border">
               <p className="font-medium">Jane Austen</p>
-              <span className="text-sm text-muted-foreground">INFJ</span>
+              <span className="text-sm text-muted-foreground">INTJ</span>
             </div>
             <div className="text-center p-4 rounded-lg border">
               <p className="font-medium">Steve Jobs</p>

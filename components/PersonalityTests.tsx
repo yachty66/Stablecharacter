@@ -12,7 +12,7 @@ export default function PersonalityTests() {
             Free Personality Tests
           </h2>
           <p className="text-muted-foreground text-lg">
-            Discover yourself through scientifically validated assessments
+            Discover yourself through free assessments
           </p>
         </div>
 
@@ -29,23 +29,23 @@ export default function PersonalityTests() {
                     Agreeableness, and Neuroticism
                   </p>
                 </div>
-                <div className="p-2 rounded-lg bg-blue-500/10">
-                  <Brain className="w-6 h-6 text-blue-500" />
+                <div className="p-2 rounded-lg bg-purple-500/10">
+                  <Brain className="w-6 h-6 text-purple-500" />
                 </div>
               </div>
               <div className="flex gap-2 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
                   Scientific
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
                   5 min
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
                   Free
                 </span>
               </div>
               <Link href="/big-five-personality-test" className="block">
-                <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white">
+                <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white">
                   Take Test
                 </Button>
               </Link>
@@ -63,23 +63,23 @@ export default function PersonalityTests() {
                     theory
                   </p>
                 </div>
-                <div className="p-2 rounded-lg bg-indigo-500/10">
-                  <Brain className="w-6 h-6 text-indigo-500" />
+                <div className="p-2 rounded-lg bg-purple-500/10">
+                  <Brain className="w-6 h-6 text-purple-500" />
                 </div>
               </div>
               <div className="flex gap-2 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-500">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
                   MBTI Based
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-500">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
                   12 min
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-500">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
                   Free
                 </span>
               </div>
               <Link href="/16-personalities-test" className="block">
-                <Button className="w-full bg-indigo-500 hover:bg-indigo-600 text-white">
+                <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white">
                   Take Test
                 </Button>
               </Link>

@@ -6,7 +6,7 @@ export default function PremiumCharacters() {
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
-          <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-500 to-purple-300 text-transparent bg-clip-text">
+        <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 text-transparent bg-clip-text">
             Premium AI Characters
           </h2>
           <p className="text-muted-foreground text-lg">
