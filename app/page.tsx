@@ -107,7 +107,10 @@ export default function MessagingInterface() {
 
   // Add useEffect for scrolling
   useEffect(() => {
-    scrollToBottom();
+    // Only scroll if we have more than the initial message
+    if (messages.length > 1) {
+      scrollToBottom();
+    }
   }, [messages, isTyping]);
 
   useEffect(() => {
