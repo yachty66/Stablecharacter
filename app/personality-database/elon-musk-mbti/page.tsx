@@ -100,6 +100,17 @@ export default function PersonalityProfile() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Add scrollToBottom function
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Add useEffect for scrolling
+  useEffect(() => {
+    // Scroll when messages change or when typing status changes
+    scrollToBottom();
+  }, [messages, isTyping]);
+
   // Handle chat submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -111,25 +122,11 @@ export default function PersonalityProfile() {
     setInputValue("");
     setIsTyping(true);
 
-    try {
-      // Add AI response (you'll need to implement the actual API call)
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: inputValue,
-          characterId: "elon-musk", // Get from params
-          previousMessages: messages,
-        }),
-      });
-
-      const data = await response.json();
-      setMessages([...newMessages, { text: data.message, isUser: false }]);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
+    // Simulate a brief delay before AI response
+    setTimeout(() => {
+      setMessages([...newMessages, { text: "hi", isUser: false }]);
       setIsTyping(false);
-    }
+    }, 1000); // 1 second delay to simulate typing
   };
 
   return (
