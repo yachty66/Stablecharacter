@@ -780,40 +780,32 @@ export default function MessagingInterface() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-9 w-9"
-                        onClick={() => setShowAuthorNote(true)}
-                      >
-                        <FileText className="h-5 w-5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-9 w-9 relative"
-                        onClick={() => {
-                          navigator.clipboard.writeText(window.location.href);
-                          setShowCopied(true);
-                          setTimeout(() => setShowCopied(false), 2000);
-                        }}
-                      >
-                        {showCopied ? (
-                          <Check className="h-5 w-5" />
-                        ) : (
+
+                    {(user || shouldShowSidebar) && (
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setShowAuthorNote(!showAuthorNote)}
+                        >
+                          <FileText className="h-5 w-5" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setShowShareDialog(true)}
+                        >
                           <Share2 className="h-5 w-5" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-9 w-9"
-                        onClick={() => setShowSettings(true)}
-                      >
-                        <Settings className="h-5 w-5" />
-                      </Button>
-                    </div>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setShowSettings(true)}
+                        >
+                          <Settings className="h-5 w-5" />
+                        </Button>
+                      </div>
+                    )}
                   </>
                 )}
               </header>
