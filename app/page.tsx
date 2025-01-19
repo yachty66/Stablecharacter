@@ -49,6 +49,8 @@ import PersonalityTests from "@/components/PersonalityTests";
 import PremiumCharacters from "@/components/PremiumCharacters";
 import PersonalityDatabase from "@/components/PersonalityDatabase";
 import CustomerReviews from "@/components/CustomerReviews";
+import CallToAction from "@/components/CallToAction";
+import Footer from "@/components/Footer";
 interface Message {
   text: string;
   isUser: boolean;
@@ -995,6 +997,12 @@ export default function MessagingInterface() {
 
           {/* Customer Reviews Section */}
           <CustomerReviews />
+
+          {/* Call to Action Section */}
+          <CallToAction />
+
+          {/* Footer Section */}
+          <Footer />
         </div>
       );
     }
