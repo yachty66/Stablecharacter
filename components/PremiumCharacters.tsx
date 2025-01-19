@@ -1,5 +1,4 @@
 import { HeartPulse, Users, Brain, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function PremiumCharacters() {
   return (
@@ -11,7 +10,8 @@ export default function PremiumCharacters() {
             Premium AI Characters
           </h2>
           <p className="text-muted-foreground text-lg">
-            Experience human-like interactions with our most advanced AI personalities
+            Experience human-like interactions with our most advanced AI
+            personalities
           </p>
         </div>
 
@@ -23,9 +23,12 @@ export default function PremiumCharacters() {
                 <HeartPulse className="w-6 h-6 text-purple-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Therapeutic Support</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Therapeutic Support
+                </h3>
                 <p className="text-muted-foreground">
-                  Engage with empathetic AI therapists and counselors trained in various therapeutic approaches
+                  Engage with empathetic AI therapists and counselors trained in
+                  various therapeutic approaches
                 </p>
               </div>
             </div>
@@ -37,9 +40,12 @@ export default function PremiumCharacters() {
                 <Users className="w-6 h-6 text-purple-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Meaningful Friendships</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Meaningful Friendships
+                </h3>
                 <p className="text-muted-foreground">
-                  Build lasting connections with AI companions who remember your conversations and grow with you
+                  Build lasting connections with AI companions who remember your
+                  conversations and grow with you
                 </p>
               </div>
             </div>
@@ -51,9 +57,12 @@ export default function PremiumCharacters() {
                 <Brain className="w-6 h-6 text-purple-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Advanced Intelligence</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Advanced Intelligence
+                </h3>
                 <p className="text-muted-foreground">
-                  Experience multimodal interactions with AI that can understand context, emotions, and nuanced communication
+                  Experience multimodal interactions with AI that can understand
+                  context, emotions, and nuanced communication
                 </p>
               </div>
             </div>
@@ -65,25 +74,21 @@ export default function PremiumCharacters() {
                 <Sparkles className="w-6 h-6 text-purple-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">Immersive Roleplay</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Immersive Roleplay
+                </h3>
                 <p className="text-muted-foreground">
-                  Engage in dynamic scenarios with AI characters that adapt to your interactions and story preferences
+                  Engage in dynamic scenarios with AI characters that adapt to
+                  your interactions and story preferences
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-12">
-          <Button 
-            size="lg"
-            className="bg-gradient-to-r from-purple-500 to-purple-400 hover:from-purple-600 hover:to-purple-500 text-white"
-            onClick={() => setShowPremiumModal(true)}
-          >
-            Upgrade to Premium
-          </Button>
-          <p className="text-sm text-muted-foreground mt-4">
+        {/* Footer Text */}
+        <div className="text-center">
+          <p className="text-muted-foreground">
             Experience the next generation of AI interaction
           </p>
         </div>
