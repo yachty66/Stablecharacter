@@ -157,6 +157,7 @@ export default function PersonalityProfile() {
                 <h2 className="text-xl font-semibold mb-4">Type Description</h2>
                 <div className="p-4 rounded-lg border border-white/20">
                   <p className="text-gray-400">
+                    <span className="text-white font-medium">INTJ</span> -
                     Introverted, Intuitive, Thinking, Judging
                   </p>
                 </div>
