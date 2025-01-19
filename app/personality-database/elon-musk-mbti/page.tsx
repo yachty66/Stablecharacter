@@ -2,47 +2,32 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Brain, MessageSquare, Users2 } from "lucide-react";
+import { ArrowLeft, MessageSquare, Users2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface PersonalityTrait {
-  trait: string;
-  score: number;
-  description: string;
-}
-
-const personalityTraits: PersonalityTrait[] = [
-  {
-    trait: "Introversion",
-    score: 75,
-    description:
-      "Prefers deep focus and solitary work, but can be publicly engaging when needed",
-  },
-  {
-    trait: "Intuition",
-    score: 90,
-    description: "Strong focus on future possibilities and innovative concepts",
-  },
-  {
-    trait: "Thinking",
-    score: 85,
-    description: "Makes decisions based on logic and objective analysis",
-  },
-  {
-    trait: "Judging",
-    score: 80,
-    description: "Systematic approach to goals with strong planning tendencies",
-  },
-];
-
-const keyCharacteristics = [
-  "Visionary thinking",
-  "Technical expertise",
-  "Direct communication",
-  "Risk-taking",
-  "Workaholic tendencies",
-  "Strategic mindset",
-];
+// This could come from a shared MBTI type definition
+const intjType = {
+  name: "INTJ",
+  description: "Introverted, Intuitive, Thinking, Judging",
+  functions: [
+    {
+      name: "Introverted Intuition (Ni)",
+      description:
+        "Primary function that drives long-term vision and future-oriented thinking",
+    },
+    {
+      name: "Extraverted Thinking (Te)",
+      description:
+        "Secondary function for logical decision-making and systematic planning",
+    },
+  ],
+  traits: [
+    "Strategic planning",
+    "Analytical thinking",
+    "Independent",
+    "Knowledge-seeking",
+  ],
+};
 
 export default function PersonalityProfile() {
   return (
@@ -70,12 +55,12 @@ export default function PersonalityProfile() {
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-3xl font-bold">Elon Musk</h1>
-                <span className="px-3 py-1 bg-purple-500/10 text-purple-500 rounded-full text-sm font-medium">
-                  INTJ
+                <span className="px-3 py-1 bg-white/10 text-white rounded-full text-sm font-medium">
+                  {intjType.name}
                 </span>
               </div>
 
-              <p className="text-muted-foreground mb-4">
+              <p className="text-gray-400 mb-4">
                 Entrepreneur, CEO of Tesla and SpaceX
               </p>
 
@@ -100,80 +85,43 @@ export default function PersonalityProfile() {
       <main className="py-12">
         <div className="max-w-4xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Personality Analysis */}
+            {/* Type Information */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-white">
-                Personality Analysis
-              </h2>
-              <div className="space-y-4">
-                {personalityTraits.map((trait) => (
-                  <div key={trait.trait} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium text-white">
-                        {trait.trait}
-                      </span>
-                      <span className="text-sm text-gray-400">
-                        {trait.score}%
-                      </span>
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Type Description</h2>
+                <p className="text-gray-400">{intjType.description}</p>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Common Traits</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {intjType.traits.map((trait) => (
+                    <div
+                      key={trait}
+                      className="p-3 rounded-lg border border-white/20 hover:bg-white/5 transition-colors"
+                    >
+                      <span className="text-sm">{trait}</span>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-white rounded-full"
-                        style={{ width: `${trait.score}%` }}
-                      />
-                    </div>
-                    <p className="text-sm text-gray-400">{trait.description}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Key Characteristics */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-white">
-                Key Characteristics
+            {/* Cognitive Functions */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4">
+                Cognitive Functions
               </h2>
-              <div className="grid grid-cols-2 gap-3">
-                {keyCharacteristics.map((characteristic) => (
+              <div className="space-y-3">
+                {intjType.functions.map((func) => (
                   <div
-                    key={characteristic}
-                    className="p-3 rounded-lg border border-white/20 hover:bg-white/5 transition-colors"
+                    key={func.name}
+                    className="p-4 rounded-lg border border-white/20"
                   >
-                    <span className="text-sm text-white">{characteristic}</span>
+                    <h3 className="font-medium mb-2">{func.name}</h3>
+                    <p className="text-sm text-gray-400">{func.description}</p>
                   </div>
                 ))}
-              </div>
-
-              <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4 text-white">
-                  Cognitive Functions
-                </h2>
-                <div className="space-y-3">
-                  <div className="p-4 rounded-lg border border-white/20">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Brain className="w-5 h-5 text-white" />
-                      <span className="font-medium text-white">
-                        Introverted Intuition (Ni)
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-400">
-                      Primary function that drives long-term vision and
-                      future-oriented thinking
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-lg border border-white/20">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Brain className="w-5 h-5 text-white" />
-                      <span className="font-medium text-white">
-                        Extraverted Thinking (Te)
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-400">
-                      Secondary function for logical decision-making and
-                      systematic planning
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
