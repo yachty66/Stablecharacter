@@ -45,7 +45,16 @@ const intjType = {
 
 interface WikiData {
   extract: string;
-  thumbnail?: string;
+  thumbnail?: {
+    source: string;
+    width: number;
+    height: number;
+  };
+  originalimage?: {
+    source: string;
+    width: number;
+    height: number;
+  };
   description?: string;
 }
 
@@ -60,11 +69,7 @@ export default function PersonalityProfile() {
           "https://en.wikipedia.org/api/rest_v1/page/summary/Elon_Musk"
         );
         const data = await response.json();
-        setWikiData({
-          extract: data.extract,
-          thumbnail: data.thumbnail?.source,
-          description: data.description,
-        });
+        setWikiData(data);
       } catch (error) {
         console.error("Error fetching Wikipedia data:", error);
       } finally {
@@ -90,7 +95,7 @@ export default function PersonalityProfile() {
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="w-32 h-32 relative rounded-xl overflow-hidden">
               <Image
-                src="/personalities/elon-musk.jpg"
+                src={wikiData?.thumbnail?.source || '/placeholder-profile.jpg'}
                 alt="Elon Musk"
                 fill
                 className="object-cover"
