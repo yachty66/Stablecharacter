@@ -15,6 +15,10 @@ import {
   Users,
   Brain,
   Sparkles,
+  BarChart3,
+  Users2,
+  LineChart,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +44,7 @@ import ChatList from "@/components/ChatList";
 import PremiumModal from "@/components/PremiumModal";
 import { Textarea } from "@/components/ui/textarea";
 import { characterGroups } from "@/app/data/characterGroups";
+import { useRouter } from "next/navigation";
 
 interface Message {
   text: string;
@@ -100,6 +105,7 @@ export default function MessagingInterface() {
   const [authorNote, setAuthorNote] = useState("");
   const [showAnime, setShowAnime] = useState(false);
   const [shouldShowSidebar, setShouldShowSidebar] = useState(false);
+  const router = useRouter();
 
   // Add messageEndRef
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -1072,6 +1078,147 @@ export default function MessagingInterface() {
                 <p className="text-sm text-muted-foreground mt-4">
                   Experience the next generation of AI interaction
                 </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Personality Tests Section */}
+          <section className="px-4 py-12 bg-gradient-to-b from-background/50 to-background">
+            <div className="max-w-4xl mx-auto space-y-8">
+              {/* Header */}
+              <div className="text-center space-y-4">
+                <h2 className="text-2xl sm:text-3xl font-bold">
+                  Free Personality Tests
+                </h2>
+                <p className="text-muted-foreground text-lg">
+                  Discover yourself through scientifically validated assessments
+                </p>
+              </div>
+
+              {/* Test Cards */}
+              <div className="grid sm:grid-cols-2 gap-6 mt-8">
+                {/* Big Five Test */}
+                <div className="group relative overflow-hidden rounded-xl border bg-card hover:bg-card/80 transition-colors">
+                  <div className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold text-xl">Big Five Test</h3>
+                        <p className="text-muted-foreground">
+                          Measure the five core dimensions of your personality:
+                          Openness, Conscientiousness, Extraversion,
+                          Agreeableness, and Neuroticism
+                        </p>
+                      </div>
+                      <div className="p-2 rounded-lg bg-blue-500/10">
+                        <BarChart3 className="w-6 h-6 text-blue-500" />
+                      </div>
+                    </div>
+                    <div className="mt-4 flex gap-2 flex-wrap">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
+                        Scientific
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
+                        15 min
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
+                        Free
+                      </span>
+                    </div>
+                    <Button
+                      className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white"
+                      onClick={() => router.push("/big-five-personality-test")}
+                    >
+                      Take Test
+                    </Button>
+                  </div>
+                </div>
+
+                {/* 16 Personalities Test */}
+                <div className="group relative overflow-hidden rounded-xl border bg-card hover:bg-card/80 transition-colors">
+                  <div className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold text-xl">
+                          16 Personalities
+                        </h3>
+                        <p className="text-muted-foreground">
+                          Discover your personality type based on Carl Jung's
+                          and Isabel Briggs Myers' typological approach
+                        </p>
+                      </div>
+                      <div className="p-2 rounded-lg bg-indigo-500/10">
+                        <Users2 className="w-6 h-6 text-indigo-500" />
+                      </div>
+                    </div>
+                    <div className="mt-4 flex gap-2 flex-wrap">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-500">
+                        MBTI Based
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-500">
+                        12 min
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-500">
+                        Free
+                      </span>
+                    </div>
+                    <Button
+                      className="mt-4 w-full bg-indigo-500 hover:bg-indigo-600 text-white"
+                      onClick={() => router.push("/mbti-test")}
+                    >
+                      Take Test
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Coming Soon Section */}
+              <div className="mt-12 text-center p-6 rounded-xl border bg-card/50">
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-lg">
+                    More Tests Coming Soon
+                  </h3>
+                  <p className="text-muted-foreground">
+                    We're developing additional personality assessments to help
+                    you gain deeper insights into yourself
+                  </p>
+                </div>
+                <div className="mt-4 flex justify-center gap-4 flex-wrap">
+                  <span className="px-3 py-1 rounded-full text-sm bg-card border">
+                    Enneagram
+                  </span>
+                  <span className="px-3 py-1 rounded-full text-sm bg-card border">
+                    Dark Triad
+                  </span>
+                  <span className="px-3 py-1 rounded-full text-sm bg-card border">
+                    Love Languages
+                  </span>
+                </div>
+              </div>
+
+              {/* Benefits */}
+              <div className="grid sm:grid-cols-3 gap-6 mt-12">
+                <div className="text-center space-y-2">
+                  <Brain className="w-6 h-6 mx-auto text-muted-foreground" />
+                  <h4 className="font-medium">Self-Understanding</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Gain valuable insights into your personality traits and
+                    behaviors
+                  </p>
+                </div>
+                <div className="text-center space-y-2">
+                  <LineChart className="w-6 h-6 mx-auto text-muted-foreground" />
+                  <h4 className="font-medium">Detailed Results</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Receive comprehensive analysis and personalized insights
+                  </p>
+                </div>
+                <div className="text-center space-y-2">
+                  <Lock className="w-6 h-6 mx-auto text-muted-foreground" />
+                  <h4 className="font-medium">Private & Secure</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Your test results are completely confidential
+                  </p>
+                </div>
               </div>
             </div>
           </section>
