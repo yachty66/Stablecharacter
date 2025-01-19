@@ -534,15 +534,31 @@ export default function MessagingInterface() {
 
   // Add useEffect for mobile input focus
   useEffect(() => {
-    // Focus input on mobile when component mounts or messages change
-    const timeoutId = setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }, 100);
+    // First reset scroll position
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
 
-    return () => clearTimeout(timeoutId);
-  }, [messages.length]); // Add messages.length as dependency to refocus after each message
+    // Then focus input with multiple attempts
+    const focusInput = () => {
+      if (inputRef.current) {
+        inputRef.current.focus({ preventScroll: true });
+        // Double-check scroll position after focus
+        window.scrollTo(0, 0);
+      }
+    };
+
+    // Try focusing multiple times to ensure it works
+    const timeoutId1 = setTimeout(focusInput, 0);
+    const timeoutId2 = setTimeout(focusInput, 100);
+    const timeoutId3 = setTimeout(focusInput, 300);
+
+    return () => {
+      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId2);
+      clearTimeout(timeoutId3);
+    };
+  }, [messages.length]);
 
   const handleCharacterChange = async (characterId: string) => {
     setSelectedCharacter(characterId);
@@ -1407,9 +1423,15 @@ export default function MessagingInterface() {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0; // For Safari
 
-    // Prevent body from having any initial scroll
+    // Temporarily fix position to ensure top loading
     document.body.style.position = "fixed";
     document.body.style.width = "100%";
+
+    // Remove the fixed position after a tiny delay to allow scrolling
+    setTimeout(() => {
+      document.body.style.position = "";
+      document.body.style.width = "";
+    }, 10);
 
     return () => {
       document.body.style.position = "";
