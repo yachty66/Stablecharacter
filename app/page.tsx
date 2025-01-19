@@ -660,7 +660,7 @@ export default function MessagingInterface() {
   const renderLandingContent = () => {
     if (!user && !shouldShowSidebar) {
       return (
-        <div className="flex flex-col min-h-screen bg-background">
+        <div className="flex flex-col min-h-[100dvh] pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
           {/* Add logo and brand name at the top */}
           <div className="w-full px-4 py-4 relative">
             {/* Add glowing gradient overlay with reduced height */}
@@ -721,7 +721,7 @@ export default function MessagingInterface() {
           <div className="w-full max-w-3xl mx-auto px-4 mb-8 flex-1">
             <div className="h-[calc(100vh-220px)] flex flex-col rounded-lg border shadow-lg">
               {/* Chat header */}
-              <header className="flex items-center justify-between px-3 py-2 border-b">
+              <header className="flex items-center justify-between px-3 py-2 border-b sticky top-0 bg-background z-10">
                 {selectedCharacter && (
                   <>
                     <div className="flex items-center gap-2 flex-1 justify-center">
@@ -921,7 +921,7 @@ export default function MessagingInterface() {
               </main>
 
               {/* Chat input */}
-              <footer className="border-t p-3">
+              <footer className="sticky bottom-0 bg-background border-t">
                 <form onSubmit={handleSubmit} className="p-2 sm:p-4">
                   <div className="flex items-center gap-2">
                     {user && !isSubscribed && (

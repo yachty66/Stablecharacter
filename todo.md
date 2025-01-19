@@ -1,2 +1,5 @@
-- adjust landing page to claude style 
-- make landing pretty and add logo on too also
+- make landing work on mobile too
+- for each section of what we offer add a section with an explainer
+- add customer reviews from reddit
+- link socials on the page
+- think about how i am going to do this with personality tests and personality database, ie addd actual test
