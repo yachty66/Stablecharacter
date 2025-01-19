@@ -95,7 +95,7 @@ export default function PersonalityProfile() {
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="w-32 h-32 relative rounded-xl overflow-hidden">
               <Image
-                src={wikiData?.thumbnail?.source || '/placeholder-profile.jpg'}
+                src={wikiData?.thumbnail?.source || "/placeholder-profile.jpg"}
                 alt="Elon Musk"
                 fill
                 className="object-cover"
