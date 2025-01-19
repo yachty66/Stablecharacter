@@ -662,8 +662,15 @@ export default function MessagingInterface() {
       return (
         <div className="flex flex-col min-h-screen bg-background">
           {/* Add logo and brand name at the top */}
-          <div className="w-full px-4 py-4">
-            <div className="flex items-center gap-2">
+          <div className="w-full px-4 py-4 relative">
+            {/* Add glowing gradient overlay */}
+            <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/20 via-background to-transparent pointer-events-none blur-xl" />
+
+            {/* Add a second, more focused gradient for depth */}
+            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+
+            {/* Logo and brand name with increased z-index */}
+            <div className="flex items-center gap-2 relative z-10">
               <Image
                 src="/logo.png"
                 alt="Stablecharacter Logo"
