@@ -13,13 +13,26 @@ const intjType = {
   functions: [
     {
       name: "Introverted Intuition (Ni)",
+      role: "Dominant",
       description:
         "Primary function that drives long-term vision and future-oriented thinking",
     },
     {
       name: "Extraverted Thinking (Te)",
+      role: "Auxiliary",
       description:
         "Secondary function for logical decision-making and systematic planning",
+    },
+    {
+      name: "Introverted Feeling (Fi)",
+      role: "Tertiary",
+      description: "Third function for personal values and moral judgments",
+    },
+    {
+      name: "Extraverted Sensing (Se)",
+      role: "Inferior",
+      description:
+        "Fourth function for experiencing and interacting with the immediate environment",
     },
   ],
   traits: [
@@ -117,29 +130,7 @@ export default function PersonalityProfile() {
       <main className="py-12">
         <div className="max-w-4xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Type Information */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Type Description</h2>
-                <p className="text-gray-400">{intjType.description}</p>
-              </div>
-
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Common Traits</h2>
-                <div className="grid grid-cols-2 gap-3">
-                  {intjType.traits.map((trait) => (
-                    <div
-                      key={trait}
-                      className="p-3 rounded-lg border border-white/20 hover:bg-white/5 transition-colors"
-                    >
-                      <span className="text-sm">{trait}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Cognitive Functions */}
+            {/* Left Column: Cognitive Functions */}
             <div>
               <h2 className="text-xl font-semibold mb-4">
                 Cognitive Functions
@@ -150,15 +141,44 @@ export default function PersonalityProfile() {
                     key={func.name}
                     className="p-4 rounded-lg border border-white/20"
                   >
-                    <h3 className="font-medium mb-2">{func.name}</h3>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium">{func.name}</span>
+                      <span className="text-sm text-gray-400">{func.role}</span>
+                    </div>
                     <p className="text-sm text-gray-400">{func.description}</p>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Right Column: Type Description and Common Traits */}
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Type Description</h2>
+                <div className="p-4 rounded-lg border border-white/20">
+                  <p className="text-gray-400">
+                    Introverted, Intuitive, Thinking, Judging
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Common Traits</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {intjType.traits.map((trait) => (
+                    <div
+                      key={trait}
+                      className="p-3 rounded-lg border border-white/20"
+                    >
+                      <span className="text-sm">{trait}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Wikipedia Background - Now below type information */}
+          {/* Bottom Section: Background */}
           <div className="mt-12">
             <h2 className="text-xl font-semibold mb-4">Background</h2>
             <div className="rounded-lg border border-white/20 p-6">
