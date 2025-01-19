@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, MessageSquare, Users2 } from "lucide-react";
+import { ArrowLeft, MessageSquare, Users2, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, FormEvent } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Input } from "@/components/ui/input";
 
 // This could come from a shared MBTI type definition
 const intjType = {
@@ -61,6 +63,13 @@ interface WikiData {
 export default function PersonalityProfile() {
   const [wikiData, setWikiData] = useState<WikiData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const messageEndRef = useRef<HTMLDivElement>(null);
+  const supabase = createClientComponentClient();
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     async function fetchWikiData() {
@@ -79,6 +88,49 @@ export default function PersonalityProfile() {
 
     fetchWikiData();
   }, []);
+
+  // Check for mobile on mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // 768px is typical tablet/mobile breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Handle chat submission
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+
+    // Add user message
+    const newMessages = [...messages, { text: inputValue, isUser: true }];
+    setMessages(newMessages);
+    setInputValue("");
+    setIsTyping(true);
+
+    try {
+      // Add AI response (you'll need to implement the actual API call)
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: inputValue,
+          characterId: "elon-musk", // Get from params
+          previousMessages: messages,
+        }),
+      });
+
+      const data = await response.json();
+      setMessages([...newMessages, { text: data.message, isUser: false }]);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
   return (
     <div className="min-h-[100dvh] bg-black text-white">
@@ -115,7 +167,10 @@ export default function PersonalityProfile() {
               </p>
 
               <div className="flex gap-4">
-                <Button className="bg-white text-black hover:bg-white/90">
+                <Button
+                  className="bg-white text-black hover:bg-white/90"
+                  onClick={() => setIsChatOpen(true)}
+                >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Start Chat
                 </Button>
@@ -132,7 +187,11 @@ export default function PersonalityProfile() {
         </div>
       </header>
 
-      <main className="py-12">
+      <main
+        className={`py-12 transition-opacity duration-300 ${
+          isChatOpen ? (isMobile ? "hidden" : "opacity-50") : "opacity-100"
+        }`}
+      >
         <div className="max-w-4xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8">
             {/* Left Column: Cognitive Functions */}
@@ -204,6 +263,101 @@ export default function PersonalityProfile() {
           </div>
         </div>
       </main>
+
+      {/* Chat Interface */}
+      {isChatOpen && (
+        <div
+          className={`
+          bg-background flex flex-col
+          ${
+            isMobile
+              ? "fixed inset-0 z-50" // Full screen on mobile
+              : "fixed bottom-0 right-8 w-[400px] h-[600px] rounded-t-lg shadow-lg z-50"
+          }
+        `}
+        >
+          {/* Chat Header */}
+          <div className="flex items-center justify-between p-4 border-b bg-black">
+            <div className="flex items-center gap-2">
+              <Image
+                src={wikiData?.thumbnail?.source || "/placeholder-profile.jpg"}
+                alt="Profile"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+              <div>
+                <h3 className="font-medium">Elon Musk</h3>
+                <p className="text-xs text-muted-foreground">INTJ</p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsChatOpen(false)}
+              className={isMobile ? "absolute right-2 top-2" : ""}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Messages Area */}
+          <div
+            className={`
+            flex-1 overflow-y-auto p-4 space-y-4
+            ${isMobile ? "pb-safe" : ""} // Add padding for iPhone safe area
+          `}
+          >
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex ${
+                  message.isUser ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`max-w-[80%] rounded-lg p-3 ${
+                    message.isUser
+                      ? "bg-primary text-primary-foreground ml-4"
+                      : "bg-muted mr-4"
+                  }`}
+                >
+                  <p className="text-sm">{message.text}</p>
+                </div>
+              </div>
+            ))}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-muted rounded-lg p-3">
+                  <p className="text-sm">typing...</p>
+                </div>
+              </div>
+            )}
+            <div ref={messageEndRef} />
+          </div>
+
+          {/* Input Area */}
+          <form
+            onSubmit={handleSubmit}
+            className={`
+            p-4 border-t
+            ${isMobile ? "pb-safe" : ""} // Add padding for iPhone safe area
+          `}
+          >
+            <div className="flex gap-2">
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Type your message..."
+                className="flex-1"
+              />
+              <Button type="submit" size="icon">
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
