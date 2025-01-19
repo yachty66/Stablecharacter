@@ -68,11 +68,15 @@ export default function CustomerReviews() {
               <div className="h-full p-6 rounded-xl border bg-card hover:bg-card/80 transition-colors">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">{review.type}</span>
+                    <div className="p-1.5 rounded-lg bg-purple-500/10">
+                      <MessageSquare className="w-4 h-4 text-purple-500" />
+                    </div>
+                    <span className="text-sm font-medium text-purple-500">
+                      {review.type}
+                    </span>
                   </div>
                   <p className="text-muted-foreground">{review.text}</p>
-                  <div className="flex items-center text-sm text-muted-foreground">
+                  <div className="flex items-center text-sm text-purple-500 group-hover:text-purple-400 transition-colors">
                     <span className="group-hover:underline">
                       Read on Reddit →
                     </span>
