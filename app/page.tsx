@@ -699,7 +699,7 @@ export default function MessagingInterface() {
                     console.error("Error:", error.message);
                   }
                 }}
-                className="gap-2"
+                className="gap-2 bg-white hover:bg-white/90 text-black hover:text-black"
               >
                 Sign in
               </Button>
