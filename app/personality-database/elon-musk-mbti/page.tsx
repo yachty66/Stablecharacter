@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, MessageSquare, Users2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 // This could come from a shared MBTI type definition
 const intjType = {
@@ -29,7 +30,38 @@ const intjType = {
   ],
 };
 
+interface WikiData {
+  extract: string;
+  thumbnail?: string;
+  description?: string;
+}
+
 export default function PersonalityProfile() {
+  const [wikiData, setWikiData] = useState<WikiData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchWikiData() {
+      try {
+        const response = await fetch(
+          "https://en.wikipedia.org/api/rest_v1/page/summary/Elon_Musk"
+        );
+        const data = await response.json();
+        setWikiData({
+          extract: data.extract,
+          thumbnail: data.thumbnail?.source,
+          description: data.description,
+        });
+      } catch (error) {
+        console.error("Error fetching Wikipedia data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchWikiData();
+  }, []);
+
   return (
     <div className="min-h-[100dvh] bg-black text-white">
       <header className="border-b border-white/10">
@@ -123,6 +155,25 @@ export default function PersonalityProfile() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Wikipedia Background - Now below type information */}
+          <div className="mt-12">
+            <h2 className="text-xl font-semibold mb-4">Background</h2>
+            <div className="rounded-lg border border-white/20 p-6">
+              {isLoading ? (
+                <div className="h-20 animate-pulse bg-white/5 rounded" />
+              ) : (
+                <>
+                  <p className="text-gray-400">
+                    {wikiData?.extract || "No information available"}
+                  </p>
+                  <div className="mt-4 text-sm text-gray-500">
+                    Source: Wikipedia
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
