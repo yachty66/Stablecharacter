@@ -72,6 +72,8 @@ export default function PersonalityProfile() {
   const [wikiData, setWikiData] = useState<WikiData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const supabase = createClientComponentClient();
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -185,7 +187,7 @@ export default function PersonalityProfile() {
               <div className="flex gap-4">
                 <Button
                   className="bg-white text-black hover:bg-white/90"
-                  onClick={() => setIsChatOpen?.(true)}
+                  onClick={() => setIsChatOpen(true)}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Start Chat
@@ -203,64 +205,73 @@ export default function PersonalityProfile() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Two Column Layout */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Left Column: Cognitive Functions */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Cognitive Functions</h2>
-            <div className="space-y-4">
-              {mbtiTypeData.functions.map((func, index) => (
-                <div
-                  key={index}
-                  className="rounded-lg border border-white/20 p-6"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium">{func.name}</span>
-                    <span className="text-sm text-gray-400">{func.role}</span>
-                  </div>
-                  <p className="text-sm text-gray-400">{func.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Column: Type Description and Common Traits */}
-          <div className="space-y-8">
+      <main
+        className={`py-12 transition-opacity duration-300 ${
+          isChatOpen ? (isMobile ? "hidden" : "opacity-50") : "opacity-100"
+        }`}
+      >
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Left Column: Cognitive Functions */}
             <div>
-              <h2 className="text-xl font-semibold mb-4">Type Description</h2>
-              <div className="p-4 rounded-lg border border-white/20">
-                <p className="text-gray-400">
-                  <span className="text-white font-medium">
-                    {personalityData.mbti_type}
-                  </span>{" "}
-                  - {mbtiTypeData.description}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Common Traits</h2>
-              <div className="grid grid-cols-2 gap-3">
-                {mbtiTypeData.traits.map((trait, index) => (
+              <h2 className="text-xl font-semibold mb-4">
+                Cognitive Functions
+              </h2>
+              <div className="space-y-3">
+                {mbtiTypeData.functions.map((func) => (
                   <div
-                    key={index}
-                    className="p-3 rounded-lg border border-white/20"
+                    key={func.name}
+                    className="p-4 rounded-lg border border-white/20"
                   >
-                    <span className="text-sm">{trait}</span>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium">{func.name}</span>
+                      <span className="text-sm text-gray-400">{func.role}</span>
+                    </div>
+                    <p className="text-sm text-gray-400">{func.description}</p>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Bottom Section: Background */}
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold mb-4">Background</h2>
-          <div className="rounded-lg border border-white/20 p-6">
-            <p className="text-gray-400">{wikiData.extract}</p>
-            <div className="mt-4 text-sm text-gray-500">Source: Wikipedia</div>
+            {/* Right Column: Type Description and Common Traits */}
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Type Description</h2>
+                <div className="p-4 rounded-lg border border-white/20">
+                  <p className="text-gray-400">
+                    <span className="text-white font-medium">
+                      {personalityData.mbti_type}
+                    </span>{" "}
+                    - {mbtiTypeData.description}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Common Traits</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {mbtiTypeData.traits.map((trait) => (
+                    <div
+                      key={trait}
+                      className="p-3 rounded-lg border border-white/20"
+                    >
+                      <span className="text-sm">{trait}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Section: Background */}
+          <div className="mt-12">
+            <h2 className="text-xl font-semibold mb-4">Background</h2>
+            <div className="rounded-lg border border-white/20 p-6">
+              <p className="text-gray-400">{wikiData.extract}</p>
+              <div className="mt-4 text-sm text-gray-500">
+                Source: Wikipedia
+              </div>
+            </div>
           </div>
         </div>
       </main>
