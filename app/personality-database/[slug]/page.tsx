@@ -14,6 +14,7 @@ interface PersonalityData {
   mbti_type: string;
   occupation?: string;
   wiki_name: string;
+  prompt: string;
 }
 
 interface WikiData {
@@ -26,8 +27,8 @@ interface WikiData {
 }
 
 interface Message {
-  role: "user" | "assistant";
-  content: string;
+  text: string;
+  isUser: boolean;
 }
 
 // MBTI type definitions
@@ -141,22 +142,48 @@ export default function PersonalityProfile() {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
-    // Add user message
-    const userMessage: Message = {
-      role: "user",
-      content: inputValue.trim(),
+    const newMessage: Message = {
+      text: inputValue.trim(),
+      isUser: true,
     };
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => [...prev, newMessage]);
     setInputValue("");
 
-    // Add hardcoded assistant response
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        role: "assistant",
-        content: "Hi!",
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-    }, 500);
+    try {
+      const response = await fetch("/api/py/personality_chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [...messages, newMessage],
+          personalityType: personalityData?.mbti_type,
+          prompt: personalityData?.prompt,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get response");
+      }
+
+      const data = await response.json();
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: data.message,
+          isUser: false,
+        },
+      ]);
+    } catch (error) {
+      console.error("Error:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: "Sorry, I encountered an error. Please try again.",
+          isUser: false,
+        },
+      ]);
+    }
   };
 
   if (isLoading) {
@@ -374,17 +401,17 @@ export default function PersonalityProfile() {
               <div
                 key={index}
                 className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
+                  message.isUser ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
                   className={`max-w-[80%] rounded-lg p-3 ${
-                    message.role === "user"
+                    message.isUser
                       ? "bg-white text-black ml-4"
                       : "bg-white/10 text-white mr-4"
                   }`}
                 >
-                  <p className="text-sm">{message.content}</p>
+                  <p className="text-sm">{message.text}</p>
                 </div>
               </div>
             ))}

@@ -29,7 +29,7 @@ class PersonalityMessage(BaseModel):
 class PersonalityMessageRequest(BaseModel):
     messages: list[PersonalityMessage]
     personalityType: str
-    wikiBio: Optional[str] = None
+    prompt: Optional[str] = None
 
 @app.post("/api/py/message_response")
 async def message_response(request: MessageRequest):
@@ -79,28 +79,31 @@ async def personality_chat(request: PersonalityMessageRequest):
     try:
         # Load first system prompt from JSON
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        print("current_dir", current_dir)
         prompt_path = os.path.join(current_dir, 'app', 'data', 'first_system_prompts.json')
         with open(prompt_path, 'r', encoding='utf-8') as f:
             personality_prompts = json.load(f)
+
+        # Convert personality type to uppercase for matching
+        personality_type = request.personalityType.upper()
+        print("the personality type is ", personality_type)  # Debug log
             
-        if request.personalityType not in personality_prompts:
-            raise HTTPException(status_code=404, detail=f"Personality type {request.personalityType} not found")
+        if personality_type not in personality_prompts:
+            raise HTTPException(status_code=404, detail=f"Personality type {personality_type} not found")
             
         # Format messages for LLM
         formatted_messages = [
             # First system prompt - personality type instructions
             {
                 "role": "system",
-                "content": personality_prompts[request.personalityType]
+                "content": personality_prompts[personality_type]
             }
         ]
         
-        # Second system prompt - Wikipedia background
-        if request.wikiBio:
+        # Second system prompt - Using the prompt from database
+        if request.prompt:
             formatted_messages.append({
                 "role": "system",
-                "content": f"Your background is: {request.wikiBio}"
+                "content": f"Background: {request.prompt}"
             })
             
         # Add user message
