@@ -142,13 +142,13 @@ export default function PersonalityProfile() {
 
   return (
     <div className="min-h-[100dvh] bg-black text-white">
-      {/* Back Button */}
+      {/* Back to Database Link */}
       <div className="max-w-4xl mx-auto px-4 py-6">
         <Link
           href="/personality-database"
-          className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors"
+          className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors mb-6"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Database
         </Link>
       </div>
