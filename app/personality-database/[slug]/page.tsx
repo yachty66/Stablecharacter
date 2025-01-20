@@ -142,29 +142,25 @@ export default function PersonalityProfile() {
 
   return (
     <div className="min-h-[100dvh] bg-black text-white">
-      {/* Back to Database Link */}
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        <Link
-          href="/personality-database"
-          className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors mb-6"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Database
-        </Link>
-      </div>
-
-      {/* Header with Profile */}
       <header className="border-b border-white/10">
         <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex gap-8 items-start">
+          {/* Back to Database Link */}
+          <Link
+            href="/personality-database"
+            className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors mb-6"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Database
+          </Link>
+
+          <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Profile Image */}
-            <div className="w-32 h-32 rounded-lg overflow-hidden bg-white/10 flex-shrink-0">
+            <div className="w-32 h-32 relative rounded-xl overflow-hidden">
               <Image
                 src={wikiData?.thumbnail?.source || "/placeholder-profile.jpg"}
                 alt={personalityData?.name || "Profile"}
-                width={128}
-                height={128}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
                 priority
                 unoptimized
               />
@@ -173,22 +169,22 @@ export default function PersonalityProfile() {
             {/* Profile Info */}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold">{personalityData?.name}</h1>
+                <h1 className="text-3xl font-bold">
+                  {personalityData?.wiki_name?.replace(/_/g, " ") ||
+                    "Loading..."}
+                </h1>
                 <span className="px-3 py-1 bg-white/10 text-white rounded-full text-sm font-medium">
                   {personalityData?.mbti_type}
                 </span>
               </div>
 
-              {personalityData?.occupation && (
-                <p className="text-gray-400 text-lg mb-6">
-                  {personalityData.occupation}
-                </p>
-              )}
+              <p className="text-gray-400 mb-4">
+                {personalityData?.occupation}
+              </p>
 
-              {/* Action Buttons */}
               <div className="flex gap-4">
                 <Button
-                  className="bg-white text-black hover:bg-white/90 inline-flex items-center"
+                  className="bg-white text-black hover:bg-white/90"
                   onClick={() => setIsChatOpen?.(true)}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
@@ -196,7 +192,7 @@ export default function PersonalityProfile() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-white text-white hover:bg-white/10 inline-flex items-center"
+                  className="border-white text-white hover:bg-white/10"
                 >
                   <Users2 className="w-4 h-4 mr-2" />
                   View Similar Types
