@@ -152,7 +152,7 @@ export default function PersonalityProfile() {
     if (!inputValue.trim()) return;
 
     // If not logged in, show login modal after 5 messages
-    if (!user && messages.length >= 10) {
+    if (!user && messages.length >= 1) {
       setShowSettings(true);
       return;
     }
@@ -203,6 +203,57 @@ export default function PersonalityProfile() {
       setIsTyping(false);
     }
   };
+
+  const handleGoogleSignIn = () => {
+    // Store current chat state and URL in localStorage
+    localStorage.setItem(
+      "pendingPersonalityMessages",
+      JSON.stringify(messages)
+    );
+    localStorage.setItem("pendingPersonalityInput", inputValue);
+    localStorage.setItem("pendingPersonalityUrl", window.location.pathname);
+
+    // Use the current URL as the redirect URL
+    const redirectTo = window.location.href;
+
+    supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: redirectTo,
+      },
+    });
+  };
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(!!user);
+
+      // If user just signed in, check for pending chat state
+      if (user) {
+        const pendingMessages = localStorage.getItem(
+          "pendingPersonalityMessages"
+        );
+        const pendingInput = localStorage.getItem("pendingPersonalityInput");
+        const pendingUrl = localStorage.getItem("pendingPersonalityUrl");
+
+        // If there's a pending URL and it matches current page
+        if (pendingUrl === window.location.pathname && pendingMessages) {
+          setMessages(JSON.parse(pendingMessages));
+          if (pendingInput) setInputValue(pendingInput);
+
+          // Clear localStorage
+          localStorage.removeItem("pendingPersonalityMessages");
+          localStorage.removeItem("pendingPersonalityInput");
+          localStorage.removeItem("pendingPersonalityUrl");
+        }
+      }
+    };
+
+    getUser();
+  }, []);
 
   if (isLoading) {
     return (
@@ -488,16 +539,7 @@ export default function PersonalityProfile() {
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
             <Button
-              onClick={() => {
-                const redirectTo =
-                  process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
-                supabase.auth.signInWithOAuth({
-                  provider: "google",
-                  options: {
-                    redirectTo: `${redirectTo}/auth/callback`,
-                  },
-                });
-              }}
+              onClick={handleGoogleSignIn}
               className="w-full flex items-center justify-center gap-2"
             >
               <Image
