@@ -152,7 +152,7 @@ export default function PersonalityProfile() {
     if (!inputValue.trim()) return;
 
     // If not logged in, show login modal after 5 messages
-    if (!user && messages.length >= 1) {
+    if (!user && messages.length >= 5) {
       setShowSettings(true);
       return;
     }
@@ -183,13 +183,20 @@ export default function PersonalityProfile() {
       }
 
       const data = await response.json();
-      setMessages((prev) => [
-        ...prev,
+      const updatedMessages = [
+        ...messages,
+        newMessage,
         {
           text: data.message,
           isUser: false,
         },
-      ]);
+      ];
+      setMessages(updatedMessages);
+
+      // Save chat after each message if user is logged in
+      if (user) {
+        await saveChat();
+      }
     } catch (error) {
       console.error("Error:", error);
       setMessages((prev) => [
@@ -244,9 +251,42 @@ export default function PersonalityProfile() {
 
         // If there's a pending URL and it matches current page
         if (pendingUrl === window.location.pathname && pendingMessages) {
-          setMessages(JSON.parse(pendingMessages));
+          const messages = JSON.parse(pendingMessages);
+          setMessages(messages);
           if (pendingInput) setInputValue(pendingInput);
-          if (pendingChatOpen) setIsChatOpen(true); // Restore chat window state
+          if (pendingChatOpen) setIsChatOpen(true);
+
+          // Save chat to Supabase
+          try {
+            // First check if chat already exists
+            const { data: existingChat } = await supabase
+              .from("chats_personalities")
+              .select("*")
+              .eq("email", user.email)
+              .eq("character_id", params.slug)
+              .single();
+
+            if (existingChat) {
+              // Update existing chat
+              await supabase
+                .from("chats_personalities")
+                .update({
+                  messages: messages,
+                  created_at: new Date().toISOString(),
+                })
+                .eq("id", existingChat.id);
+            } else {
+              // Insert new chat
+              await supabase.from("chats_personalities").insert({
+                email: user.email,
+                messages: messages,
+                character_id: params.slug,
+                created_at: new Date().toISOString(),
+              });
+            }
+          } catch (error) {
+            console.error("Error saving chat:", error);
+          }
 
           // Clear localStorage
           localStorage.removeItem("pendingPersonalityMessages");
@@ -259,6 +299,39 @@ export default function PersonalityProfile() {
 
     getUser();
   }, []);
+
+  // Also add a function to save chat updates
+  const saveChat = async () => {
+    if (!user) return;
+
+    try {
+      const { data: existingChat } = await supabase
+        .from("chats_personalities")
+        .select("*")
+        .eq("email", user.email)
+        .eq("character_id", params.slug)
+        .single();
+
+      if (existingChat) {
+        await supabase
+          .from("chats_personalities")
+          .update({
+            messages: messages,
+            created_at: new Date().toISOString(),
+          })
+          .eq("id", existingChat.id);
+      } else {
+        await supabase.from("chats_personalities").insert({
+          email: user.email,
+          messages: messages,
+          character_id: params.slug,
+          created_at: new Date().toISOString(),
+        });
+      }
+    } catch (error) {
+      console.error("Error saving chat:", error);
+    }
+  };
 
   if (isLoading) {
     return (
