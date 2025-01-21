@@ -205,15 +205,15 @@ export default function PersonalityProfile() {
   };
 
   const handleGoogleSignIn = () => {
-    // Store current chat state and URL in localStorage
+    // Store current chat state, URL, and chat window state in localStorage
     localStorage.setItem(
       "pendingPersonalityMessages",
       JSON.stringify(messages)
     );
     localStorage.setItem("pendingPersonalityInput", inputValue);
     localStorage.setItem("pendingPersonalityUrl", window.location.pathname);
+    localStorage.setItem("pendingPersonalityChatOpen", "true"); // Store chat window state
 
-    // Use the current URL as the redirect URL
     const redirectTo = window.location.href;
 
     supabase.auth.signInWithOAuth({
@@ -238,16 +238,21 @@ export default function PersonalityProfile() {
         );
         const pendingInput = localStorage.getItem("pendingPersonalityInput");
         const pendingUrl = localStorage.getItem("pendingPersonalityUrl");
+        const pendingChatOpen = localStorage.getItem(
+          "pendingPersonalityChatOpen"
+        );
 
         // If there's a pending URL and it matches current page
         if (pendingUrl === window.location.pathname && pendingMessages) {
           setMessages(JSON.parse(pendingMessages));
           if (pendingInput) setInputValue(pendingInput);
+          if (pendingChatOpen) setIsChatOpen(true); // Restore chat window state
 
           // Clear localStorage
           localStorage.removeItem("pendingPersonalityMessages");
           localStorage.removeItem("pendingPersonalityInput");
           localStorage.removeItem("pendingPersonalityUrl");
+          localStorage.removeItem("pendingPersonalityChatOpen");
         }
       }
     };
