@@ -83,6 +83,7 @@ export default function PersonalityProfile() {
   const [inputValue, setInputValue] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -148,6 +149,7 @@ export default function PersonalityProfile() {
     };
     setMessages((prev) => [...prev, newMessage]);
     setInputValue("");
+    setIsTyping(true);
 
     try {
       const response = await fetch("/api/py/personality_chat", {
@@ -183,6 +185,8 @@ export default function PersonalityProfile() {
           isUser: false,
         },
       ]);
+    } finally {
+      setIsTyping(false);
     }
   };
 
@@ -415,6 +419,26 @@ export default function PersonalityProfile() {
                 </div>
               </div>
             ))}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="max-w-[80%] rounded-lg p-3 bg-white/10 text-white mr-4">
+                  <div className="flex space-x-1">
+                    <div
+                      className="w-2 h-2 bg-white rounded-full animate-bounce"
+                      style={{ animationDelay: "0ms" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-white rounded-full animate-bounce"
+                      style={{ animationDelay: "150ms" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-white rounded-full animate-bounce"
+                      style={{ animationDelay: "300ms" }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={messageEndRef} />
           </div>
 
