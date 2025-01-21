@@ -152,7 +152,7 @@ export default function PersonalityProfile() {
     if (!inputValue.trim()) return;
 
     // If not logged in, show login modal after 5 messages
-    if (!user && messages.length >= 5) {
+    if (!user && messages.length >= 10) {
       setShowSettings(true);
       return;
     }
