@@ -7,6 +7,12 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { MessageSquare, Users2, ArrowLeft, X, Send } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface PersonalityData {
   id: string;
@@ -84,6 +90,8 @@ export default function PersonalityProfile() {
   const [isMobile, setIsMobile] = useState(false);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [user, setUser] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -142,6 +150,12 @@ export default function PersonalityProfile() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
+
+    // If not logged in, show login modal after 5 messages
+    if (!user && messages.length >= 5) {
+      setShowSettings(true);
+      return;
+    }
 
     const newMessage: Message = {
       text: inputValue.trim(),
@@ -466,6 +480,37 @@ export default function PersonalityProfile() {
           </form>
         </div>
       )}
+
+      <Dialog open={showSettings} onOpenChange={setShowSettings}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Sign in to continue chatting!</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-4">
+            <Button
+              onClick={() => {
+                const redirectTo =
+                  process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+                supabase.auth.signInWithOAuth({
+                  provider: "google",
+                  options: {
+                    redirectTo: `${redirectTo}/auth/callback`,
+                  },
+                });
+              }}
+              className="w-full flex items-center justify-center gap-2"
+            >
+              <Image
+                src="https://www.google.com/favicon.ico"
+                alt="Google"
+                width={20}
+                height={20}
+              />
+              Sign in with Google
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
