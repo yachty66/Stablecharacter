@@ -191,22 +191,48 @@ export default function PersonalityProfile() {
       const updatedMessages = [...messages, newMessage, aiMessage];
       setMessages(updatedMessages);
 
-      // Save chat after both user message and AI response if user is logged in
+      // Save chat and increment counter after both user message and AI response if user is logged in
       if (user) {
         try {
           const {
             data: { user: currentUser },
           } = await supabase.auth.getUser();
           if (currentUser?.email) {
+            // Save chat
             await supabase.from("chats_personalities").insert({
               email: currentUser.email,
               messages: updatedMessages,
               character_id: params.slug,
               created_at: new Date().toISOString(),
             });
+
+            // Check if user exists in chat_counter
+            const { data: existingCounter } = await supabase
+              .from("chat_counter")
+              .select("*")
+              .eq("email", currentUser.email)
+              .single();
+
+            if (existingCounter) {
+              // Update existing counter
+              await supabase
+                .from("chat_counter")
+                .update({
+                  counter: existingCounter.counter + 1,
+                  created_at: new Date().toISOString(),
+                })
+                .eq("email", currentUser.email);
+            } else {
+              // Create new counter entry
+              await supabase.from("chat_counter").insert({
+                email: currentUser.email,
+                counter: 1,
+                created_at: new Date().toISOString(),
+              });
+            }
           }
         } catch (error) {
-          console.error("Error saving chat:", error);
+          console.error("Error saving chat and updating counter:", error);
         }
       }
     } catch (error) {
