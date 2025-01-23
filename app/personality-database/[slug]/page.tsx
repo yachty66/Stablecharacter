@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import PremiumModal from "@/components/PremiumModal";
 
 interface PersonalityData {
   id: string;
@@ -92,6 +93,8 @@ export default function PersonalityProfile() {
   const [isTyping, setIsTyping] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [user, setUser] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -155,6 +158,30 @@ export default function PersonalityProfile() {
     if (!user && messages.length >= 2) {
       setShowSettings(true);
       return;
+    }
+
+    // Check counter for logged-in users
+    if (user) {
+      try {
+        const {
+          data: { user: currentUser },
+        } = await supabase.auth.getUser();
+        if (currentUser?.email) {
+          const { data: counterData } = await supabase
+            .from("chat_counter")
+            .select("counter")
+            .eq("email", currentUser.email)
+            .single();
+
+          // Show premium modal if counter is over 20
+          if (counterData?.counter >= 20 && !isSubscribed) {
+            setShowPremiumModal(true);
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("Error checking counter:", error);
+      }
     }
 
     const newMessage: Message = {
@@ -633,6 +660,11 @@ export default function PersonalityProfile() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <PremiumModal
+        open={showPremiumModal}
+        onOpenChange={setShowPremiumModal}
+      />
     </div>
   );
 }
