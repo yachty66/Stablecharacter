@@ -152,7 +152,7 @@ export default function PersonalityProfile() {
     if (!inputValue.trim()) return;
 
     // If not logged in, show login modal after 5 messages
-    if (!user && messages.length >= 5) {
+    if (!user && messages.length >= 2) {
       setShowSettings(true);
       return;
     }
@@ -300,34 +300,19 @@ export default function PersonalityProfile() {
     getUser();
   }, []);
 
-  // Also add a function to save chat updates
+  // save the whole current chat in a new row
   const saveChat = async () => {
     if (!user) return;
 
     try {
-      const { data: existingChat } = await supabase
-        .from("chats_personalities")
-        .select("*")
-        .eq("email", user.email)
-        .eq("character_id", params.slug)
-        .single();
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
 
-      if (existingChat) {
-        await supabase
-          .from("chats_personalities")
-          .update({
-            messages: messages,
-            created_at: new Date().toISOString(),
-          })
-          .eq("id", existingChat.id);
-      } else {
-        await supabase.from("chats_personalities").insert({
-          email: user.email,
-          messages: messages,
-          character_id: params.slug,
-          created_at: new Date().toISOString(),
-        });
-      }
+      await supabase.from("chats_personalities").insert({
+        email: currentUser.email,
+        messages: messages,
+        character_id: params.slug,
+        created_at: new Date().toISOString(),
+      });
     } catch (error) {
       console.error("Error saving chat:", error);
     }
@@ -348,9 +333,6 @@ export default function PersonalityProfile() {
       </div>
     );
   }
-
-  // Add console.log to debug
-  console.log("MBTI Type:", personalityData.mbti_type);
 
   // Get MBTI type data with safety check
   const mbtiTypeData =
