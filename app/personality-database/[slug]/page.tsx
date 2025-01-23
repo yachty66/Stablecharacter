@@ -448,8 +448,8 @@ export default function PersonalityProfile() {
               <Image
                 src={personalityData?.image || "/placeholder-profile.jpg"}
                 alt="Profile"
-                width={180}
-                height={180}
+                width={128}
+                height={128}
                 className="rounded-lg"
                 priority
               />
