@@ -445,14 +445,15 @@ export default function PersonalityProfile() {
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Profile Image */}
             <div className="flex justify-center mb-8">
-              <Image
-                src={personalityData?.image || "/placeholder-profile.jpg"}
-                alt="Profile"
-                width={128}
-                height={128}
-                className="rounded-lg"
-                priority
-              />
+              <div className="w-[128px] h-[128px] relative">
+                <Image
+                  src={personalityData?.image || "/placeholder-profile.jpg"}
+                  alt="Profile"
+                  fill
+                  className="rounded-lg object-cover"
+                  priority
+                />
+              </div>
             </div>
 
             {/* Profile Info */}
