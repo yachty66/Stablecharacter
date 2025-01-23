@@ -37,11 +37,11 @@ const nextConfig = {
   },
   images: {
     domains: [
-      "outpaintingai.s3.us-east-1.amazonaws.com",
       "www.google.com",
       "lh3.googleusercontent.com",
       "avatars.githubusercontent.com",
       "upload.wikimedia.org",
+      "stablecharacter.s3.us-east-1.amazonaws.com",
     ],
   },
 };

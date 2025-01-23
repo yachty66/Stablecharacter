@@ -22,6 +22,7 @@ interface PersonalityData {
   occupation?: string;
   wiki_name: string;
   prompt: string;
+  image: string;
 }
 
 interface WikiData {
@@ -102,7 +103,7 @@ export default function PersonalityProfile() {
         // Get personality data from Supabase
         const { data: personalityData, error: supabaseError } = await supabase
           .from("personalities")
-          .select("*")
+          .select("*, image")
           .eq("name", params.slug)
           .single();
 
@@ -443,14 +444,14 @@ export default function PersonalityProfile() {
 
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Profile Image */}
-            <div className="w-32 h-32 relative rounded-xl overflow-hidden">
+            <div className="flex justify-center mb-8">
               <Image
-                src={wikiData?.thumbnail?.source || "/placeholder-profile.jpg"}
-                alt={personalityData?.name || "Profile"}
-                fill
-                className="object-cover"
+                src={personalityData?.image || "/placeholder-profile.jpg"}
+                alt="Profile"
+                width={180}
+                height={180}
+                className="rounded-lg"
                 priority
-                unoptimized
               />
             </div>
 
@@ -578,7 +579,7 @@ export default function PersonalityProfile() {
           <div className="flex items-center justify-between p-4 border-b bg-black">
             <div className="flex items-center gap-2">
               <Image
-                src={wikiData?.thumbnail?.source || "/placeholder-profile.jpg"}
+                src={personalityData?.image || "/placeholder-profile.jpg"}
                 alt="Profile"
                 width={32}
                 height={32}
@@ -586,7 +587,7 @@ export default function PersonalityProfile() {
               />
               <div>
                 <h3 className="font-medium">
-                  {personalityData?.wiki_name?.replace(/_/g, " ")}
+                  {personalityData?.name?.replace(/_/g, " ")}
                 </h3>
                 <p className="text-xs text-muted-foreground">
                   {personalityData?.mbti_type?.toUpperCase()}
@@ -612,6 +613,15 @@ export default function PersonalityProfile() {
                   message.isUser ? "justify-end" : "justify-start"
                 }`}
               >
+                {!message.isUser && (
+                  <Image
+                    src={personalityData?.image || "/placeholder-profile.jpg"}
+                    alt="Profile"
+                    width={32}
+                    height={32}
+                    className="rounded-full mr-2"
+                  />
+                )}
                 <div
                   className={`max-w-[80%] rounded-lg p-3 ${
                     message.isUser
