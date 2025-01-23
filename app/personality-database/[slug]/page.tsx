@@ -150,6 +150,28 @@ export default function PersonalityProfile() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(!!user);
+
+      // Check subscription status if user is logged in
+      if (user?.email) {
+        const { data: subscription } = await supabase
+          .from("subscriptions")
+          .select("*")
+          .eq("email", user.email)
+          .single();
+
+        setIsSubscribed(!!subscription);
+      }
+    };
+
+    getUser();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
@@ -160,27 +182,37 @@ export default function PersonalityProfile() {
       return;
     }
 
-    // Check counter for logged-in users
+    // Check counter and subscription for logged-in users
     if (user) {
       try {
         const {
           data: { user: currentUser },
         } = await supabase.auth.getUser();
         if (currentUser?.email) {
-          const { data: counterData } = await supabase
-            .from("chat_counter")
-            .select("counter")
+          // First check subscription status
+          const { data: subscription } = await supabase
+            .from("subscriptions")
+            .select("*")
             .eq("email", currentUser.email)
             .single();
 
-          // Show premium modal if counter is over 20
-          if (counterData?.counter >= 20 && !isSubscribed) {
-            setShowPremiumModal(true);
-            return;
+          // Only check counter if user is not subscribed
+          if (!subscription) {
+            const { data: counterData } = await supabase
+              .from("chat_counter")
+              .select("counter")
+              .eq("email", currentUser.email)
+              .single();
+
+            // Show premium modal if counter is over 20 and no active subscription
+            if (counterData?.counter >= 20) {
+              setShowPremiumModal(true);
+              return;
+            }
           }
         }
       } catch (error) {
-        console.error("Error checking counter:", error);
+        console.error("Error checking counter and subscription:", error);
       }
     }
 

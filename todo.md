@@ -1,4 +1,7 @@
-- after 5 messages force sign in, after 15 messages total make them pay (after sign in save messages as well)
+- make prompt of elon better so that i can scale this up to 100 maybe 1000 characters
+
+
+
 - get all top celebrities and top characters ie name and mbti type 
 - in the next step get wikipedia page for each of them (drop them if they do not have a wiki page)
 
