@@ -183,19 +183,31 @@ export default function PersonalityProfile() {
       }
 
       const data = await response.json();
-      const updatedMessages = [
-        ...messages,
-        newMessage,
-        {
-          text: data.message,
-          isUser: false,
-        },
-      ];
+      const aiMessage = {
+        text: data.message,
+        isUser: false,
+      };
+
+      const updatedMessages = [...messages, newMessage, aiMessage];
       setMessages(updatedMessages);
 
-      // Save chat after each message if user is logged in
+      // Save chat after both user message and AI response if user is logged in
       if (user) {
-        await saveChat();
+        try {
+          const {
+            data: { user: currentUser },
+          } = await supabase.auth.getUser();
+          if (currentUser?.email) {
+            await supabase.from("chats_personalities").insert({
+              email: currentUser.email,
+              messages: updatedMessages,
+              character_id: params.slug,
+              created_at: new Date().toISOString(),
+            });
+          }
+        } catch (error) {
+          console.error("Error saving chat:", error);
+        }
       }
     } catch (error) {
       console.error("Error:", error);
@@ -299,24 +311,6 @@ export default function PersonalityProfile() {
 
     getUser();
   }, []);
-
-  // save the whole current chat in a new row
-  const saveChat = async () => {
-    if (!user) return;
-
-    try {
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-
-      await supabase.from("chats_personalities").insert({
-        email: currentUser.email,
-        messages: messages,
-        character_id: params.slug,
-        created_at: new Date().toISOString(),
-      });
-    } catch (error) {
-      console.error("Error saving chat:", error);
-    }
-  };
 
   if (isLoading) {
     return (
