@@ -1,54 +1,145 @@
-'use client';
+"use client";
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Construction } from "lucide-react";
+import {
+  personalityAssessment,
+  AssessmentQuestion,
+} from "@/app/data/16PersonalityTest";
 
-export default function ComingSoon() {
+interface Question extends AssessmentQuestion {
+  id: number;
+}
+
+// Map questions with IDs
+const questions: Question[] = personalityAssessment.map((q, index) => ({
+  ...q,
+  id: index + 1,
+}));
+
+export default function BigFive() {
+  const supabase = createClientComponentClient();
+
+  const traitOrder = [
+    { number: 1, name: "Extraversion" },
+    { number: 2, name: "Agreeableness" },
+    { number: 3, name: "Conscientiousness" },
+    { number: 4, name: "Emotional Stability" },
+    { number: 5, name: "Intellect/Imagination" },
+  ];
+
+  const [answers, setAnswers] = useState<{ [key: number]: number }>({});
+  const [showResults, setShowResults] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [scores, setScores] = useState<{ [key: number]: number }>({});
+
+  const questionsPerPage = 5;
+  const totalPages = Math.ceil(questions.length / questionsPerPage);
+  const currentQuestions = questions.slice(
+    currentPage * questionsPerPage,
+    (currentPage + 1) * questionsPerPage
+  );
+
+  const calculateScores = async () => {
+    const typeScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    questions.forEach((question) => {
+      const answer = answers[question.id];
+      if (answer !== undefined) {
+        const score = question.math === "+" ? answer : 5 - (answer - 1);
+        typeScores[question.type] += score;
+      }
+    });
+
+    const result = {
+      scores: typeScores,
+      answers: answers,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      const { data, error } = await supabase
+        .from("big_five_results")
+        .insert([{ result }]);
+
+      if (error) {
+        console.error("Error saving results:", error);
+      } else {
+        console.log("Results saved successfully:", data);
+      }
+    } catch (error) {
+      console.error("Error saving results:", error);
+    }
+
+    setScores(typeScores);
+    setShowResults(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleAnswer = (questionId: number, value: number) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prev) => prev + 1);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const isPageComplete = () =>
+    currentQuestions.every((q) => answers[q.id] !== undefined);
+
   return (
-    <div className="min-h-[100dvh] bg-background flex flex-col">
-      <header className="border-b">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6">
-            <Link
-              href="/"
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Go to MBTI Characters Chat
-            </Link>
-          </div>
-          <h1 className="text-3xl font-bold mb-3">16 Personalities Test</h1>
+    <div>
+      {!showResults ? (
+        <div>
+          {currentQuestions.map((question) => (
+            <div key={question.id}>
+              <p>{question.question}</p>
+              {[1, 2, 3, 4, 5].map((value) => (
+                <button
+                  key={value}
+                  onClick={() => handleAnswer(question.id, value)}
+                >
+                  {value}
+                </button>
+              ))}
+            </div>
+          ))}
+          <button onClick={handlePrevious} disabled={currentPage === 0}>
+            Previous
+          </button>
+          <button
+            onClick={handleNext}
+            disabled={!isPageComplete() || currentPage === totalPages - 1}
+          >
+            Next
+          </button>
+          {isPageComplete() && currentPage === totalPages - 1 && (
+            <button onClick={calculateScores}>Submit</button>
+          )}
         </div>
-      </header>
-
-      <main className="flex-1 flex items-center justify-center p-4">
-        <div className="text-center space-y-4 max-w-md mx-auto">
-          <div className="bg-purple-500/10 p-4 rounded-full w-16 h-16 mx-auto">
-            <Construction className="w-8 h-8 text-purple-500 mx-auto mt-1" />
-          </div>
-          <h2 className="text-2xl font-bold">Coming Soon</h2>
-          <p className="text-muted-foreground">
-            We're working hard to bring you an accurate and insightful 16 Personalities test. 
-            In the meantime, try our Big Five personality assessment!
-          </p>
-          <div className="pt-4">
-            <Link 
-              href="/big-five-personality-test"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-purple-500 text-white hover:bg-purple-600 transition-colors"
-            >
-              Take Big Five Test
-            </Link>
-          </div>
+      ) : (
+        <div>
+          <h2>Your Results</h2>
+          {traitOrder.map(({ number, name }) => (
+            <div key={number}>
+              <p>
+                {name}: {scores[number]}
+              </p>
+            </div>
+          ))}
         </div>
-      </main>
-
-      <footer className="border-t">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <p className="text-sm text-muted-foreground text-center">
-            Based on Carl Jung's personality theory and the Myers-Briggs Type Indicator (MBTI)
-          </p>
-        </div>
-      </footer>
+      )}
     </div>
   );
 }

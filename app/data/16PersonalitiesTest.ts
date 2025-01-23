@@ -1,0 +1,77 @@
+export interface AssessmentQuestion {
+  question: string;
+  type: string; // MBTI category like EI, SN, TF, or JP
+  math: "+" | "-";
+}
+
+export const assessment: AssessmentQuestion[] = [
+  { question: "You enjoy vibrant social events with lots of people.", type: "EI", math: "+" },
+  { question: "You often spend time exploring unrealistic and impractical ideas.", type: "SN", math: "-" },
+  { question: "You rely more on your experience than your imagination.", type: "SN", math: "+" },
+  { question: "You find it difficult to introduce yourself to people.", type: "EI", math: "-" },
+  { question: "You prefer to follow a set schedule rather than leave things to chance.", type: "JP", math: "+" },
+  { question: "You find yourself more drawn to facts than theories.", type: "SN", math: "+" },
+  { question: "You rarely worry about how your actions affect other people.", type: "TF", math: "-" },
+  { question: "You enjoy having a to-do list and checking off tasks.", type: "JP", math: "+" },
+  { question: "You are more of a natural improviser than a careful planner.", type: "JP", math: "-" },
+  { question: "You often think about what you should have said in conversations long after they are over.", type: "EI", math: "-" },
+  { question: "You feel more energized by spending time alone than with a group of people.", type: "EI", math: "-" },
+  { question: "You consider yourself more practical than creative.", type: "SN", math: "+" },
+  { question: "You are very detail-oriented when completing tasks.", type: "JP", math: "+" },
+  { question: "You are easily moved by stories and experiences.", type: "TF", math: "+" },
+  { question: "You enjoy taking time to reflect on your thoughts and ideas.", type: "EI", math: "-" },
+  { question: "You make decisions based more on logic than emotions.", type: "TF", math: "+" },
+  { question: "You often start new hobbies before finishing old ones.", type: "JP", math: "-" },
+  { question: "You feel drawn to speculative ideas and concepts.", type: "SN", math: "-" },
+  { question: "You prefer quiet and intimate gatherings over large parties.", type: "EI", math: "-" },
+  { question: "You often rely on your instincts rather than detailed plans.", type: "JP", math: "-" },
+  { question: "You prioritize fairness over feelings when making decisions.", type: "TF", math: "+" },
+  { question: "You feel more comfortable focusing on the present than on the future.", type: "SN", math: "+" },
+  { question: "You often feel drained after spending time in a large group.", type: "EI", math: "-" },
+  { question: "You prefer exploring abstract concepts to focusing on specific details.", type: "SN", math: "-" },
+  { question: "You like to stick to routines and structured plans.", type: "JP", math: "+" },
+];
+
+export const traitDescriptions = {
+  EI: {
+    title: "Extraversion vs. Introversion",
+    description:
+      "Extraversion reflects a preference for social interaction, external stimulation, and action. Introversion reflects a preference for introspection, reflection, and solitary activities.",
+  },
+  SN: {
+    title: "Sensing vs. Intuition",
+    description:
+      "Sensing reflects a preference for concrete, factual information and practical approaches. Intuition reflects a preference for abstract ideas, possibilities, and innovation.",
+  },
+  TF: {
+    title: "Thinking vs. Feeling",
+    description:
+      "Thinking reflects a preference for logic and objective decision-making. Feeling reflects a preference for empathy, values, and considering how decisions affect others.",
+  },
+  JP: {
+    title: "Judging vs. Perceiving",
+    description:
+      "Judging reflects a preference for structure, organization, and planned approaches. Perceiving reflects a preference for spontaneity, adaptability, and flexibility.",
+  },
+} as const;
+
+export const answerOptions = [
+  { value: 1, label: "Strongly Disagree" },
+  { value: 2, label: "Disagree" },
+  { value: 3, label: "Neutral" },
+  { value: 4, label: "Agree" },
+  { value: 5, label: "Strongly Agree" },
+] as const;
+
+export const helpText = `
+Describe yourself as you honestly are, not as you want to be.
+Answer based on your natural tendencies and preferences, thinking about how you act in most situations.
+This will help you gain the most accurate understanding of your personality type.
+
+Indicate for each statement how much you agree:
+1. Strongly Disagree
+2. Disagree
+3. Neutral
+4. Agree
+5. Strongly Agree
+`;
