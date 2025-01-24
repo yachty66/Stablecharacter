@@ -1,6 +1,3 @@
-- get all top celebrities and top characters ie name and mbti type 
-- in the next step get wikipedia page for each of them (drop them if they do not have a wiki page)
-
-- want to take top characters and celebrities from https://www.personality-database.com/profile?pid=2&cid=27 
-but before i add directly dozens of characters i add two and then based on that i scale them up
+- make database website functioning with filter for each type and also a search based thing which displays the personalities based on string matching
+--> once i have this i can push that to prod 
 

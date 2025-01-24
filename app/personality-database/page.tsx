@@ -1,46 +1,55 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Search, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // This would come from your database
 const personalities = [
   {
-    id: 'elon-musk',
-    name: 'Elon Musk',
-    type: 'INTJ',
-    category: 'Entrepreneur',
-    image: '/personalities/elon-musk.jpg',
-    description: 'Entrepreneur, CEO of Tesla and SpaceX',
-  },
-  {
-    id: 'sasuke-uchiha',
-    name: 'Sasuke Uchiha',
-    type: 'INTJ',
-    category: 'Fictional',
-    image: '/personalities/sasuke-uchiha.jpg',
-    description: 'Character from Naruto series',
+    id: "elon-musk",
+    name: "Elon Musk",
+    type: "INTJ",
+    image: "/personalities/elon-musk.jpg",
+    description: "Entrepreneur, CEO of Tesla and SpaceX",
   },
   // Add more personalities...
 ];
 
-const categories = ['All', 'Entrepreneur', 'Fictional', 'Historical', 'Artist', 'Scientist'];
-const types = ['All', 'INTJ', 'ENTJ', 'INTP', 'ENTP', 'INFJ', 'ENFJ', 'INFP', 'ENFP'];
+const types = [
+  "All",
+  "INTJ",
+  "ENTJ",
+  "INTP",
+  "ENTP",
+  "INFJ",
+  "ENFJ",
+  "INFP",
+  "ENFP",
+  "ISTJ",
+  "ESTJ",
+  "ISFJ",
+  "ESFJ",
+  "ISTP",
+  "ESTP",
+  "ISFP",
+  "ESFP",
+];
 
 export default function PersonalityDatabase() {
-  const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedType, setSelectedType] = useState('All');
+  const [search, setSearch] = useState("");
+  const [selectedType, setSelectedType] = useState("All");
 
   const filteredPersonalities = personalities.filter((personality) => {
-    const matchesSearch = personality.name.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || personality.category === selectedCategory;
-    const matchesType = selectedType === 'All' || personality.type === selectedType;
-    return matchesSearch && matchesCategory && matchesType;
+    const matchesSearch = personality.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesType =
+      selectedType === "All" || personality.type === selectedType;
+    return matchesSearch && matchesType;
   });
 
   return (
@@ -68,50 +77,26 @@ export default function PersonalityDatabase() {
             />
           </div>
 
-          {/* Filter Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* Categories */}
-            <div className="flex-1 space-y-2">
-              <label className="text-sm text-gray-400">Category</label>
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <Button
-                    key={category}
-                    variant={selectedCategory === category ? 'default' : 'outline'}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`
-                      ${selectedCategory === category 
-                        ? 'bg-white text-black hover:bg-white/90' 
-                        : 'border-white/20 text-white hover:bg-white/10'
-                      }
-                    `}
-                  >
-                    {category}
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            {/* MBTI Types */}
-            <div className="flex-1 space-y-2">
-              <label className="text-sm text-gray-400">MBTI Type</label>
-              <div className="flex flex-wrap gap-2">
-                {types.map((type) => (
-                  <Button
-                    key={type}
-                    variant={selectedType === type ? 'default' : 'outline'}
-                    onClick={() => setSelectedType(type)}
-                    className={`
-                      ${selectedType === type 
-                        ? 'bg-white text-black hover:bg-white/90' 
-                        : 'border-white/20 text-white hover:bg-white/10'
-                      }
-                    `}
-                  >
-                    {type}
-                  </Button>
-                ))}
-              </div>
+          {/* MBTI Types Filter */}
+          <div className="space-y-2">
+            <label className="text-sm text-gray-400">MBTI Type</label>
+            <div className="flex flex-wrap gap-2">
+              {types.map((type) => (
+                <Button
+                  key={type}
+                  variant={selectedType === type ? "default" : "outline"}
+                  onClick={() => setSelectedType(type)}
+                  className={`
+                    ${
+                      selectedType === type
+                        ? "bg-white text-black hover:bg-white/90"
+                        : "border-white/20 text-white hover:bg-white/10"
+                    }
+                  `}
+                >
+                  {type}
+                </Button>
+              ))}
             </div>
           </div>
         </div>
@@ -140,7 +125,9 @@ export default function PersonalityDatabase() {
                       {personality.type}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-400">{personality.description}</p>
+                  <p className="text-sm text-gray-400">
+                    {personality.description}
+                  </p>
                 </div>
               </div>
             </Link>
