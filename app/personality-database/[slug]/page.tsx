@@ -182,6 +182,7 @@ export default function PersonalityProfile() {
       text: inputValue.trim(),
       isUser: true,
     };
+
     setMessages((prev) => [...prev, newMessage]);
     setInputValue("");
     setIsTyping(true);
@@ -204,6 +205,8 @@ export default function PersonalityProfile() {
       }
 
       const data = await response.json();
+      setIsTyping(false);
+
       const aiMessage = {
         text: data.message,
         isUser: false,
@@ -257,7 +260,7 @@ export default function PersonalityProfile() {
         }
       }
     } catch (error) {
-      console.error("Error:", error);
+      setIsTyping(false);
       setMessages((prev) => [
         ...prev,
         {
@@ -265,8 +268,6 @@ export default function PersonalityProfile() {
           isUser: false,
         },
       ]);
-    } finally {
-      setIsTyping(false);
     }
   };
 
