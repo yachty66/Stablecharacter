@@ -15,6 +15,7 @@ interface Personality {
   mbti_type: string;
   image: string;
   prompt: string;
+  description: string;
 }
 
 const types = [
@@ -52,7 +53,7 @@ export default function PersonalityDatabase() {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
-    async function fetchPersonalities() {
+    async function fetchData() {
       const { data, error } = await supabase
         .from("personalities")
         .select("*")
@@ -66,12 +67,11 @@ export default function PersonalityDatabase() {
       setPersonalities(data || []);
     }
 
-    fetchPersonalities();
+    fetchData();
   }, [supabase]);
 
   const filteredPersonalities = personalities.filter((personality) => {
     if (!personality || !personality.name) return false;
-
     const matchesSearch = personality.name
       .toLowerCase()
       .includes(search.toLowerCase());
@@ -137,10 +137,10 @@ export default function PersonalityDatabase() {
             <Link
               key={personality.id}
               href={`/personality-database/${personality.wiki_name}`}
-              className="group"
+              className="group h-full"
             >
-              <div className="rounded-lg border border-white/20 overflow-hidden hover:border-white/40 transition-colors">
-                <div className="aspect-[3/2] relative bg-gray-800">
+              <div className="rounded-lg border border-white/20 overflow-hidden hover:border-white/40 transition-colors h-full flex flex-col">
+                <div className="aspect-[3/2] relative bg-gray-800 flex-shrink-0">
                   {personality.image && isValidS3Url(personality.image) ? (
                     <Image
                       src={personality.image}
@@ -157,17 +157,15 @@ export default function PersonalityDatabase() {
                     />
                   )}
                 </div>
-                <div className="p-4">
+                <div className="p-4 flex flex-col flex-grow">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium">{personality.name}</h3>
-                    <span className="px-2 py-1 text-sm bg-white/10 rounded-full">
+                    <span className="px-2 py-1 text-sm bg-white/10 rounded-full flex-shrink-0">
                       {personality.mbti_type || "Unknown"}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-400 line-clamp-2">
-                    {personality.prompt?.substring(0, 100) ||
-                      "No description available"}
-                    ...
+                  <p className="text-sm text-gray-400 line-clamp-2 flex-grow">
+                    {personality.description || "No description available"}
                   </p>
                 </div>
               </div>
