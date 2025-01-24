@@ -46,6 +46,11 @@ const isValidS3Url = (url: string) => {
   return url?.includes("stablecharacter.s3.us-east-1.amazonaws.com");
 };
 
+// Helper function to convert name to URL-friendly format
+const formatNameForUrl = (name: string) => {
+  return name.toLowerCase().replace(/\s+/g, "-");
+};
+
 export default function PersonalityDatabase() {
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState("All");
@@ -136,7 +141,9 @@ export default function PersonalityDatabase() {
           {filteredPersonalities.map((personality) => (
             <Link
               key={personality.id}
-              href={`/personality-database/${personality.wiki_name}`}
+              href={`/personality-database/${formatNameForUrl(
+                personality.name
+              )}`}
               className="group h-full"
             >
               <div className="rounded-lg border border-white/20 overflow-hidden hover:border-white/40 transition-colors h-full flex flex-col">
