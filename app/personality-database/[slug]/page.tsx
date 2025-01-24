@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import PremiumModal from "@/components/PremiumModal";
+import mbtiTypes from "@/app/data/mbtiTypes";
 
 interface PersonalityData {
   id: string;
@@ -38,46 +39,6 @@ interface Message {
   text: string;
   isUser: boolean;
 }
-
-// MBTI type definitions
-const mbtiTypes = {
-  INTJ: {
-    name: "INTJ",
-    description: "Introverted, Intuitive, Thinking, Judging",
-    functions: [
-      {
-        name: "Introverted Intuition (Ni)",
-        role: "Dominant",
-        description:
-          "Primary function that drives long-term vision and future-oriented thinking",
-      },
-      {
-        name: "Extraverted Thinking (Te)",
-        role: "Auxiliary",
-        description:
-          "Secondary function for logical decision-making and systematic planning",
-      },
-      {
-        name: "Introverted Feeling (Fi)",
-        role: "Tertiary",
-        description: "Third function for personal values and moral judgments",
-      },
-      {
-        name: "Extraverted Sensing (Se)",
-        role: "Inferior",
-        description:
-          "Fourth function for experiencing and interacting with the immediate environment",
-      },
-    ],
-    traits: [
-      "Strategic planning",
-      "Analytical thinking",
-      "Independent",
-      "Knowledge-seeking",
-    ],
-  },
-  // Add other MBTI types as needed
-};
 
 export default function PersonalityProfile() {
   const params = useParams();
