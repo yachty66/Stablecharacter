@@ -58,6 +58,13 @@ export default function PersonalityDatabase() {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
+    // Get type from URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const typeParam = params.get("type");
+    if (typeParam && types.includes(typeParam.toUpperCase())) {
+      setSelectedType(typeParam.toUpperCase());
+    }
+
     async function fetchData() {
       const { data, error } = await supabase
         .from("personalities")

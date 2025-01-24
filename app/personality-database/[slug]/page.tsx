@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { MessageSquare, Users2, ArrowLeft, X, Send } from "lucide-react";
@@ -42,6 +42,7 @@ interface Message {
 
 export default function PersonalityProfile() {
   const params = useParams();
+  const router = useRouter();
   const [personalityData, setPersonalityData] =
     useState<PersonalityData | null>(null);
   const [wikiData, setWikiData] = useState<WikiData | null>(null);
@@ -360,6 +361,10 @@ export default function PersonalityProfile() {
     getUser();
   }, []);
 
+  const handleViewSimilarTypes = () => {
+    router.push(`/personality-database?type=${personalityData?.mbti_type}`);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-[100dvh] bg-black text-white flex items-center justify-center">
@@ -445,6 +450,7 @@ export default function PersonalityProfile() {
                 <Button
                   variant="outline"
                   className="border-white text-white hover:bg-white/10"
+                  onClick={handleViewSimilarTypes}
                 >
                   <Users2 className="w-4 h-4 mr-2" />
                   View Similar Types
