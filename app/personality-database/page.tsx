@@ -1,23 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-// This would come from your database
-const personalities = [
-  {
-    id: "elon-musk",
-    name: "Elon Musk",
-    type: "INTJ",
-    image: "/personalities/elon-musk.jpg",
-    description: "Entrepreneur, CEO of Tesla and SpaceX",
-  },
-  // Add more personalities...
-];
+interface Personality {
+  id: number;
+  name: string;
+  wiki_name: string;
+  mbti_type: string;
+  image: string;
+  prompt: string;
+}
 
 const types = [
   "All",
@@ -39,16 +37,48 @@ const types = [
   "ESFP",
 ];
 
+const DEFAULT_IMAGE =
+  "https://stablecharacter.s3.us-east-1.amazonaws.com/default-avatar.png";
+
+// Helper function to validate if URL is from S3
+const isValidS3Url = (url: string) => {
+  return url?.includes("stablecharacter.s3.us-east-1.amazonaws.com");
+};
+
 export default function PersonalityDatabase() {
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState("All");
+  const [personalities, setPersonalities] = useState<Personality[]>([]);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    async function fetchPersonalities() {
+      const { data, error } = await supabase
+        .from("personalities")
+        .select("*")
+        .order("id");
+
+      if (error) {
+        console.error("Error fetching personalities:", error);
+        return;
+      }
+
+      setPersonalities(data || []);
+    }
+
+    fetchPersonalities();
+  }, [supabase]);
 
   const filteredPersonalities = personalities.filter((personality) => {
+    if (!personality || !personality.name) return false;
+
     const matchesSearch = personality.name
       .toLowerCase()
       .includes(search.toLowerCase());
     const matchesType =
-      selectedType === "All" || personality.type === selectedType;
+      selectedType === "All" ||
+      (personality.mbti_type &&
+        personality.mbti_type.toLowerCase() === selectedType.toLowerCase());
     return matchesSearch && matchesType;
   });
 
@@ -106,27 +136,38 @@ export default function PersonalityDatabase() {
           {filteredPersonalities.map((personality) => (
             <Link
               key={personality.id}
-              href={`/personality-database/${personality.id}`}
+              href={`/personality-database/${personality.wiki_name}`}
               className="group"
             >
               <div className="rounded-lg border border-white/20 overflow-hidden hover:border-white/40 transition-colors">
-                <div className="aspect-[3/2] relative">
-                  <Image
-                    src={personality.image}
-                    alt={personality.name}
-                    fill
-                    className="object-cover"
-                  />
+                <div className="aspect-[3/2] relative bg-gray-800">
+                  {personality.image && isValidS3Url(personality.image) ? (
+                    <Image
+                      src={personality.image}
+                      alt={personality.name || "Character"}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <Image
+                      src={DEFAULT_IMAGE}
+                      alt={personality.name || "Character"}
+                      fill
+                      className="object-cover"
+                    />
+                  )}
                 </div>
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium">{personality.name}</h3>
                     <span className="px-2 py-1 text-sm bg-white/10 rounded-full">
-                      {personality.type}
+                      {personality.mbti_type || "Unknown"}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-400">
-                    {personality.description}
+                  <p className="text-sm text-gray-400 line-clamp-2">
+                    {personality.prompt?.substring(0, 100) ||
+                      "No description available"}
+                    ...
                   </p>
                 </div>
               </div>
