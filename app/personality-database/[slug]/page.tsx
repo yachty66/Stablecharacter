@@ -545,7 +545,7 @@ export default function PersonalityProfile() {
                 alt="Profile"
                 width={32}
                 height={32}
-                className="rounded-full"
+                className="rounded-full w-8 h-8 object-cover"
               />
               <div>
                 <h3 className="font-medium">
@@ -581,7 +581,7 @@ export default function PersonalityProfile() {
                     alt="Profile"
                     width={32}
                     height={32}
-                    className="rounded-full mr-2"
+                    className="rounded-full w-8 h-8 object-cover mr-2"
                   />
                 )}
                 <div
