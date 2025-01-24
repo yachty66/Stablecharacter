@@ -141,9 +141,7 @@ export default function PersonalityDatabase() {
           {filteredPersonalities.map((personality) => (
             <Link
               key={personality.id}
-              href={`/personality-database/${formatNameForUrl(
-                personality.name
-              )}`}
+              href={`/personality-database/${personality.wiki_name}`}
               className="group h-full"
             >
               <div className="rounded-lg border border-white/20 overflow-hidden hover:border-white/40 transition-colors h-full flex flex-col">
@@ -151,14 +149,18 @@ export default function PersonalityDatabase() {
                   {personality.image && isValidS3Url(personality.image) ? (
                     <Image
                       src={personality.image}
-                      alt={personality.name || "Character"}
+                      alt={
+                        personality.wiki_name?.replace(/_/g, " ") || "Character"
+                      }
                       fill
                       className="object-cover"
                     />
                   ) : (
                     <Image
                       src={DEFAULT_IMAGE}
-                      alt={personality.name || "Character"}
+                      alt={
+                        personality.wiki_name?.replace(/_/g, " ") || "Character"
+                      }
                       fill
                       className="object-cover"
                     />
@@ -166,7 +168,9 @@ export default function PersonalityDatabase() {
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-medium">{personality.name}</h3>
+                    <h3 className="font-medium">
+                      {personality.wiki_name?.replace(/_/g, " ")}
+                    </h3>
                     <span className="px-2 py-1 text-sm bg-white/10 rounded-full flex-shrink-0">
                       {personality.mbti_type || "Unknown"}
                     </span>
