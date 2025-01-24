@@ -141,7 +141,7 @@ export default function PersonalityDatabase() {
           {filteredPersonalities.map((personality) => (
             <Link
               key={personality.id}
-              href={`/personality-database/${personality.wiki_name}`}
+              href={`/personality-database/${personality.name}`}
               className="group h-full"
             >
               <div className="rounded-lg border border-white/20 overflow-hidden hover:border-white/40 transition-colors h-full flex flex-col">
