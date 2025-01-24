@@ -77,9 +77,8 @@ async def message_response(request: MessageRequest):
 @app.post("/api/py/personality_chat")
 async def personality_chat(request: PersonalityMessageRequest):
     try:
-        # Load first system prompt from JSON
-        current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        prompt_path = os.path.join(current_dir, 'app', 'data', 'first_system_prompts.json')
+        # Load first system prompt from JSON - using same approach as characters.json
+        prompt_path = os.path.join(os.path.dirname(__file__), 'first_system_prompts.json')
         with open(prompt_path, 'r', encoding='utf-8') as f:
             personality_prompts = json.load(f)
 

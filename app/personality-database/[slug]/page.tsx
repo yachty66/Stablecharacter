@@ -139,7 +139,7 @@ export default function PersonalityProfile() {
     if (!inputValue.trim()) return;
 
     // If not logged in, show login modal after 5 messages
-    if (!user && messages.length >= 2) {
+    if (!user && messages.length >= 5) {
       setShowSettings(true);
       return;
     }
@@ -166,8 +166,8 @@ export default function PersonalityProfile() {
               .eq("email", currentUser.email)
               .single();
 
-            // Show premium modal if counter is over 20 and no active subscription
-            if (counterData?.counter >= 20) {
+            // Show premium modal if counter is over 15 and no active subscription
+            if (counterData?.counter >= 15) {
               setShowPremiumModal(true);
               return;
             }
