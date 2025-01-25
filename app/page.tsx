@@ -1354,9 +1354,19 @@ export default function MessagingInterface() {
                     </div>
                   </div>
 
+                  <Link href="/personality-database" className="w-full">
+                    <Button
+                      className="w-full flex items-center justify-center gap-2"
+                      variant="outline"
+                    >
+                      <Users2 className="w-4 h-4" />
+                      Personality Database
+                    </Button>
+                  </Link>
+
                   <Button
                     onClick={() =>
-                      window.open("https://discord.gg/mrSkBn9F", "_blank")
+                      window.open("https://discord.gg/rtCcVzthqu", "_blank")
                     }
                     variant="outline"
                     className="flex items-center gap-2"

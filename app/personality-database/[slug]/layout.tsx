@@ -26,17 +26,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const mbtiType = personality?.mbti_type?.toUpperCase() || "";
 
   return {
-    title: `${name} MBTI Type (${mbtiType}) | Personality Database`,
+    title: `${name} MBTI Type (${mbtiType}) | Stablecharacter`,
     description: `Discover ${name}'s MBTI personality type (${mbtiType}). Explore cognitive functions, personality traits, and chat with an AI trained on ${name}'s ${mbtiType} personality type.`,
     keywords: `${name} mbti, ${name} personality type, ${name} ${mbtiType}, what is ${name}'s mbti type, ${mbtiType} personality, ${name} myers briggs type`,
     openGraph: {
-      title: `${name} MBTI Type (${mbtiType}) | Personality Database`,
+      title: `${name} MBTI Type (${mbtiType}) | Stablecharacter`,
       description: `Discover ${name}'s MBTI personality type (${mbtiType}). Explore cognitive functions, personality traits, and chat with an AI trained on ${name}'s ${mbtiType} personality type.`,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${name} MBTI Type (${mbtiType}) | Personality Database`,
+      title: `${name} MBTI Type (${mbtiType}) | Stablecharacter`,
       description: `Discover ${name}'s MBTI personality type (${mbtiType}). Explore cognitive functions, personality traits, and chat with an AI trained on ${name}'s ${mbtiType} personality type.`,
     },
   };
