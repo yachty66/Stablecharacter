@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://stablecharacter.com/api/sitemap.xml
