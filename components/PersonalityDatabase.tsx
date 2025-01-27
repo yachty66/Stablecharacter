@@ -1,4 +1,6 @@
 import { BookOpen, Users2, Star, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function PersonalityDatabase() {
   return (
@@ -13,6 +15,13 @@ export default function PersonalityDatabase() {
             Chat with famous personalities and characters, each with their
             authentic MBTI type
           </p>
+          <div className="pt-4">
+            <Link href="/personality-database">
+              <Button className="bg-purple-500 hover:bg-purple-600 text-white">
+                Explore Database
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Features Grid */}
@@ -91,16 +100,16 @@ export default function PersonalityDatabase() {
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="text-center p-4 rounded-lg border">
-              <p className="font-medium">Sherlock Holmes</p>
+              <p className="font-medium">J. K. Rowling</p>
+              <span className="text-sm text-muted-foreground">INFJ</span>
+            </div>
+            <div className="text-center p-4 rounded-lg border">
+              <p className="font-medium">Elon Musk</p>
               <span className="text-sm text-muted-foreground">INTJ</span>
             </div>
             <div className="text-center p-4 rounded-lg border">
-              <p className="font-medium">Tony Stark</p>
-              <span className="text-sm text-muted-foreground">ENTP</span>
-            </div>
-            <div className="text-center p-4 rounded-lg border">
-              <p className="font-medium">Jane Austen</p>
-              <span className="text-sm text-muted-foreground">INTJ</span>
+              <p className="font-medium">Christiano Ronaldo</p>
+              <span className="text-sm text-muted-foreground">ESFP</span>
             </div>
             <div className="text-center p-4 rounded-lg border">
               <p className="font-medium">Steve Jobs</p>
