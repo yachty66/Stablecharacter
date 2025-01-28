@@ -1,27 +1,27 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "16 Personalities Test | Coming Soon | Stablecharacter",
-  description: "Our comprehensive 16 personalities test is coming soon. Discover your MBTI personality type and find characters that match your personality.",
+  title: "Free 16 Personalities Test | Stablecharacter",
+  description: "Take the free 16 Personalities test to uncover your MBTI personality type and gain insights into your unique traits. Match with MBTI characters and explore your strengths. No registration required.",
   openGraph: {
-    title: "16 Personalities Test | Coming Soon | Stablecharacter",
-    description: "Our comprehensive 16 personalities test is coming soon. Discover your MBTI personality type and find characters that match your personality.",
+    title: "Free 16 Personalities Test | Stablecharacter",
+    description: "Take the free 16 Personalities test to uncover your MBTI personality type and gain insights into your unique traits. Match with MBTI characters and explore your strengths.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "16 Personalities Test | Coming Soon | Stablecharacter",
-    description: "Our comprehensive 16 personalities test is coming soon. Discover your MBTI personality type and find characters that match your personality.",
+    title: "Free 16 Personalities Test | Stablecharacter",
+    description: "Take the free 16 Personalities test to uncover your MBTI personality type and gain insights into your unique traits. Match with MBTI characters and explore your strengths.",
   },
   keywords: [
     "16 personalities test",
     "MBTI test",
-    "personality assessment",
-    "Myers-Briggs",
-    "personality type test",
-    "MBTI personality test",
-    "Jung personality test"
-  ]
+    "free personality test",
+    "personality traits test",
+    "MBTI characters",
+    "Myers-Briggs personality test",
+    "discover your personality type"
+  ],
 };
 
 export default function SixteenPersonalitiesLayout({
