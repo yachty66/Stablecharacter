@@ -72,7 +72,7 @@ export default function PersonalityTests() {
                   MBTI Based
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
-                  12 min
+                  5 min
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
                   Free

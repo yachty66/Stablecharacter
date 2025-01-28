@@ -737,7 +737,7 @@ export default function MessagingInterface() {
 
           {/* Chat Interface - adjusted height and padding */}
           <div className="w-full max-w-3xl mx-auto px-4 mb-8 flex-1">
-            <div className="h-[calc(100vh-220px)] flex flex-col rounded-lg border shadow-lg">
+            <div className="h-[calc(100vh-220px)] flex flex-col rounded-xl border-2 border-border bg-background overflow-hidden">
               {/* Chat header */}
               <header className="flex items-center justify-between px-3 py-2 border-b sticky top-0 bg-background z-10">
                 {selectedCharacter && (
