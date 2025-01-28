@@ -5,30 +5,265 @@ export interface AssessmentQuestion {
 }
 
 export const assessment: AssessmentQuestion[] = [
-  { question: "You often feel drained after spending time in a large group.", type: "EI", math: "-" },
-  { question: "You feel more comfortable focusing on the present than on the future.", type: "SN", math: "+" },
-  { question: "You make decisions based more on logic than emotions.", type: "TF", math: "+" },
-  { question: "You enjoy vibrant social events with lots of people.", type: "EI", math: "+" },
-  { question: "You often let your emotions guide your decisions.", type: "TF", math: "-" },
-  { question: "You like to stick to routines and structured plans.", type: "JP", math: "+" },
-  { question: "You are more of a natural improviser than a careful planner.", type: "JP", math: "-" },
-  { question: "You rarely worry about how your actions affect other people.", type: "TF", math: "-" },
-  { question: "You enjoy having a to-do list and checking off tasks.", type: "JP", math: "+" },
-  { question: "You prefer quiet and intimate gatherings over large parties.", type: "EI", math: "+" },
-  { question: "You consider yourself more creative than practical.", type: "SN", math: "-" },
-  { question: "You prioritize fairness over feelings when making decisions.", type: "TF", math: "+" },
-  { question: "You feel more energized by spending time alone than with a group of people.", type: "EI", math: "-" },
-  { question: "You enjoy taking time to reflect on your thoughts and ideas.", type: "EI", math: "+" },
-  { question: "You are easily moved by stories and experiences.", type: "TF", math: "+" },
-  { question: "You find it difficult to remain detached in emotionally charged situations.", type: "TF", math: "-" },
-  { question: "You often start new hobbies before finishing old ones.", type: "JP", math: "-" },
-  { question: "You rely more on your experience than your imagination.", type: "SN", math: "+" },
-  { question: "You find yourself more drawn to facts than theories.", type: "SN", math: "+" },
-  { question: "You prefer to follow a set schedule rather than leave things to chance.", type: "JP", math: "+" },
-  { question: "You prefer exploring abstract concepts to focusing on specific details.", type: "SN", math: "-" },
-  { question: "You find it difficult to introduce yourself to people.", type: "EI", math: "-" },
-  { question: "You often spend time exploring unrealistic and impractical ideas.", type: "SN", math: "-" },
-  { question: "You often rely on your instincts rather than detailed plans.", type: "JP", math: "-" },
+  // I/E Questions
+  { question: "You regularly make new friends.", type: "EI", math: "-" },
+  {
+    question:
+      "You find the idea of networking or promoting yourself to strangers very daunting.",
+    type: "EI",
+    math: "+",
+  },
+  {
+    question:
+      "You feel comfortable just walking up to someone you find interesting and striking up a conversation.",
+    type: "EI",
+    math: "-",
+  },
+  {
+    question: "You enjoy participating in team-based activities.",
+    type: "EI",
+    math: "-",
+  },
+  {
+    question: "You enjoy solitary hobbies or activities more than group ones.",
+    type: "EI",
+    math: "+",
+  },
+  {
+    question:
+      "You usually wait for others to introduce themselves first at social gatherings.",
+    type: "EI",
+    math: "+",
+  },
+  {
+    question: "You usually prefer to be around others rather than on your own.",
+    type: "EI",
+    math: "-",
+  },
+  {
+    question: "Your friends would describe you as lively and outgoing.",
+    type: "EI",
+    math: "-",
+  },
+  { question: "You avoid making phone calls.", type: "EI", math: "+" },
+  {
+    question: "You can easily connect with people you have just met.",
+    type: "EI",
+    math: "-",
+  },
+  {
+    question:
+      "You would love a job that requires you to work alone most of the time.",
+    type: "EI",
+    math: "+",
+  },
+  {
+    question:
+      "You feel more drawn to busy, bustling atmospheres than to quiet, intimate places.",
+    type: "EI",
+    math: "-",
+  },
+
+  // S/N Questions
+  {
+    question:
+      "Complex and novel ideas excite you more than simple and straightforward ones.",
+    type: "SN",
+    math: "-",
+  },
+  {
+    question:
+      "You are not too interested in discussions about various interpretations of creative works.",
+    type: "SN",
+    math: "+",
+  },
+  {
+    question: "You enjoy experimenting with new and untested approaches.",
+    type: "SN",
+    math: "-",
+  },
+  {
+    question:
+      "You actively seek out new experiences and knowledge areas to explore.",
+    type: "SN",
+    math: "-",
+  },
+  {
+    question:
+      "You cannot imagine yourself writing fictional stories for a living.",
+    type: "SN",
+    math: "+",
+  },
+  { question: "You enjoy debating ethical dilemmas.", type: "SN", math: "-" },
+  {
+    question:
+      "You become bored or lose interest when the discussion gets highly theoretical.",
+    type: "SN",
+    math: "+",
+  },
+  {
+    question:
+      "You are drawn to various forms of creative expression, such as writing.",
+    type: "SN",
+    math: "-",
+  },
+  {
+    question: "You enjoy exploring unfamiliar ideas and viewpoints.",
+    type: "SN",
+    math: "-",
+  },
+  {
+    question:
+      "You are not too interested in discussing theories on what the world could look like in the future.",
+    type: "SN",
+    math: "+",
+  },
+  {
+    question:
+      "You believe that pondering abstract philosophical questions is a waste of time.",
+    type: "SN",
+    math: "+",
+  },
+  {
+    question:
+      "You prefer tasks that require you to come up with creative solutions rather than follow concrete steps.",
+    type: "SN",
+    math: "-",
+  },
+
+  // T/F Questions
+  {
+    question:
+      "You usually feel more persuaded by what resonates emotionally with you than by factual arguments.",
+    type: "TF",
+    math: "-",
+  },
+  {
+    question:
+      "People's stories and emotions speak louder to you than numbers or data.",
+    type: "TF",
+    math: "-",
+  },
+  {
+    question:
+      "You prioritize facts over people's feelings when determining a course of action.",
+    type: "TF",
+    math: "+",
+  },
+  {
+    question: "You prioritize being sensitive over being completely honest.",
+    type: "TF",
+    math: "-",
+  },
+  {
+    question:
+      "You favor efficiency in decisions, even if it means disregarding some emotional aspects.",
+    type: "TF",
+    math: "+",
+  },
+  {
+    question:
+      "In disagreements, you prioritize proving your point over preserving the feelings of others.",
+    type: "TF",
+    math: "+",
+  },
+  {
+    question: "You are not easily swayed by emotional arguments.",
+    type: "TF",
+    math: "+",
+  },
+  {
+    question:
+      "When facts and feelings conflict, you usually find yourself following your heart.",
+    type: "TF",
+    math: "-",
+  },
+  {
+    question:
+      "You usually base your choices on objective facts rather than emotional impressions.",
+    type: "TF",
+    math: "+",
+  },
+  {
+    question: "Your emotions control you more than you control them.",
+    type: "TF",
+    math: "-",
+  },
+  {
+    question:
+      "When making decisions, you focus more on how the affected people might feel than on what is most logical or efficient.",
+    type: "TF",
+    math: "-",
+  },
+  {
+    question:
+      "You are more likely to rely on emotional intuition than logical reasoning when making a choice.",
+    type: "TF",
+    math: "-",
+  },
+
+  // J/P Questions
+  {
+    question: "Your living and working spaces are clean and organized.",
+    type: "JP",
+    math: "+",
+  },
+  {
+    question:
+      "You prioritize and plan tasks effectively, often completing them well before the deadline.",
+    type: "JP",
+    math: "+",
+  },
+  {
+    question: "You like to use organizing tools like schedules and lists.",
+    type: "JP",
+    math: "+",
+  },
+  {
+    question: "You often allow the day to unfold without any schedule at all.",
+    type: "JP",
+    math: "-",
+  },
+  {
+    question: "You prefer to do your chores before allowing yourself to relax.",
+    type: "JP",
+    math: "+",
+  },
+  {
+    question: "You often end up doing things at the last possible moment.",
+    type: "JP",
+    math: "-",
+  },
+  {
+    question:
+      "You find it challenging to maintain a consistent work or study schedule.",
+    type: "JP",
+    math: "-",
+  },
+  {
+    question: "You like to have a to-do list for each day.",
+    type: "JP",
+    math: "+",
+  },
+  {
+    question:
+      "If your plans are interrupted, your top priority is to get back on track as soon as possible.",
+    type: "JP",
+    math: "+",
+  },
+  {
+    question:
+      "Your personal work style is closer to spontaneous bursts of energy than organized and consistent efforts.",
+    type: "JP",
+    math: "-",
+  },
+  {
+    question:
+      "You complete things methodically without skipping over any steps.",
+    type: "JP",
+    math: "+",
+  },
+  { question: "You struggle with deadlines.", type: "JP", math: "-" },
 ];
 
 export const traitDescriptions = {
