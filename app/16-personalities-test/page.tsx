@@ -18,6 +18,25 @@ const questions: Question[] = assessment.map((q, index) => ({
   id: index + 1,
 }));
 
+const traitDescriptions = {
+  EI: {
+    description:
+      "Extraversion vs Introversion indicates how you interact with the world and where you direct your energy. Extraverts tend to be outgoing and energized by social interaction, while Introverts prefer deeper one-on-one connections and need time alone to recharge.",
+  },
+  SN: {
+    description:
+      "Sensing vs Intuition reflects how you process information. Sensing types focus on concrete facts and present realities, while Intuitive types look for patterns, possibilities and deeper meanings.",
+  },
+  TF: {
+    description:
+      "Thinking vs Feeling shows how you make decisions. Thinking types prioritize logic and objective criteria, while Feeling types consider people and special circumstances.",
+  },
+  JP: {
+    description:
+      "Judging vs Perceiving reveals how you approach structure and planning. Judging types prefer organization and clear decisions, while Perceiving types stay flexible and adapt to circumstances.",
+  },
+};
+
 export default function SixteenPersonalities() {
   const supabase = createClientComponentClient();
   const mainRef = useRef<HTMLDivElement>(null);
@@ -242,6 +261,19 @@ export default function SixteenPersonalities() {
   const renderResults = () => {
     if (!showResults) return null;
 
+    // Calculate the user's MBTI type
+    const getUserType = (scores: Record<string, number>) => {
+      const MIDDLE_SCORE = 18;
+      return (
+        (scores.EI > MIDDLE_SCORE ? "E" : "I") +
+        (scores.SN > MIDDLE_SCORE ? "N" : "S") +
+        (scores.TF > MIDDLE_SCORE ? "F" : "T") +
+        (scores.JP > MIDDLE_SCORE ? "J" : "P")
+      );
+    };
+
+    const userType = getUserType(scores);
+
     const dimensionLabels = {
       EI: { left: "Extraverted", right: "Introverted" },
       SN: { left: "Intuitive", right: "Observant" },
@@ -264,9 +296,20 @@ export default function SixteenPersonalities() {
           };
     };
 
+    const MIDDLE_SCORE = 18;
+    const getLevel = (score: number) => (score > MIDDLE_SCORE ? "High" : "Low");
+
+    const compatibleTypes = getMBTICompatibility(scores);
+
     return (
       <div className="bg-muted/50 rounded-lg p-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Your Traits</h2>
+        <div className="text-center space-y-6 mb-12">
+          <h2 className="text-3xl font-bold">Your Results</h2>
+          <div className="space-y-2">
+            <div className="text-xl text-muted-foreground">Your Type</div>
+            <div className="text-4xl font-bold">{userType}</div>
+          </div>
+        </div>
 
         <div className="space-y-8">
           {traitOrder.map(({ number }) => {
@@ -302,15 +345,55 @@ export default function SixteenPersonalities() {
                     </div>
                   </div>
                 </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  {traitDescriptions[number].description}
+                </p>
               </div>
             );
           })}
         </div>
 
-        <div className="mt-8">
-          <p className="text-sm text-muted-foreground">
-            {traitDescriptions[traitOrder[0].number].description}
+        {/* Add Compatible Types Section */}
+        <div className="mt-12 border-t pt-8">
+          <h3 className="text-xl font-semibold text-center mb-4">
+            Compatible MBTI Types
+          </h3>
+          <p className="text-muted-foreground text-center mb-6">
+            These MBTI types scored in at least 2 categories in the same way
+            (high or low) as you:
           </p>
+          <div className="flex flex-col items-center gap-4">
+            {compatibleTypes.map((type, index) => (
+              <div key={index} className="text-lg font-medium">
+                {type}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Add Chat Button */}
+        <div className="mt-8 text-center">
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+          >
+            <span>Chat with similar Types</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="ml-2 h-4 w-4"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     );
