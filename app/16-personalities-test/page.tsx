@@ -9,8 +9,6 @@ import {
   traitDescriptions,
 } from "@/app/data/16PersonalitiesTest";
 
-//the scores from https://ipip.ori.org/new_ipip-50-item-scale.html are used
-
 interface Question extends AssessmentQuestion {
   id: number;
 }
@@ -110,7 +108,7 @@ export default function SixteenPersonalities() {
   };
 
   const calculateRunningScores = () => {
-    const runningScores = { "EI": 0, "SN": 0, "TF": 0, "JP": 0};
+    const runningScores = { EI: 0, SN: 0, TF: 0, JP: 0 };
 
     questions.forEach((question, index) => {
       const answer = answers[index + 1];
@@ -177,146 +175,115 @@ export default function SixteenPersonalities() {
   const isLastPage = currentPage === totalPages - 1;
 
   // Function to determine MBTI compatibility based on aggregated typeScores
-    const getMBTICompatibility = (typeScores: Record<string, number>) => {
-      // Middle point to differentiate preferences (assumes scores range from 6-30)
-      const MIDDLE_SCORE = 18;
+  const getMBTICompatibility = (typeScores: Record<string, number>) => {
+    // Middle point to differentiate preferences (assumes scores range from 6-30)
+    const MIDDLE_SCORE = 18;
 
-      // Determine MBTI preferences based on typeScores
-      const preferences = {
-        E: typeScores.EI > MIDDLE_SCORE, // Extraversion (E) vs Introversion (I)
-        N: typeScores.SN > MIDDLE_SCORE, // Intuition (N) vs Sensing (S)
-        F: typeScores.TF > MIDDLE_SCORE, // Feeling (F) vs Thinking (T)
-        J: typeScores.JP > MIDDLE_SCORE, // Judging (J) vs Perceiving (P)
-      };
-
-      // Construct the user's MBTI type
-      const mbtiType =
-        (preferences.E ? "E" : "I") +
-        (preferences.N ? "N" : "S") +
-        (preferences.F ? "F" : "T") +
-        (preferences.J ? "J" : "P");
-
-      // All possible MBTI types
-      const allTypes = [
-        "ENFJ",
-        "ENFP",
-        "ENTJ",
-        "ENTP",
-        "ESFJ",
-        "ESFP",
-        "ESTJ",
-        "ESTP",
-        "INFJ",
-        "INFP",
-        "INTJ",
-        "INTP",
-        "ISFJ",
-        "ISFP",
-        "ISTJ",
-        "ISTP",
-      ];
-
-      // Helper function to count matching preferences
-      const countMatches = (type: string) => {
-        let matches = 0;
-        if (type[0] === mbtiType[0]) matches++; // E/I
-        if (type[1] === mbtiType[1]) matches++; // N/S
-        if (type[2] === mbtiType[2]) matches++; // F/T
-        if (type[3] === mbtiType[3]) matches++; // J/P
-        return matches;
-      };
-
-      // Filter types based on at least 2 matching traits
-      const compatibleTypes = allTypes.filter((type) => countMatches(type) >= 2);
-
-      return compatibleTypes;
+    // Determine MBTI preferences based on typeScores
+    const preferences = {
+      E: typeScores.EI > MIDDLE_SCORE, // Extraversion (E) vs Introversion (I)
+      N: typeScores.SN > MIDDLE_SCORE, // Intuition (N) vs Sensing (S)
+      F: typeScores.TF > MIDDLE_SCORE, // Feeling (F) vs Thinking (T)
+      J: typeScores.JP > MIDDLE_SCORE, // Judging (J) vs Perceiving (P)
     };
+
+    // Construct the user's MBTI type
+    const mbtiType =
+      (preferences.E ? "E" : "I") +
+      (preferences.N ? "N" : "S") +
+      (preferences.F ? "F" : "T") +
+      (preferences.J ? "J" : "P");
+
+    // All possible MBTI types
+    const allTypes = [
+      "ENFJ",
+      "ENFP",
+      "ENTJ",
+      "ENTP",
+      "ESFJ",
+      "ESFP",
+      "ESTJ",
+      "ESTP",
+      "INFJ",
+      "INFP",
+      "INTJ",
+      "INTP",
+      "ISFJ",
+      "ISFP",
+      "ISTJ",
+      "ISTP",
+    ];
+
+    // Helper function to count matching preferences
+    const countMatches = (type: string) => {
+      let matches = 0;
+      if (type[0] === mbtiType[0]) matches++; // E/I
+      if (type[1] === mbtiType[1]) matches++; // N/S
+      if (type[2] === mbtiType[2]) matches++; // F/T
+      if (type[3] === mbtiType[3]) matches++; // J/P
+      return matches;
+    };
+
+    // Filter types based on at least 2 matching traits
+    const compatibleTypes = allTypes.filter((type) => countMatches(type) >= 2);
+
+    return compatibleTypes;
+  };
 
   const renderResults = () => {
     if (!showResults) return null;
 
-    const MIDDLE_SCORE = 18;
-    const getLevel = (score: number) => (score > MIDDLE_SCORE ? "High" : "Low");
+    const dimensionLabels = {
+      EI: { left: "Extraverted", right: "Introverted", label: "Introverted" },
+      SN: { left: "Intuitive", right: "Observant", label: "Intuitive" },
+      TF: { left: "Thinking", right: "Feeling", label: "Thinking" },
+      JP: { left: "Judging", right: "Prospecting", label: "Judging" },
+    };
 
-    const compatibleTypes = getMBTICompatibility(scores);
+    // Calculate percentage for the right-side trait
+    const calculateTraitPercentage = (score: number) => {
+      return Math.round(((score - 12) / (60 - 12)) * 100);
+    };
 
     return (
       <div className="bg-muted/50 rounded-lg p-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Your Results</h2>
-
-        <p className="text-muted-foreground mb-8 text-center">
-          Your 16 Personalities assessment results are shown below. Each
-          trait is scored on a scale from 6 to 30, where 6 represents the
-          lowest possible score and 30 represents the highest possible score.
-        </p>
+        <h2 className="text-2xl font-bold text-center mb-6">Your Traits</h2>
 
         <div className="space-y-8">
-          {traitOrder.map(({ number, name }) => (
-            <div key={number} className="space-y-2">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-medium">{name}</h3>
-                <span className="text-sm font-medium">
-                  Score: {scores[number]} ({getLevel(scores[number])})
-                </span>
+          {traitOrder.map(({ number }) => {
+            const percentage = calculateTraitPercentage(scores[number]);
+            return (
+              <div key={number} className="space-y-4">
+                <div className="text-center mb-2">
+                  <span className="text-lg">
+                    {percentage}% {dimensionLabels[number].label}
+                  </span>
+                </div>
+                <div className="relative">
+                  <div className="flex justify-between text-sm text-muted-foreground mb-2">
+                    <span>{dimensionLabels[number].left}</span>
+                    <span>{dimensionLabels[number].right}</span>
+                  </div>
+                  <div className="h-2 bg-secondary rounded-full">
+                    <div className="relative w-full">
+                      <div
+                        className="absolute top-1/2 w-4 h-4 bg-white border-2 border-primary rounded-full -translate-y-1/2 -translate-x-1/2"
+                        style={{
+                          left: `${percentage}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="h-2 bg-secondary rounded-full">
-                <div
-                  className="h-full bg-primary rounded-full transition-all"
-                  style={{
-                    width: `${Math.max(
-                      ((scores[number] - 6) / 24) * 100,
-                      0
-                    )}%`,
-                  }}
-                />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                {traitDescriptions[number].description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Compatible Types Section */}
-        <div className="mt-12 border-t pt-8">
-          <h3 className="text-xl font-semibold text-center mb-4">
-            Compatible MBTI Types
-          </h3>
-          <p className="text-muted-foreground text-center mb-6">
-            This MBTI types scored in at least 2 categories in the same way
-            (high or low) as you:
+        <div className="mt-8">
+          <p className="text-sm text-muted-foreground">
+            {traitDescriptions[traitOrder[0].number].description}
           </p>
-          <div className="flex flex-col items-center gap-4">
-            {compatibleTypes.map((type, index) => (
-              <div key={index} className="text-lg font-medium">
-                {type}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-8 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-          >
-            <span>Chat with similar Types</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="ml-2 h-4 w-4"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </Link>
         </div>
       </div>
     );
