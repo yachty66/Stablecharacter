@@ -49,7 +49,8 @@ export default function SixteenPersonalities() {
   );
 
   const calculateScores = async () => {
-    const typeScores: Record<string, number> = {
+    // Initialize scores for each trait type
+    const typeScores = {
       EI: 0,
       SN: 0,
       TF: 0,
@@ -90,9 +91,11 @@ export default function SixteenPersonalities() {
       console.error("Error saving results:", error);
     }
 
-    // Update state and scroll to top
+    // Update state
     setScores(typeScores);
     setShowResults(true);
+
+    // Add immediate scroll before state updates
     scrollToTop();
 
     // Track completion in Google Analytics
@@ -153,17 +156,17 @@ export default function SixteenPersonalities() {
   };
 
   const scrollToTop = () => {
-    if (mainRef.current) {
-      mainRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    setTimeout(() => {
+      if (mainRef.current) {
+        mainRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
   };
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage((prev) => prev + 1);
       scrollToTop();
-    } else {
-      calculateScores();
     }
   };
 
@@ -313,6 +316,13 @@ export default function SixteenPersonalities() {
     );
   };
 
+  // Also let's add a useEffect to handle scrolling when showResults changes
+  useEffect(() => {
+    if (showResults) {
+      scrollToTop();
+    }
+  }, [showResults]);
+
   return (
     <div className="min-h-[100dvh] bg-background flex flex-col">
       <header className="border-b">
@@ -403,7 +413,7 @@ export default function SixteenPersonalities() {
         </div>
       </header>
 
-      <main ref={mainRef} className="flex-1 py-8">
+      <main ref={mainRef} className="flex-1 py-8" id="main-content">
         <div className="max-w-4xl mx-auto px-4">
           {!showResults ? (
             <div className="space-y-8">
