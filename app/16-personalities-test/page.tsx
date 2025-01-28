@@ -234,15 +234,25 @@ export default function SixteenPersonalities() {
     if (!showResults) return null;
 
     const dimensionLabels = {
-      EI: { left: "Extraverted", right: "Introverted", label: "Introverted" },
-      SN: { left: "Intuitive", right: "Observant", label: "Intuitive" },
-      TF: { left: "Thinking", right: "Feeling", label: "Thinking" },
-      JP: { left: "Judging", right: "Prospecting", label: "Judging" },
+      EI: { left: "Extraverted", right: "Introverted" },
+      SN: { left: "Intuitive", right: "Observant" },
+      TF: { left: "Thinking", right: "Feeling" },
+      JP: { left: "Judging", right: "Prospecting" },
     };
 
-    // Calculate percentage for the right-side trait
-    const calculateTraitPercentage = (score: number) => {
-      return Math.round(((score - 12) / (60 - 12)) * 100);
+    // Calculate percentage for each trait
+    const calculateTraitPercentages = (score: number) => {
+      const normalizedScore = ((score - 12) / (60 - 12)) * 100;
+      // If normalized score is > 50%, return it, otherwise return the complement
+      return normalizedScore > 50
+        ? {
+            value: Math.round(normalizedScore),
+            dominant: "right",
+          }
+        : {
+            value: Math.round(100 - normalizedScore),
+            dominant: "left",
+          };
     };
 
     return (
@@ -251,13 +261,19 @@ export default function SixteenPersonalities() {
 
         <div className="space-y-8">
           {traitOrder.map(({ number }) => {
-            const percentage = calculateTraitPercentage(scores[number]);
+            const { value, dominant } = calculateTraitPercentages(
+              scores[number]
+            );
+            const displayText = `${value}% ${
+              dominant === "right"
+                ? dimensionLabels[number].right
+                : dimensionLabels[number].left
+            }`;
+
             return (
               <div key={number} className="space-y-4">
                 <div className="text-center mb-2">
-                  <span className="text-lg">
-                    {percentage}% {dimensionLabels[number].label}
-                  </span>
+                  <span className="text-lg">{displayText}</span>
                 </div>
                 <div className="relative">
                   <div className="flex justify-between text-sm text-muted-foreground mb-2">
@@ -269,7 +285,9 @@ export default function SixteenPersonalities() {
                       <div
                         className="absolute top-1/2 w-4 h-4 bg-white border-2 border-primary rounded-full -translate-y-1/2 -translate-x-1/2"
                         style={{
-                          left: `${percentage}%`,
+                          left: `${
+                            dominant === "right" ? value : 100 - value
+                          }%`,
                         }}
                       />
                     </div>
