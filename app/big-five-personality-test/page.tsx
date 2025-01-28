@@ -1,7 +1,7 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   assessment,
@@ -21,6 +21,7 @@ const questions: Question[] = assessment.map((q, index) => ({
 }));
 
 export default function BigFive() {
+  const mainRef = useRef<HTMLDivElement>(null);
   const supabase = createClientComponentClient();
 
   // Add this trait order definition
@@ -91,10 +92,7 @@ export default function BigFive() {
     // Update state and scroll to top
     setScores(typeScores);
     setShowResults(true);
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    scrollToTop();
 
     // Track completion in Google Analytics
     if (typeof window !== "undefined" && (window as any).gtag) {
@@ -153,17 +151,23 @@ export default function BigFive() {
     });
   };
 
+  const scrollToTop = () => {
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage((prev) => prev + 1);
-      window.scrollTo(0, 0);
+      scrollToTop();
     }
   };
 
   const handlePrevious = () => {
     if (currentPage > 0) {
       setCurrentPage((prev) => prev - 1);
-      window.scrollTo(0, 0);
+      scrollToTop();
     }
   };
 
@@ -424,7 +428,7 @@ export default function BigFive() {
         </div>
       </header>
 
-      <main className="flex-1 py-8">
+      <main ref={mainRef} className="flex-1 py-8">
         <div className="max-w-4xl mx-auto px-4">
           {!showResults ? (
             <div className="space-y-8">
