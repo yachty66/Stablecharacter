@@ -78,14 +78,16 @@ export default function DarkTriad() {
       P: Math.round((typeScores.P / (traitQuestionCounts.P * 5)) * 100),
     };
 
+    const result = {
+      scores: finalScores,
+      answers: answers,
+      timestamp: new Date().toISOString(),
+    };
+
     try {
-      const { error } = await supabase.from("dark_triad_results").insert([
-        {
-          scores: finalScores,
-          answers: answers,
-          timestamp: new Date().toISOString(),
-        },
-      ]);
+      const { error } = await supabase
+        .from("dark_triad_results")
+        .insert([{ result }]);
 
       if (error) {
         console.error("Error saving results:", error);
@@ -356,6 +358,22 @@ export default function DarkTriad() {
           )}
         </div>
       </main>
+
+      <footer className="border-t">
+        <div className="max-w-4xl mx-auto px-4 py-6">
+          <p className="text-sm text-muted-foreground text-center">
+            Based on the Short Dark Triad (SD3) personality assessment.{" "}
+            <a
+              href="https://openpsychometrics.org/tests/SD3/results.php"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground transition-colors"
+            >
+              Source: OpenPsychometrics SD3
+            </a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
