@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Brain, Clock, Shield } from "lucide-react";
+import { Brain, Clock, Shield, Heart, Skull } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function PersonalityTests() {
@@ -79,6 +79,74 @@ export default function PersonalityTests() {
                 </span>
               </div>
               <Link href="/16-personalities-test" className="block">
+                <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white">
+                  Take Test
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Love Languages Test */}
+          <div className="group relative overflow-hidden rounded-xl border bg-card hover:bg-card/80 transition-colors">
+            <div className="p-6 space-y-4">
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-xl">Love Languages</h3>
+                  <p className="text-muted-foreground">
+                    Understand how you prefer to give and receive love through
+                    the five love languages
+                  </p>
+                </div>
+                <div className="p-2 rounded-lg bg-purple-500/10">
+                  <Heart className="w-6 h-6 text-purple-500" />
+                </div>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
+                  Relationship
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
+                  3 min
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
+                  Free
+                </span>
+              </div>
+              <Link href="/love-languages-test" className="block">
+                <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white">
+                  Take Test
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Dark Triad Test */}
+          <div className="group relative overflow-hidden rounded-xl border bg-card hover:bg-card/80 transition-colors">
+            <div className="p-6 space-y-4">
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-xl">Dark Triad</h3>
+                  <p className="text-muted-foreground">
+                    Explore the darker aspects of personality: Machiavellianism,
+                    Narcissism, and Psychopathy
+                  </p>
+                </div>
+                <div className="p-2 rounded-lg bg-purple-500/10">
+                  <Skull className="w-6 h-6 text-purple-500" />
+                </div>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
+                  Scientific
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
+                  4 min
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500">
+                  Free
+                </span>
+              </div>
+              <Link href="/dark-triad-test" className="block">
                 <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white">
                   Take Test
                 </Button>
