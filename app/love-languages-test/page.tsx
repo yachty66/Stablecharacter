@@ -269,11 +269,15 @@ export default function LoveLanguages() {
                 {currentQuestions.map((question) => renderQuestion(question))}
               </div>
 
-              <div className="flex justify-between pt-8">
+              <div className="flex justify-between items-center pt-8 px-4">
                 <button
                   onClick={handlePrevious}
-                  disabled={currentPage === 0}
-                  className="px-4 py-2 rounded-lg border hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base font-medium transition-opacity
+                    ${
+                      currentPage > 0
+                        ? "bg-secondary text-secondary-foreground hover:opacity-90"
+                        : "invisible"
+                    }`}
                 >
                   Previous
                 </button>
@@ -282,15 +286,25 @@ export default function LoveLanguages() {
                   <button
                     onClick={calculateScores}
                     disabled={!isPageComplete()}
-                    className="px-6 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`bg-primary text-primary-foreground px-6 sm:px-8 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium transition-opacity
+                      ${
+                        isPageComplete()
+                          ? "hover:opacity-90"
+                          : "opacity-50 cursor-not-allowed"
+                      }`}
                   >
-                    View Results
+                    See Results
                   </button>
                 ) : (
                   <button
                     onClick={handleNext}
                     disabled={!isPageComplete()}
-                    className="px-4 py-2 rounded-lg border hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`bg-primary text-primary-foreground px-6 sm:px-8 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium transition-opacity
+                      ${
+                        isPageComplete()
+                          ? "hover:opacity-90"
+                          : "opacity-50 cursor-not-allowed"
+                      }`}
                   >
                     Next
                   </button>
