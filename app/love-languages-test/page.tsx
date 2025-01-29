@@ -56,6 +56,7 @@ export default function LoveLanguages() {
   };
 
   const calculateScores = async () => {
+    // First calculate raw scores
     const typeScores = { W: 0, S: 0, G: 0, T: 0, P: 0 };
 
     questions.forEach((question) => {
@@ -69,31 +70,28 @@ export default function LoveLanguages() {
       }
     });
 
-    const traitQuestionCounts = {
-      W: questions.filter(
-        (q) => q.option1.type === "W" || q.option2.type === "W"
-      ).length,
-      S: questions.filter(
-        (q) => q.option1.type === "S" || q.option2.type === "S"
-      ).length,
-      G: questions.filter(
-        (q) => q.option1.type === "G" || q.option2.type === "G"
-      ).length,
-      T: questions.filter(
-        (q) => q.option1.type === "T" || q.option2.type === "T"
-      ).length,
-      P: questions.filter(
-        (q) => q.option1.type === "P" || q.option2.type === "P"
-      ).length,
+    // Calculate total score
+    const totalScore = Object.values(typeScores).reduce((a, b) => a + b, 0);
+
+    // Convert to percentages that sum to 100
+    const finalScores = {
+      W: Math.round((typeScores.W / totalScore) * 100),
+      S: Math.round((typeScores.S / totalScore) * 100),
+      G: Math.round((typeScores.G / totalScore) * 100),
+      T: Math.round((typeScores.T / totalScore) * 100),
+      P: Math.round((typeScores.P / totalScore) * 100),
     };
 
-    const finalScores = {
-      W: Math.round((typeScores.W / traitQuestionCounts.W) * 100),
-      S: Math.round((typeScores.S / traitQuestionCounts.S) * 100),
-      G: Math.round((typeScores.G / traitQuestionCounts.G) * 100),
-      T: Math.round((typeScores.T / traitQuestionCounts.T) * 100),
-      P: Math.round((typeScores.P / traitQuestionCounts.P) * 100),
-    };
+    // Adjust for rounding errors to ensure sum is exactly 100
+    const sum = Object.values(finalScores).reduce((a, b) => a + b, 0);
+    if (sum !== 100) {
+      const diff = 100 - sum;
+      // Add the difference to the highest score
+      const highestType = Object.entries(finalScores).reduce((a, b) =>
+        b[1] > a[1] ? b : a
+      )[0];
+      finalScores[highestType] += diff;
+    }
 
     const result = {
       scores: finalScores,
@@ -323,8 +321,8 @@ export default function LoveLanguages() {
                   <div key={number} className="space-y-2">
                     <div className="flex justify-between items-center">
                       <h3 className="text-lg font-medium">{name}</h3>
-                      <span className="text-sm font-medium">
-                        Score: {scores[number]}%
+                      <span className="text-lg font-medium">
+                        {scores[number]}%
                       </span>
                     </div>
                     <div className="h-2 bg-secondary rounded-full">
@@ -333,7 +331,7 @@ export default function LoveLanguages() {
                         style={{ width: `${scores[number]}%` }}
                       />
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground mt-2">
                       {traitDescriptions[number].description}
                     </p>
                   </div>
