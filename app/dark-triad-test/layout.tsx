@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dark Triad Personality Test | Stablecharacter",
+  title: "Free Dark Triad Personality Test | Stablecharacter",
   description:
     "Take the Dark Triad personality test to measure Machiavellianism, Narcissism, and Psychopathy traits. Discover your personality tendencies. Free, no registration required.",
   openGraph: {
-    title: "Dark Triad Personality Test | Stablecharacter",
+    title: "Free Dark Triad Personality Test | Stablecharacter",
     description:
       "Take the Dark Triad personality test to measure Machiavellianism, Narcissism, and Psychopathy traits. Discover your personality tendencies.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dark Triad Personality Test | Stablecharacter",
+    title: "Free Dark Triad Personality Test | Stablecharacter",
     description:
       "Take the Dark Triad personality test to measure Machiavellianism, Narcissism, and Psychopathy traits. Discover your personality tendencies.",
   },
