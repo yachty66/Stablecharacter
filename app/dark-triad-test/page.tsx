@@ -60,15 +60,28 @@ export default function DarkTriad() {
     questions.forEach((question) => {
       const answer = answers[question.id];
       if (answer !== undefined) {
-        const score = question.math === "+" ? answer : 5 - (answer - 1);
+        const score = question.math === "+" ? answer : 6 - answer;
         typeScores[question.type] += score;
       }
     });
 
+    // Calculate trait-specific percentages
+    const traitQuestionCounts = {
+      M: questions.filter((q) => q.type === "M").length,
+      N: questions.filter((q) => q.type === "N").length,
+      P: questions.filter((q) => q.type === "P").length,
+    };
+
+    const finalScores = {
+      M: Math.round((typeScores.M / (traitQuestionCounts.M * 5)) * 100),
+      N: Math.round((typeScores.N / (traitQuestionCounts.N * 5)) * 100),
+      P: Math.round((typeScores.P / (traitQuestionCounts.P * 5)) * 100),
+    };
+
     try {
       const { error } = await supabase.from("dark_triad_results").insert([
         {
-          scores: typeScores,
+          scores: finalScores,
           answers: answers,
           timestamp: new Date().toISOString(),
         },
@@ -81,7 +94,7 @@ export default function DarkTriad() {
       console.error("Error saving results:", error);
     }
 
-    setScores(typeScores);
+    setScores(finalScores);
     setShowResults(true);
     scrollToTop();
 
@@ -95,9 +108,6 @@ export default function DarkTriad() {
 
   const renderResults = () => {
     if (!showResults) return null;
-
-    const MAX_SCORE = questions.filter((q) => q.type === "M").length * 5;
-    const getPercentage = (score: number) => (score / MAX_SCORE) * 100;
 
     return (
       <div className="bg-muted/50 rounded-lg p-8">
@@ -114,14 +124,14 @@ export default function DarkTriad() {
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-medium">{name}</h3>
                 <span className="text-sm font-medium">
-                  Score: {Math.round(getPercentage(scores[number]))}%
+                  Score: {scores[number]}%
                 </span>
               </div>
               <div className="h-2 bg-secondary rounded-full">
                 <div
                   className="h-full bg-primary rounded-full transition-all"
                   style={{
-                    width: `${getPercentage(scores[number])}%`,
+                    width: `${scores[number]}%`,
                   }}
                 />
               </div>

@@ -250,10 +250,10 @@ export default function BigFive() {
   const renderResults = () => {
     if (!showResults) return null;
 
-    const MIDDLE_SCORE = 30;
-    const getLevel = (score: number) => (score > MIDDLE_SCORE ? "High" : "Low");
-
-    const compatibleTypes = getMBTICompatibility(scores);
+    const getMaxScore = (type: string) =>
+      questions.filter((q) => q.type === type).length * 5;
+    const getPercentage = (score: number, type: string) =>
+      (score / getMaxScore(type)) * 100;
 
     return (
       <div className="bg-muted/50 rounded-lg p-8">
@@ -261,8 +261,7 @@ export default function BigFive() {
 
         <p className="text-muted-foreground mb-8 text-center">
           Your Big Five personality assessment results are shown below. Each
-          trait is scored on a scale from 10 to 50, where 10 represents the
-          lowest possible score and 50 represents the highest possible score.
+          trait is scored as a percentage of the maximum possible score.
         </p>
 
         <div className="space-y-8">
@@ -271,17 +270,14 @@ export default function BigFive() {
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-medium">{name}</h3>
                 <span className="text-sm font-medium">
-                  Score: {scores[number]} ({getLevel(scores[number])})
+                  Score: {Math.round(getPercentage(scores[number], number))}%
                 </span>
               </div>
               <div className="h-2 bg-secondary rounded-full">
                 <div
                   className="h-full bg-primary rounded-full transition-all"
                   style={{
-                    width: `${Math.max(
-                      ((scores[number] - 10) / 40) * 100,
-                      0
-                    )}%`,
+                    width: `${getPercentage(scores[number], number)}%`,
                   }}
                 />
               </div>
@@ -302,7 +298,7 @@ export default function BigFive() {
             (high or low) as you:
           </p>
           <div className="flex flex-col items-center gap-4">
-            {compatibleTypes.map((type, index) => (
+            {getMBTICompatibility(scores).map((type, index) => (
               <div key={index} className="text-lg font-medium">
                 {type}
               </div>
