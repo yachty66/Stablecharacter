@@ -317,25 +317,27 @@ export default function LoveLanguages() {
                 Your Results
               </h2>
               <div className="space-y-8">
-                {traitOrder.map(({ number, name }) => (
-                  <div key={number} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-lg font-medium">{name}</h3>
-                      <span className="text-lg font-medium">
-                        {scores[number]}%
-                      </span>
+                {traitOrder
+                  .sort((a, b) => scores[b.number] - scores[a.number])
+                  .map(({ number, name }) => (
+                    <div key={number} className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <h3 className="text-lg font-medium">{name}</h3>
+                        <span className="text-lg font-medium">
+                          {scores[number]}%
+                        </span>
+                      </div>
+                      <div className="h-2 bg-secondary rounded-full">
+                        <div
+                          className="h-full bg-primary rounded-full transition-all"
+                          style={{ width: `${scores[number]}%` }}
+                        />
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        {traitDescriptions[number].description}
+                      </p>
                     </div>
-                    <div className="h-2 bg-secondary rounded-full">
-                      <div
-                        className="h-full bg-primary rounded-full transition-all"
-                        style={{ width: `${scores[number]}%` }}
-                      />
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      {traitDescriptions[number].description}
-                    </p>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           )}
