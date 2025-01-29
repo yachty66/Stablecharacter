@@ -30,9 +30,11 @@ export default function LoveLanguages() {
   );
 
   const scrollToTop = () => {
-    if (mainRef.current) {
-      mainRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    setTimeout(() => {
+      if (mainRef.current) {
+        mainRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
   };
 
   const handleAnswer = (questionId: number, value: 1 | 2) => {
