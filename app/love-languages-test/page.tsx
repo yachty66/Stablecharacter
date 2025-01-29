@@ -210,7 +210,7 @@ export default function LoveLanguages() {
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
-                Takes 5 minutes
+                Takes 3 minutes
               </div>
               <div className="flex items-center">
                 <svg
@@ -252,30 +252,17 @@ export default function LoveLanguages() {
         </div>
       </header>
 
-      <main ref={mainRef} className="min-h-screen py-12">
+      <main ref={mainRef} className="flex-1 py-8" id="main-content">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-4">Love Languages Test</h1>
-            <p className="text-muted-foreground">
-              Discover your primary love language and understand how you prefer
-              to receive love and affection.
-            </p>
-          </div>
-
           {!showResults ? (
             <div className="space-y-8">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">
-                  Question {currentPage * questionsPerPage + 1} -{" "}
-                  {Math.min(
-                    (currentPage + 1) * questionsPerPage,
-                    questions.length
-                  )}{" "}
-                  of {questions.length}
-                </h2>
-                <div className="text-sm text-muted-foreground">
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-sm text-muted-foreground">
                   Page {currentPage + 1} of {totalPages}
-                </div>
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {questions.length} questions total
+                </span>
               </div>
 
               <div className="space-y-12">
