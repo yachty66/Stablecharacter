@@ -129,6 +129,7 @@ export default function SixteenPersonalities() {
 
   const calculateRunningScores = () => {
     const runningScores = { EI: 0, SN: 0, TF: 0, JP: 0 };
+    console.log("runningScores", runningScores);
 
     questions.forEach((question, index) => {
       const answer = answers[index + 1];
@@ -264,10 +265,11 @@ export default function SixteenPersonalities() {
     // Calculate the user's MBTI type
     const getUserType = (scores: Record<string, number>) => {
       const MIDDLE_SCORE = 18;
+      console.log("Final scores: ", scores);
       return (
-        (scores.EI > MIDDLE_SCORE ? "E" : "I") +
-        (scores.SN > MIDDLE_SCORE ? "N" : "S") +
-        (scores.TF > MIDDLE_SCORE ? "F" : "T") +
+        (scores.EI > MIDDLE_SCORE ? "I" : "E") +
+        (scores.SN <= MIDDLE_SCORE ? "N" : "S") +
+        (scores.TF > MIDDLE_SCORE ? "T" : "F") +
         (scores.JP > MIDDLE_SCORE ? "J" : "P")
       );
     };
@@ -284,14 +286,16 @@ export default function SixteenPersonalities() {
     // Calculate percentage for each trait
     const calculateTraitPercentages = (score: number) => {
       const normalizedScore = ((score - 12) / (60 - 12)) * 100;
-      // If normalized score is > 50%, return it, otherwise return the complement
-      return normalizedScore > 50
+      // Cap the normalized score at 100
+      const cappedScore = Math.min(Math.max(normalizedScore, 0), 100);
+
+      return cappedScore > 50
         ? {
-            value: Math.round(normalizedScore),
+            value: Math.round(cappedScore),
             dominant: "right",
           }
         : {
-            value: Math.round(100 - normalizedScore),
+            value: Math.round(100 - cappedScore),
             dominant: "left",
           };
     };
