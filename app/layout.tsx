@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import RedditPixel from "@/components/RedditPixel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,7 +55,6 @@ export default async function RootLayout({
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
         />
         <meta name="HandheldFriendly" content="true" />
-        <RedditPixel userEmail={session?.user?.email} />
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-1TKZY373XY"
