@@ -3,18 +3,9 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useRef } from "react";
 import Link from "next/link";
-import { raw16personalitydata } from "@/app/data/raw16personalitydata";
+import { assessment, AssessmentQuestion } from "@/app/data/16PersonalitiesTest";
 
-interface Question {
-  id: string;
-  text: string;
-  options: {
-    text: string;
-    value: number;
-  }[];
-}
-
-const questions: Question[] = raw16personalitydata;
+const questions: AssessmentQuestion[] = assessment;
 
 export default function SixteenPersonalities() {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -34,31 +25,31 @@ export default function SixteenPersonalities() {
   );
 
   const calculateScores = async () => {
-    // Calculate MBTI dimensions
     const dimensionScores = {
-      EI: 0, // Extraversion (positive) vs Introversion (negative)
-      SN: 0, // Sensing (positive) vs Intuition (negative)
-      TF: 0, // Thinking (positive) vs Feeling (negative)
-      JP: 0, // Judging (positive) vs Perceiving (negative)
+      EI: 0,
+      NS: 0,
+      TF: 0,
+      JP: 0,
     };
 
-    // Calculate the scores for each dimension
-    Object.entries(answers).forEach(([questionId, value]) => {
-      // Add your scoring logic here based on question types
-      // You'll need to map questions to dimensions
+    // Calculate the scores for each dimension using the structured data
+    questions.forEach((question) => {
+      const answer = answers[question.text];
+      if (answer !== undefined) {
+        const score = question.math === "+" ? answer : -answer;
+        dimensionScores[question.type] += score;
+      }
     });
 
-    // Determine MBTI type
     const type = {
       EI: dimensionScores.EI > 0 ? "E" : "I",
-      SN: dimensionScores.SN > 0 ? "S" : "N",
+      NS: dimensionScores.NS > 0 ? "N" : "S",
       TF: dimensionScores.TF > 0 ? "T" : "F",
       JP: dimensionScores.JP > 0 ? "J" : "P",
     };
 
-    const mbtiType = `${type.EI}${type.SN}${type.TF}${type.JP}`;
+    const mbtiType = `${type.EI}${type.NS}${type.TF}${type.JP}`;
 
-    // Create result object
     const result = {
       scores: dimensionScores,
       type: mbtiType,
@@ -67,7 +58,6 @@ export default function SixteenPersonalities() {
     };
 
     try {
-      // Save to Supabase
       const { data, error } = await supabase
         .from("sixteen_personalities_results")
         .insert([{ result }]);
@@ -83,7 +73,6 @@ export default function SixteenPersonalities() {
     setShowResults(true);
     scrollToTop();
 
-    // Track completion in Google Analytics
     if (typeof window !== "undefined" && (window as any).gtag) {
       (window as any).gtag("event", "test_completed", {
         event_category: "Engagement",
@@ -93,11 +82,12 @@ export default function SixteenPersonalities() {
     }
   };
 
-  const handleAnswer = (questionId: string, value: number) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [questionId]: value,
-    }));
+  const handleAnswer = (questionText: string, value: number) => {
+    setAnswers((prev) => {
+      const newAnswers = { ...prev };
+      newAnswers[questionText] = value;
+      return newAnswers;
+    });
   };
 
   const scrollToTop = () => {
@@ -121,7 +111,7 @@ export default function SixteenPersonalities() {
   };
 
   const isPageComplete = () => {
-    return currentQuestions.every((q) => answers[q.id] !== undefined);
+    return currentQuestions.every((q) => answers[q.text] !== undefined);
   };
 
   const isLastPage = currentPage === totalPages - 1;
@@ -243,7 +233,7 @@ export default function SixteenPersonalities() {
               </div>
 
               {currentQuestions.map((question) => (
-                <div key={question.id} className="space-y-4">
+                <div key={question.text} className="space-y-4">
                   <h3 className="text-base sm:text-lg font-medium text-center max-w-2xl mx-auto px-4">
                     {question.text}
                   </h3>
@@ -251,13 +241,13 @@ export default function SixteenPersonalities() {
                     <div className="w-full max-w-md space-y-2">
                       {question.options.map((option) => (
                         <button
-                          key={option.value}
+                          key={`${question.text}-${option.value}`}
                           onClick={() =>
-                            handleAnswer(question.id, option.value)
+                            handleAnswer(question.text, option.value)
                           }
                           className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors
                             ${
-                              answers[question.id] === option.value
+                              answers[question.text] === option.value
                                 ? "bg-primary text-primary-foreground"
                                 : "bg-background hover:bg-muted border"
                             }`}
