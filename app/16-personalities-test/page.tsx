@@ -119,11 +119,95 @@ export default function SixteenPersonalities() {
   const renderResults = () => {
     if (!showResults) return null;
 
-    // Add your results rendering logic here
+    const mbtiType = `${scores.EI > 0 ? "E" : "I"}${scores.NS > 0 ? "N" : "S"}${
+      scores.TF > 0 ? "T" : "F"
+    }${scores.JP > 0 ? "J" : "P"}`;
+
     return (
       <div className="bg-muted/50 rounded-lg p-8">
         <h2 className="text-2xl font-bold text-center mb-6">Your Results</h2>
-        {/* Add results visualization */}
+
+        <div className="max-w-2xl mx-auto space-y-8">
+          <div className="text-center">
+            <h3 className="text-4xl font-bold mb-4">{mbtiType}</h3>
+            <p className="text-muted-foreground">Your personality type is:</p>
+          </div>
+
+          <div className="space-y-6">
+            {/* E/I Scale */}
+            <div>
+              <div className="flex justify-between mb-2">
+                <span>Introversion (I)</span>
+                <span>Extraversion (E)</span>
+              </div>
+              <div className="h-2 bg-muted rounded-full">
+                <div
+                  className="h-full bg-primary rounded-full transition-all"
+                  style={{
+                    width: `${((scores.EI + 21) / 42) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* N/S Scale */}
+            <div>
+              <div className="flex justify-between mb-2">
+                <span>Sensing (S)</span>
+                <span>Intuition (N)</span>
+              </div>
+              <div className="h-2 bg-muted rounded-full">
+                <div
+                  className="h-full bg-primary rounded-full transition-all"
+                  style={{
+                    width: `${((scores.NS + 21) / 42) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* T/F Scale */}
+            <div>
+              <div className="flex justify-between mb-2">
+                <span>Feeling (F)</span>
+                <span>Thinking (T)</span>
+              </div>
+              <div className="h-2 bg-muted rounded-full">
+                <div
+                  className="h-full bg-primary rounded-full transition-all"
+                  style={{
+                    width: `${((scores.TF + 21) / 42) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* J/P Scale */}
+            <div>
+              <div className="flex justify-between mb-2">
+                <span>Perceiving (P)</span>
+                <span>Judging (J)</span>
+              </div>
+              <div className="h-2 bg-muted rounded-full">
+                <div
+                  className="h-full bg-primary rounded-full transition-all"
+                  style={{
+                    width: `${((scores.JP + 21) / 42) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center pt-6">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center bg-primary text-primary-foreground px-8 py-3 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              Explore Characters with Your Type
+            </Link>
+          </div>
+        </div>
       </div>
     );
   };
