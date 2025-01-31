@@ -2,25 +2,29 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Free 16 Personalities Test | Stablecharacter",
-  description: "Take the free 16 Personalities test to uncover your MBTI personality type and gain insights into your unique traits. Match with MBTI characters and explore your strengths. No registration required.",
+  description:
+    "Take the comprehensive 16 personalities test and discover your personality type. Find characters that match your MBTI personality type. Free, no registration required.",
   openGraph: {
     title: "Free 16 Personalities Test | Stablecharacter",
-    description: "Take the free 16 Personalities test to uncover your MBTI personality type and gain insights into your unique traits. Match with MBTI characters and explore your strengths.",
+    description:
+      "Take the comprehensive 16 personalities test and discover your personality type. Find characters that match your MBTI personality type.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Free 16 Personalities Test | Stablecharacter",
-    description: "Take the free 16 Personalities test to uncover your MBTI personality type and gain insights into your unique traits. Match with MBTI characters and explore your strengths.",
+    description:
+      "Take the comprehensive 16 personalities test and discover your personality type. Find characters that match your MBTI personality type.",
   },
   keywords: [
     "16 personalities test",
     "MBTI test",
+    "personality type test",
+    "Myers-Briggs test",
     "free personality test",
-    "personality traits test",
-    "MBTI characters",
-    "Myers-Briggs personality test",
-    "discover your personality type"
+    "MBTI compatibility",
+    "personality assessment",
+    "character personality match",
   ],
 };
 
