@@ -144,25 +144,25 @@ export default function SixteenPersonalities() {
             {/* E/I Scale */}
             <div>
               <div className="flex justify-between mb-2">
-                <span>Introversion (I)</span>
                 <span>Extraversion (E)</span>
+                <span>Introversion (I)</span>
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium w-12">
-                  {calculatePercentages(-scores.EI).mainPercentage}%
+                  {calculatePercentages(scores.EI).mainPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
                       width: `${
-                        calculatePercentages(-scores.EI).mainPercentage
+                        calculatePercentages(scores.EI).mainPercentage
                       }%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(-scores.EI).oppositePercentage}%
+                  {calculatePercentages(scores.EI).oppositePercentage}%
                 </span>
               </div>
             </div>
