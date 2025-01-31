@@ -60,78 +60,87 @@ function ProfileCard() {
   ];
 
   return (
-    <Card className="max-w-md bg-[#F71512] rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
-      {/* Decorative elements */}
-      <div className="absolute top-0 right-0 w-40 h-40 bg-pink-500/30 rounded-full blur-3xl -mr-20 -mt-20"></div>
-      <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/30 rounded-full blur-3xl -ml-20 -mb-20"></div>
+    <Card className="max-w-md overflow-hidden rounded-3xl shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
+      <div className="relative bg-gradient-to-br from-[#F71512] via-[#FF4B47] to-[#FF6B67]">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-black/20 rounded-full blur-3xl -ml-20 -mb-20"></div>
 
-      {/* Header with gradient overlay */}
-      <CardHeader className="bg-gradient-to-r from-[#E774B5] to-[#E774B5]/90 p-6 relative">
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
-        <h2 className="text-3xl font-bold text-white drop-shadow-sm">Manu</h2>
-      </CardHeader>
+        {/* Mesh gradient overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.2)_100%)]"></div>
 
-      {/* Main Image with enhanced container */}
-      <div className="p-4">
-        <div className="rounded-2xl overflow-hidden border-2 border-[#E774B5] shadow-xl relative group">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10 group-hover:opacity-75 transition-opacity"></div>
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-30%20at%208.46.55%E2%80%AFPM-gQDmZAAz0w90R46zeLIU1gP1mek2Wm.png"
-            alt="Profile illustration"
-            className="w-full aspect-square object-cover bg-[#7FB5E3] transform group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      </div>
+        {/* Header with glass effect */}
+        <CardHeader className="relative bg-white/10 backdrop-blur-sm border-b border-white/10 p-6">
+          <h2 className="text-3xl font-bold text-white drop-shadow-lg">Manu</h2>
+        </CardHeader>
 
-      {/* Content with glass effect */}
-      <CardContent className="p-8 space-y-8 relative">
-        <div className="space-y-2">
-          <h1 className="text-5xl font-bold mb-2 text-white tracking-tight">
-            Debater
-          </h1>
-          <p className="text-2xl text-white/90 font-medium">Analyst squad</p>
+        {/* Main Image with enhanced container */}
+        <div className="p-4">
+          <div className="rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl relative group">
+            <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/20 group-hover:opacity-75 transition-opacity"></div>
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-30%20at%208.46.55%E2%80%AFPM-gQDmZAAz0w90R46zeLIU1gP1mek2Wm.png"
+              alt="Profile illustration"
+              className="w-full aspect-square object-cover transform group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
         </div>
 
-        {/* Stats with enhanced visuals */}
-        <div className="space-y-5">
-          {stats.map((stat, index) => (
-            <div key={index} className="space-y-2">
-              <div className="flex justify-between items-center text-white/90">
-                <span className="text-sm font-medium uppercase tracking-wider">
-                  {stat.label}
-                </span>
-                <span className="text-sm font-bold">{stat.percentage}%</span>
-              </div>
-              <div className="h-3 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
-                <div
-                  className="h-full rounded-full transition-all duration-500 ease-out relative"
-                  style={{
-                    width: `${stat.percentage}%`,
-                    backgroundColor: stat.color,
-                    boxShadow: `0 0 25px ${stat.color}60`,
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0"></div>
+        {/* Content with glass effect */}
+        <CardContent className="p-8 space-y-8 relative backdrop-blur-sm bg-black/5">
+          <div className="space-y-2">
+            <h1 className="text-5xl font-bold mb-2 text-white tracking-tight drop-shadow-lg">
+              Debater
+            </h1>
+            <p className="text-2xl text-white/90 font-medium">Analyst squad</p>
+          </div>
+
+          {/* Stats with enhanced visuals */}
+          <div className="space-y-5">
+            {stats.map((stat, index) => (
+              <div key={index} className="space-y-2">
+                <div className="flex justify-between items-center text-white/90">
+                  <span className="text-sm font-medium uppercase tracking-wider">
+                    {stat.label}
+                  </span>
+                  <span className="text-sm font-bold">{stat.percentage}%</span>
+                </div>
+                <div className="h-3 bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
+                  <div
+                    className="h-full rounded-full transition-all duration-500 ease-out relative"
+                    style={{
+                      width: `${stat.percentage}%`,
+                      background: `linear-gradient(90deg, ${stat.color}aa, ${stat.color})`,
+                      boxShadow: `0 0 20px ${stat.color}40`,
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.2)_50%,transparent_100%)] animate-shine"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* Share button with enhanced styling */}
-        <button
-          className="w-full py-4 px-6 bg-white/10 hover:bg-white/15 
-                          text-white font-medium rounded-xl transition-all
-                          border border-white/20 backdrop-blur-sm
-                          flex items-center justify-center gap-3
-                          hover:shadow-lg hover:scale-[1.02]"
-        >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-          </svg>
-          Share Result
-        </button>
-      </CardContent>
+          {/* Share button with glass effect */}
+          <button
+            className="w-full py-4 px-6 bg-white/10 hover:bg-white/15 
+                            text-white font-medium rounded-xl transition-all
+                            border border-white/20 backdrop-blur-sm
+                            flex items-center justify-center gap-3
+                            hover:shadow-lg hover:scale-[1.02]
+                            group"
+          >
+            <svg
+              className="w-5 h-5 group-hover:rotate-12 transition-transform"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+            </svg>
+            Share Result
+          </button>
+        </CardContent>
+      </div>
     </Card>
   );
 }
