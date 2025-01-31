@@ -9,6 +9,7 @@ import {
   traitDescriptions,
 } from "@/app/data/bigFiveAssessment";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import html2canvas from "html2canvas";
 
 //the scores from https://ipip.ori.org/new_ipip-50-item-scale.html are used
 
@@ -59,8 +60,32 @@ function ProfileCard() {
     { label: "Social", percentage: 90 },
   ];
 
+  const handleDownload = async () => {
+    const cardElement = document.getElementById("personality-card");
+    if (!cardElement) return;
+
+    try {
+      const canvas = await html2canvas(cardElement, {
+        scale: 2, // Higher resolution
+        backgroundColor: null,
+        logging: false,
+      });
+
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "my-personality-card.png";
+      link.click();
+    } catch (error) {
+      console.error("Error generating image:", error);
+    }
+  };
+
   return (
-    <Card className="max-w-md overflow-hidden rounded-3xl shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
+    <Card
+      id="personality-card"
+      className="max-w-md overflow-hidden rounded-3xl shadow-2xl transform hover:scale-[1.02] transition-all duration-300"
+    >
       <div className="relative bg-gradient-to-br from-[#F71512] via-[#FF4B47] to-[#FF6B67]">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
@@ -122,18 +147,30 @@ function ProfileCard() {
             ))}
           </div>
 
-          {/* Share button */}
+          {/* Download button */}
           <button
+            onClick={handleDownload}
             className="w-full py-3 px-6 bg-black/30 hover:bg-black/40 
-                            text-white font-medium rounded-xl transition-all
-                            backdrop-blur-sm
-                            flex items-center justify-center gap-2
-                            hover:shadow-lg"
+                      text-white font-medium rounded-xl transition-all
+                      backdrop-blur-sm
+                      flex items-center justify-center gap-2
+                      hover:shadow-lg"
           >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
             </svg>
-            Share Result
+            Download Image
           </button>
         </CardContent>
       </div>
