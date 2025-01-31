@@ -123,6 +123,13 @@ export default function SixteenPersonalities() {
       scores.TF > 0 ? "T" : "F"
     }${scores.JP > 0 ? "J" : "P"}`;
 
+    // Helper function to calculate percentages
+    const calculatePercentages = (score: number) => {
+      const mainPercentage = Math.round(((score + 21) / 42) * 100);
+      const oppositePercentage = 100 - mainPercentage;
+      return { mainPercentage, oppositePercentage };
+    };
+
     return (
       <div className="bg-muted/50 rounded-lg p-8">
         <h2 className="text-2xl font-bold text-center mb-6">Your Results</h2>
@@ -140,13 +147,23 @@ export default function SixteenPersonalities() {
                 <span>Introversion (I)</span>
                 <span>Extraversion (E)</span>
               </div>
-              <div className="h-2 bg-muted rounded-full">
-                <div
-                  className="h-full bg-primary rounded-full transition-all"
-                  style={{
-                    width: `${((scores.EI + 21) / 42) * 100}%`,
-                  }}
-                />
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium w-12">
+                  {calculatePercentages(scores.EI).oppositePercentage}%
+                </span>
+                <div className="flex-1 h-2 bg-muted rounded-full">
+                  <div
+                    className="h-full bg-primary rounded-full transition-all"
+                    style={{
+                      width: `${
+                        calculatePercentages(scores.EI).mainPercentage
+                      }%`,
+                    }}
+                  />
+                </div>
+                <span className="text-sm font-medium w-12 text-right">
+                  {calculatePercentages(scores.EI).mainPercentage}%
+                </span>
               </div>
             </div>
 
@@ -156,13 +173,23 @@ export default function SixteenPersonalities() {
                 <span>Sensing (S)</span>
                 <span>Intuition (N)</span>
               </div>
-              <div className="h-2 bg-muted rounded-full">
-                <div
-                  className="h-full bg-primary rounded-full transition-all"
-                  style={{
-                    width: `${((scores.NS + 21) / 42) * 100}%`,
-                  }}
-                />
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium w-12">
+                  {calculatePercentages(scores.NS).oppositePercentage}%
+                </span>
+                <div className="flex-1 h-2 bg-muted rounded-full">
+                  <div
+                    className="h-full bg-primary rounded-full transition-all"
+                    style={{
+                      width: `${
+                        calculatePercentages(scores.NS).mainPercentage
+                      }%`,
+                    }}
+                  />
+                </div>
+                <span className="text-sm font-medium w-12 text-right">
+                  {calculatePercentages(scores.NS).mainPercentage}%
+                </span>
               </div>
             </div>
 
@@ -172,13 +199,23 @@ export default function SixteenPersonalities() {
                 <span>Feeling (F)</span>
                 <span>Thinking (T)</span>
               </div>
-              <div className="h-2 bg-muted rounded-full">
-                <div
-                  className="h-full bg-primary rounded-full transition-all"
-                  style={{
-                    width: `${((scores.TF + 21) / 42) * 100}%`,
-                  }}
-                />
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium w-12">
+                  {calculatePercentages(scores.TF).oppositePercentage}%
+                </span>
+                <div className="flex-1 h-2 bg-muted rounded-full">
+                  <div
+                    className="h-full bg-primary rounded-full transition-all"
+                    style={{
+                      width: `${
+                        calculatePercentages(scores.TF).mainPercentage
+                      }%`,
+                    }}
+                  />
+                </div>
+                <span className="text-sm font-medium w-12 text-right">
+                  {calculatePercentages(scores.TF).mainPercentage}%
+                </span>
               </div>
             </div>
 
@@ -188,13 +225,23 @@ export default function SixteenPersonalities() {
                 <span>Perceiving (P)</span>
                 <span>Judging (J)</span>
               </div>
-              <div className="h-2 bg-muted rounded-full">
-                <div
-                  className="h-full bg-primary rounded-full transition-all"
-                  style={{
-                    width: `${((scores.JP + 21) / 42) * 100}%`,
-                  }}
-                />
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium w-12">
+                  {calculatePercentages(scores.JP).oppositePercentage}%
+                </span>
+                <div className="flex-1 h-2 bg-muted rounded-full">
+                  <div
+                    className="h-full bg-primary rounded-full transition-all"
+                    style={{
+                      width: `${
+                        calculatePercentages(scores.JP).mainPercentage
+                      }%`,
+                    }}
+                  />
+                </div>
+                <span className="text-sm font-medium w-12 text-right">
+                  {calculatePercentages(scores.JP).mainPercentage}%
+                </span>
               </div>
             </div>
           </div>
