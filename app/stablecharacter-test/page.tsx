@@ -52,11 +52,11 @@ function StatBar({ label, percentage, color, index }: StatBarProps) {
 // Add ProfileCard component
 function ProfileCard() {
   const stats = [
-    { label: "Patient", percentage: 5, color: "#7FB5E3" },
-    { label: "Organized", percentage: 15, color: "#7FB5E3" },
-    { label: "Emotional", percentage: 45, color: "#7FB5E3" },
-    { label: "Imaginative", percentage: 75, color: "#8B7FE3" },
-    { label: "Social", percentage: 90, color: "#8B7FE3" },
+    { label: "Patient", percentage: 5 },
+    { label: "Organized", percentage: 15 },
+    { label: "Emotional", percentage: 45 },
+    { label: "Imaginative", percentage: 75 },
+    { label: "Social", percentage: 90 },
   ];
 
   return (
@@ -70,12 +70,12 @@ function ProfileCard() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.2)_100%)]"></div>
 
         {/* Header with glass effect */}
-        <CardHeader className="relative bg-white/10 backdrop-blur-sm border-b border-white/10 p-6">
-          <h2 className="text-3xl font-bold text-white drop-shadow-lg">Manu</h2>
+        <CardHeader className="relative bg-white/10 backdrop-blur-sm border-b border-white/10 p-4">
+          <h2 className="text-2xl font-bold text-white drop-shadow-lg">Manu</h2>
         </CardHeader>
 
         {/* Main Image with enhanced container */}
-        <div className="p-4">
+        <div className="p-3">
           <div className="rounded-2xl overflow-hidden border-2 border-white/20 shadow-xl relative group">
             <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/20 group-hover:opacity-75 transition-opacity"></div>
             <img
@@ -87,31 +87,32 @@ function ProfileCard() {
         </div>
 
         {/* Content with glass effect */}
-        <CardContent className="p-8 space-y-8 relative backdrop-blur-sm bg-black/5">
-          <div className="space-y-2">
-            <h1 className="text-5xl font-bold mb-2 text-white tracking-tight drop-shadow-lg">
+        <CardContent className="p-6 space-y-6 relative backdrop-blur-sm bg-black/5">
+          <div>
+            <h1 className="text-4xl font-bold mb-1 text-white tracking-tight drop-shadow-lg">
               Debater
             </h1>
-            <p className="text-2xl text-white/90 font-medium">Analyst squad</p>
+            <p className="text-xl text-white/90 font-medium">Analyst squad</p>
           </div>
 
-          {/* Stats with enhanced visuals */}
-          <div className="space-y-5">
+          {/* Stats with white gradients */}
+          <div className="space-y-3">
             {stats.map((stat, index) => (
-              <div key={index} className="space-y-2">
+              <div key={index} className="space-y-1">
                 <div className="flex justify-between items-center text-white/90">
                   <span className="text-sm font-medium uppercase tracking-wider">
                     {stat.label}
                   </span>
                   <span className="text-sm font-bold">{stat.percentage}%</span>
                 </div>
-                <div className="h-3 bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
+                <div className="h-2 bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
                   <div
                     className="h-full rounded-full transition-all duration-500 ease-out relative"
                     style={{
                       width: `${stat.percentage}%`,
-                      background: `linear-gradient(90deg, ${stat.color}aa, ${stat.color})`,
-                      boxShadow: `0 0 20px ${stat.color}40`,
+                      background:
+                        "linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.6) 100%)",
+                      boxShadow: "0 0 10px rgba(255,255,255,0.3)",
                     }}
                   >
                     <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.2)_50%,transparent_100%)] animate-shine"></div>
@@ -121,20 +122,15 @@ function ProfileCard() {
             ))}
           </div>
 
-          {/* Share button with glass effect */}
+          {/* Share button */}
           <button
-            className="w-full py-4 px-6 bg-white/10 hover:bg-white/15 
+            className="w-full py-3 px-6 bg-black/30 hover:bg-black/40 
                             text-white font-medium rounded-xl transition-all
-                            border border-white/20 backdrop-blur-sm
-                            flex items-center justify-center gap-3
-                            hover:shadow-lg hover:scale-[1.02]
-                            group"
+                            backdrop-blur-sm
+                            flex items-center justify-center gap-2
+                            hover:shadow-lg"
           >
-            <svg
-              className="w-5 h-5 group-hover:rotate-12 transition-transform"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
             </svg>
             Share Result
