@@ -123,9 +123,9 @@ export default function SixteenPersonalities() {
       scores.TF > 0 ? "T" : "F"
     }${scores.JP > 0 ? "J" : "P"}`;
 
-    // Helper function to calculate percentages
     const calculatePercentages = (score: number) => {
-      const mainPercentage = Math.round(((score + 21) / 42) * 100);
+      const normalizedScore = Math.max(Math.min(score, 36), -36);
+      const mainPercentage = Math.round(((normalizedScore + 36) / 72) * 100);
       const oppositePercentage = 100 - mainPercentage;
       return { mainPercentage, oppositePercentage };
     };
@@ -149,20 +149,20 @@ export default function SixteenPersonalities() {
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium w-12">
-                  {calculatePercentages(scores.EI).oppositePercentage}%
+                  {calculatePercentages(-scores.EI).mainPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
                       width: `${
-                        calculatePercentages(scores.EI).mainPercentage
+                        calculatePercentages(-scores.EI).mainPercentage
                       }%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(scores.EI).mainPercentage}%
+                  {calculatePercentages(-scores.EI).oppositePercentage}%
                 </span>
               </div>
             </div>
@@ -170,12 +170,12 @@ export default function SixteenPersonalities() {
             {/* N/S Scale */}
             <div>
               <div className="flex justify-between mb-2">
-                <span>Sensing (S)</span>
                 <span>Intuition (N)</span>
+                <span>Sensing (S)</span>
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium w-12">
-                  {calculatePercentages(scores.NS).oppositePercentage}%
+                  {calculatePercentages(scores.NS).mainPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
@@ -188,7 +188,7 @@ export default function SixteenPersonalities() {
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(scores.NS).mainPercentage}%
+                  {calculatePercentages(scores.NS).oppositePercentage}%
                 </span>
               </div>
             </div>
@@ -196,12 +196,12 @@ export default function SixteenPersonalities() {
             {/* T/F Scale */}
             <div>
               <div className="flex justify-between mb-2">
-                <span>Feeling (F)</span>
                 <span>Thinking (T)</span>
+                <span>Feeling (F)</span>
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium w-12">
-                  {calculatePercentages(scores.TF).oppositePercentage}%
+                  {calculatePercentages(scores.TF).mainPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
@@ -214,7 +214,7 @@ export default function SixteenPersonalities() {
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(scores.TF).mainPercentage}%
+                  {calculatePercentages(scores.TF).oppositePercentage}%
                 </span>
               </div>
             </div>
@@ -222,12 +222,12 @@ export default function SixteenPersonalities() {
             {/* J/P Scale */}
             <div>
               <div className="flex justify-between mb-2">
-                <span>Perceiving (P)</span>
                 <span>Judging (J)</span>
+                <span>Perceiving (P)</span>
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium w-12">
-                  {calculatePercentages(scores.JP).oppositePercentage}%
+                  {calculatePercentages(scores.JP).mainPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
@@ -240,7 +240,7 @@ export default function SixteenPersonalities() {
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(scores.JP).mainPercentage}%
+                  {calculatePercentages(scores.JP).oppositePercentage}%
                 </span>
               </div>
             </div>

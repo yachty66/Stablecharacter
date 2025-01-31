@@ -1,7 +1,7 @@
 export interface AssessmentQuestion {
   text: string;
-  type: "EI" | "NS" | "TF" | "JP";  // The four MBTI dimensions
-  math: "+" | "-";  // + means the question scores in the first direction (E/S/T/J), - means the second (I/N/F/P)
+  type: "EI" | "NS" | "TF" | "JP"; // The four MBTI dimensions
+  math: "+" | "-"; // + means the question scores in the first direction (E/S/T/J), - means the second (I/N/F/P)
   options: {
     text: string;
     value: number;
@@ -626,20 +626,6 @@ export const assessment: AssessmentQuestion[] = [
     ],
   },
   {
-    text: "If a decision feels right to you, you often act on it without needing further proof.",
-    type: "NS",
-    math: "+",
-    options: [
-      { text: "Disagree strongly", value: -3 },
-      { text: "Disagree moderately", value: -2 },
-      { text: "Disagree a little", value: -1 },
-      { text: "Neither agree nor disagree", value: 0 },
-      { text: "Agree a little", value: 1 },
-      { text: "Agree moderately", value: 2 },
-      { text: "Agree strongly", value: 3 },
-    ],
-  },
-  {
     text: "You complete things methodically without skipping over any steps.",
     type: "JP",
     math: "+",
@@ -684,7 +670,7 @@ export const assessment: AssessmentQuestion[] = [
   {
     text: "You struggle with deadlines.",
     type: "JP",
-    math: "+",
+    math: "-",
     options: [
       { text: "Disagree strongly", value: -3 },
       { text: "Disagree moderately", value: -2 },
@@ -694,26 +680,30 @@ export const assessment: AssessmentQuestion[] = [
       { text: "Agree moderately", value: 2 },
       { text: "Agree strongly", value: 3 },
     ],
-  }  
+  },
   // Add all questions from raw16personalitydata.ts here with appropriate type and math assignments
 ];
 
 export const traitDescriptions = {
   EI: {
     title: "Extraversion vs. Introversion",
-    description: "How you interact with the world and direct your energy. Extraverts prefer active involvement in the outer world, while Introverts prefer quiet reflection and conservation of energy.",
+    description:
+      "How you interact with the world and direct your energy. Extraverts prefer active involvement in the outer world, while Introverts prefer quiet reflection and conservation of energy.",
   },
-  SN: {
+  NS: {
     title: "Sensing vs. Intuition",
-    description: "How you process information. Sensing types focus on concrete facts and experiences, while Intuitive types focus on patterns and possibilities.",
+    description:
+      "How you process information. Sensing types focus on concrete facts and experiences, while Intuitive types focus on patterns and possibilities.",
   },
   TF: {
     title: "Thinking vs. Feeling",
-    description: "How you make decisions. Thinking types prefer logical analysis, while Feeling types consider human values and harmony.",
+    description:
+      "How you make decisions. Thinking types prefer logical analysis, while Feeling types consider human values and harmony.",
   },
   JP: {
     title: "Judging vs. Perceiving",
-    description: "How you organize your world. Judging types prefer structure and decisions, while Perceiving types prefer flexibility and keeping options open.",
+    description:
+      "How you organize your world. Judging types prefer structure and decisions, while Perceiving types prefer flexibility and keeping options open.",
   },
 } as const;
 
