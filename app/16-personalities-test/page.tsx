@@ -1,64 +1,30 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
-import {
-  assessment,
-  AssessmentQuestion,
-  traitDescriptions,
-} from "@/app/data/16PersonalitiesTest";
+import { raw16personalitydata } from "@/app/data/raw16personalitydata";
 
-interface Question extends AssessmentQuestion {
-  id: number;
+interface Question {
+  id: string;
+  text: string;
+  options: {
+    text: string;
+    value: number;
+  }[];
 }
 
-const questions: Question[] = assessment.map((q, index) => ({
-  ...q,
-  id: index + 1,
-}));
-
-const traitDescriptions = {
-  EI: {
-    description:
-      "Extraversion vs Introversion indicates how you interact with the world and where you direct your energy. Extraverts tend to be outgoing and energized by social interaction, while Introverts prefer deeper one-on-one connections and need time alone to recharge.",
-  },
-  SN: {
-    description:
-      "Sensing vs Intuition reflects how you process information. Sensing types focus on concrete facts and present realities, while Intuitive types look for patterns, possibilities and deeper meanings.",
-  },
-  TF: {
-    description:
-      "Thinking vs Feeling shows how you make decisions. Thinking types prioritize logic and objective criteria, while Feeling types consider people and special circumstances.",
-  },
-  JP: {
-    description:
-      "Judging vs Perceiving reveals how you approach structure and planning. Judging types prefer organization and clear decisions, while Perceiving types stay flexible and adapt to circumstances.",
-  },
-};
+const questions: Question[] = raw16personalitydata;
 
 export default function SixteenPersonalities() {
-  const supabase = createClientComponentClient();
   const mainRef = useRef<HTMLDivElement>(null);
+  const supabase = createClientComponentClient();
 
-  // TODO Add this trait order definition
-  const traitOrder = [
-    { number: "EI", name: "Extraversion vs. Introversion" },
-    { number: "SN", name: "Sensing vs. Intuition" },
-    { number: "TF", name: "Thinking vs. Feeling" },
-    { number: "JP", name: "Judging vs. Perceiving" },
-  ];
-
-  // Initialize with empty answers instead of all 5s
-  const [answers, setAnswers] = useState<{ [key: number]: number }>({});
-
-  // Start with showResults as false
+  // State management
+  const [answers, setAnswers] = useState<{ [key: string]: number }>({});
   const [showResults, setShowResults] = useState(false);
-
   const [currentPage, setCurrentPage] = useState(0);
-
-  // Initialize with empty scores
-  const [scores, setScores] = useState<{ [key: number]: number }>({});
+  const [scores, setScores] = useState<{ [key: string]: number }>({});
 
   const questionsPerPage = 5;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -68,121 +34,76 @@ export default function SixteenPersonalities() {
   );
 
   const calculateScores = async () => {
-    // Initialize scores for each trait type
-    const typeScores = {
-      EI: 0,
-      SN: 0,
-      TF: 0,
-      JP: 0,
+    // Calculate MBTI dimensions
+    const dimensionScores = {
+      EI: 0, // Extraversion (positive) vs Introversion (negative)
+      SN: 0, // Sensing (positive) vs Intuition (negative)
+      TF: 0, // Thinking (positive) vs Feeling (negative)
+      JP: 0, // Judging (positive) vs Perceiving (negative)
     };
 
-    questions.forEach((question) => {
-      const answer = answers[question.id];
-      if (answer !== undefined) {
-        const score = question.math === "+" ? answer : 6 - answer;
-        typeScores[question.type] += score;
-      }
+    // Calculate the scores for each dimension
+    Object.entries(answers).forEach(([questionId, value]) => {
+      // Add your scoring logic here based on question types
+      // You'll need to map questions to dimensions
     });
 
-    console.log("typeScores", typeScores);
+    // Determine MBTI type
+    const type = {
+      EI: dimensionScores.EI > 0 ? "E" : "I",
+      SN: dimensionScores.SN > 0 ? "S" : "N",
+      TF: dimensionScores.TF > 0 ? "T" : "F",
+      JP: dimensionScores.JP > 0 ? "J" : "P",
+    };
 
-    // Get compatible MBTI types
-    const compatibleTypes = getMBTICompatibility(typeScores);
+    const mbtiType = `${type.EI}${type.SN}${type.TF}${type.JP}`;
 
     // Create result object
     const result = {
-      scores: typeScores,
+      scores: dimensionScores,
+      type: mbtiType,
       answers: answers,
-      compatibleTypes: compatibleTypes,
       timestamp: new Date().toISOString(),
     };
 
     try {
       // Save to Supabase
       const { data, error } = await supabase
-        .from("16_personality_results")
+        .from("sixteen_personalities_results")
         .insert([{ result }]);
 
       if (error) {
         console.error("Error saving results:", error);
-      } else {
-        console.log("Results saved successfully:", data);
       }
     } catch (error) {
       console.error("Error saving results:", error);
     }
 
-    // Update state
-    setScores(typeScores);
+    setScores(dimensionScores);
     setShowResults(true);
-
-    // Add immediate scroll before state updates
     scrollToTop();
 
     // Track completion in Google Analytics
     if (typeof window !== "undefined" && (window as any).gtag) {
       (window as any).gtag("event", "test_completed", {
         event_category: "Engagement",
-        event_label: "16 Personality Test",
-        compatible_types: compatibleTypes.join(","),
+        event_label: "16 Personalities Test",
+        mbti_type: mbtiType,
       });
     }
   };
 
-  const calculateRunningScores = () => {
-    const runningScores = { EI: 0, SN: 0, TF: 0, JP: 0 };
-    console.log("runningScores", runningScores);
-
-    questions.forEach((question, index) => {
-      const answer = answers[index + 1];
-      if (answer !== undefined) {
-        // For + keyed items: use value directly (1,2,3,4,5)
-        // For - keyed items: reverse the value (5,4,3,2,1)
-        const score = question.math === "+" ? answer : 6 - answer;
-
-        runningScores[question.type] += score;
-      }
-    });
-
-    return runningScores;
-  };
-
-  const handleAnswer = (questionId: number, value: number) => {
-    //get the value from my data
-    const question = questions.find((q) => q.id === questionId);
-    //calculate the score
-    const score = question?.math === "+" ? value : 6 - value;
-    //store the id of the question, value of the user and the score
-    const questionPoints = {
-      id: questionId,
-      value: value,
-      score: score,
-    };
-    //next we need to make the store the value
-    setAnswers((prev) => {
-      const newAnswers = { ...prev, [questionId]: value };
-      return newAnswers;
-    });
-
-    setAnswers((prev) => {
-      const newAnswers = { ...prev, [questionId]: value };
-
-      const currentQuestion = questions.find((q) => q.id === questionId);
-      if (currentQuestion) {
-        const score = currentQuestion.math === "+" ? value : 6 - value;
-        const scores = calculateRunningScores();
-      }
-      // console.log("newAnswers", newAnswers);
-      return newAnswers;
-    });
+  const handleAnswer = (questionId: string, value: number) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }));
   };
 
   const scrollToTop = () => {
-    setTimeout(() => {
-      if (mainRef.current) {
-        mainRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }, 100);
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const handleNext = () => {
@@ -205,226 +126,16 @@ export default function SixteenPersonalities() {
 
   const isLastPage = currentPage === totalPages - 1;
 
-  // Function to determine MBTI compatibility based on aggregated typeScores
-  const getMBTICompatibility = (typeScores: Record<string, number>) => {
-    // Middle point to differentiate preferences (assumes scores range from 6-30)
-    const MIDDLE_SCORE = 18;
-
-    // Determine MBTI preferences based on typeScores
-    const preferences = {
-      I: typeScores.EI > MIDDLE_SCORE, // Now true means Introversion
-      S: typeScores.SN > MIDDLE_SCORE, // Now true means Sensing
-      T: typeScores.TF > MIDDLE_SCORE, // Now true means Thinking
-      P: typeScores.JP > MIDDLE_SCORE, // Now true means Perceiving
-    };
-
-    // Construct the user's MBTI type
-    const mbtiType =
-      (preferences.I ? "I" : "E") +
-      (preferences.S ? "S" : "N") +
-      (preferences.T ? "T" : "F") +
-      (preferences.P ? "P" : "J");
-
-    // All possible MBTI types
-    const allTypes = [
-      "ENFJ",
-      "ENFP",
-      "ENTJ",
-      "ENTP",
-      "ESFJ",
-      "ESFP",
-      "ESTJ",
-      "ESTP",
-      "INFJ",
-      "INFP",
-      "INTJ",
-      "INTP",
-      "ISFJ",
-      "ISFP",
-      "ISTJ",
-      "ISTP",
-    ];
-
-    // Helper function to count matching preferences
-    const countMatches = (type: string) => {
-      let matches = 0;
-      if (type[0] === mbtiType[0]) matches++; // E/I
-      if (type[1] === mbtiType[1]) matches++; // N/S
-      if (type[2] === mbtiType[2]) matches++; // F/T
-      if (type[3] === mbtiType[3]) matches++; // J/P
-      return matches;
-    };
-
-    // Filter types based on at least 2 matching traits
-    const compatibleTypes = allTypes.filter((type) => countMatches(type) >= 2);
-
-    return compatibleTypes;
-  };
-
   const renderResults = () => {
     if (!showResults) return null;
 
-    // Calculate the user's MBTI type
-    const getUserType = (scores: Record<string, number>) => {
-      const MIDDLE_SCORE = 18;
-      console.log("Final scores: ", scores);
-      return (
-        (scores.EI > MIDDLE_SCORE ? "I" : "E") +
-        (scores.SN > MIDDLE_SCORE ? "S" : "N") +
-        (scores.TF > MIDDLE_SCORE ? "T" : "F") +
-        (scores.JP > MIDDLE_SCORE ? "P" : "J")
-      );
-    };
-
-    const userType = getUserType(scores);
-
-    const dimensionLabels = {
-      EI: { left: "Extraverted", right: "Introverted" },
-      SN: { left: "Intuitive", right: "Observant" },
-      TF: { left: "Thinking", right: "Feeling" },
-      JP: { left: "Judging", right: "Prospecting" },
-    };
-
-    // Calculate percentage for each trait
-    const calculateTraitPercentages = (score: number) => {
-      const normalizedScore = ((score - 12) / (60 - 12)) * 100;
-      const cappedScore = Math.min(Math.max(normalizedScore, 0), 100);
-
-      // For TF and JP, we want to show the left-side trait when score is high
-      return cappedScore > 50
-        ? {
-            value: Math.round(cappedScore),
-            dominant: "left", // Changed from "right" to "left"
-          }
-        : {
-            value: Math.round(100 - cappedScore),
-            dominant: "right", // Changed from "left" to "right"
-          };
-    };
-
-    const MIDDLE_SCORE = 18;
-    const getLevel = (score: number) => (score > MIDDLE_SCORE ? "High" : "Low");
-
-    const compatibleTypes = getMBTICompatibility(scores);
-
+    // Add your results rendering logic here
     return (
       <div className="bg-muted/50 rounded-lg p-8">
-        <div className="text-center space-y-6 mb-12">
-          <h2 className="text-3xl font-bold">Your Results</h2>
-          <div className="space-y-2">
-            <div className="text-xl text-muted-foreground">Your Type</div>
-            <div className="text-4xl font-bold">{userType}</div>
-          </div>
-        </div>
-
-        <div className="space-y-8">
-          {traitOrder.map(({ number }) => {
-            const { value, dominant } = calculateTraitPercentages(
-              scores[number]
-            );
-            const displayText = `${value}% ${
-              dominant === "right"
-                ? dimensionLabels[number].right
-                : dimensionLabels[number].left
-            }`;
-
-            return (
-              <div key={number} className="space-y-4">
-                <div className="text-center mb-2">
-                  <span className="text-lg">{displayText}</span>
-                </div>
-                <div className="relative">
-                  <div className="flex justify-between text-sm text-muted-foreground mb-2">
-                    <span>{dimensionLabels[number].left}</span>
-                    <span>{dimensionLabels[number].right}</span>
-                  </div>
-                  <div className="h-2 bg-secondary rounded-full">
-                    <div className="relative w-full">
-                      <div
-                        className="absolute top-1/2 w-4 h-4 bg-white border-2 border-primary rounded-full -translate-y-1/2 -translate-x-1/2"
-                        style={{
-                          left: `${
-                            dominant === "right" ? value : 100 - value
-                          }%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  {traitDescriptions[number].description}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Add Compatible Types Section */}
-        <div className="mt-12 border-t pt-8">
-          <h3 className="text-xl font-semibold text-center mb-4">
-            Compatible MBTI Types
-          </h3>
-          <p className="text-muted-foreground text-center mb-6">
-            These MBTI types scored in at least 2 categories in the same way
-            (high or low) as you:
-          </p>
-          <div className="flex flex-col items-center gap-4">
-            {compatibleTypes.map((type, index) => (
-              <div key={index} className="text-lg font-medium">
-                {type}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Add Chat Button */}
-        <div className="mt-8 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-          >
-            <span>Chat with similar Types</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="ml-2 h-4 w-4"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
+        <h2 className="text-2xl font-bold text-center mb-6">Your Results</h2>
+        {/* Add results visualization */}
       </div>
     );
-  };
-
-  // Also let's add a useEffect to handle scrolling when showResults changes
-  useEffect(() => {
-    if (showResults) {
-      scrollToTop();
-    }
-  }, [showResults]);
-
-  // Add this right after your state declarations (around line 61)
-  const testISFP = () => {
-    // EI: { left: "Extraverted", right: "Introverted" },
-    // SN: { left: "Intuitive", right: "Observant" },
-    // TF: { left: "Thinking", right: "Feeling" },
-    // JP: { left: "Judging", right: "Prospecting" },
-    setScores({
-      EI: 30,
-      SN: 30,
-      TF: 12,
-      JP: 12,
-    });
-    setShowResults(true);
   };
 
   return (
@@ -456,7 +167,8 @@ export default function SixteenPersonalities() {
           <h1 className="text-3xl font-bold mb-3">16 Personalities Test</h1>
           <div className="space-y-2">
             <p className="text-muted-foreground">
-              Discover your personality traits through this assessment
+              Discover your MBTI personality type through this comprehensive
+              assessment
             </p>
             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
               <div className="flex items-center">
@@ -517,7 +229,7 @@ export default function SixteenPersonalities() {
         </div>
       </header>
 
-      <main ref={mainRef} className="flex-1 py-8" id="main-content">
+      <main ref={mainRef} className="flex-1 py-8">
         <div className="max-w-4xl mx-auto px-4">
           {!showResults ? (
             <div className="space-y-8">
@@ -533,31 +245,25 @@ export default function SixteenPersonalities() {
               {currentQuestions.map((question) => (
                 <div key={question.id} className="space-y-4">
                   <h3 className="text-base sm:text-lg font-medium text-center max-w-2xl mx-auto px-4">
-                    {question.question}
+                    {question.text}
                   </h3>
                   <div className="flex flex-col items-center space-y-4">
-                    {/* Scale labels and buttons */}
                     <div className="w-full max-w-md space-y-2">
-                      {[
-                        { value: 1, label: "Strongly Disagree" },
-                        { value: 2, label: "Disagree" },
-                        { value: 3, label: "Neutral" },
-                        { value: 4, label: "Agree" },
-                        { value: 5, label: "Strongly Agree" },
-                      ].map(({ value, label }) => (
+                      {question.options.map((option) => (
                         <button
-                          key={value}
-                          onClick={() => handleAnswer(question.id, value)}
+                          key={option.value}
+                          onClick={() =>
+                            handleAnswer(question.id, option.value)
+                          }
                           className={`w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors
                             ${
-                              answers[question.id] === value
+                              answers[question.id] === option.value
                                 ? "bg-primary text-primary-foreground"
                                 : "bg-background hover:bg-muted border"
                             }`}
                         >
-                          <span className="text-sm sm:text-base">{label}</span>
-                          <span className="text-sm sm:text-base font-medium">
-                            {value}
+                          <span className="text-sm sm:text-base">
+                            {option.text}
                           </span>
                         </button>
                       ))}
@@ -607,14 +313,6 @@ export default function SixteenPersonalities() {
                   </button>
                 )}
               </div>
-
-              {/* Add this button in the JSX before the test starts (around line 512) */}
-              <button
-                onClick={testISFP}
-                className="mb-4 px-4 py-2 bg-primary text-primary-foreground rounded"
-              >
-                Test ISFP Result
-              </button>
             </div>
           ) : (
             renderResults()
@@ -625,22 +323,11 @@ export default function SixteenPersonalities() {
       <footer className="border-t">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <p className="text-sm text-muted-foreground text-center">
-            Based on the 16 Personalities model.
+            Based on the Myers-Briggs Type Indicator (MBTI®) personality
+            framework
           </p>
         </div>
       </footer>
     </div>
   );
 }
-// Final scores:
-// Object
-
-// gave me istj
-
-// EI: 56
-
-// JP: 20
-
-// SN: 61
-
-// TF: 20

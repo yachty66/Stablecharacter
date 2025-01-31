@@ -202,6 +202,10 @@ export default function StablecharacterTest() {
   // Initialize with empty scores
   const [scores, setScores] = useState<{ [key: number]: number }>({});
 
+  // Add userName to the state
+  const [userName, setUserName] = useState<string>("");
+  const [showNameInput, setShowNameInput] = useState<boolean>(false);
+
   const questionsPerPage = 5;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
   const currentQuestions = questions.slice(
@@ -307,6 +311,10 @@ export default function StablecharacterTest() {
       // console.log("newAnswers", newAnswers);
       return newAnswers;
     });
+
+    if (questionId === questions.length) {
+      setShowNameInput(true);
+    }
   };
 
   const scrollToTop = () => {
@@ -405,6 +413,13 @@ export default function StablecharacterTest() {
     return types;
   };
 
+  const handleNameSubmit = () => {
+    if (userName.trim()) {
+      setShowResults(true);
+      setShowNameInput(false);
+    }
+  };
+
   const renderResults = () => {
     if (!showResults) return null;
 
@@ -438,6 +453,31 @@ export default function StablecharacterTest() {
             ))}
           </div>
         </div>
+
+        {showNameInput && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-center">One Last Thing!</h2>
+            <p className="text-center text-muted-foreground">
+              Please enter your name to see your results.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <input
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                placeholder="Enter your name"
+                className="px-4 py-2 rounded-lg border bg-background"
+                onKeyDown={(e) => e.key === "Enter" && handleNameSubmit()}
+              />
+              <button
+                onClick={handleNameSubmit}
+                className="px-6 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="mt-8 text-center">
           <Link
