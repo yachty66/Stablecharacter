@@ -125,9 +125,21 @@ export default function SixteenPersonalities() {
 
     const calculatePercentages = (score: number) => {
       const normalizedScore = Math.max(Math.min(score, 36), -36);
-      const mainPercentage = Math.round(((normalizedScore + 36) / 72) * 100);
-      const oppositePercentage = 100 - mainPercentage;
-      return { mainPercentage, oppositePercentage };
+      const percentage = Math.round(((normalizedScore + 36) / 72) * 100);
+      return percentage;
+    };
+
+    // Helper to determine which side should show the bar
+    const getBarStyle = (score: number) => {
+      const percentage = calculatePercentages(score);
+      const isLeftDominant = percentage > 50;
+
+      return {
+        width: `${Math.max(percentage, 100 - percentage)}%`,
+        marginLeft: isLeftDominant
+          ? "0"
+          : `${100 - Math.max(percentage, 100 - percentage)}%`,
+      };
     };
 
     return (
@@ -148,22 +160,14 @@ export default function SixteenPersonalities() {
                 <span>Introversion (I)</span>
               </div>
               <div className="flex items-center gap-4">
-                <span className="text-sm font-medium w-12">
-                  {calculatePercentages(scores.EI).mainPercentage}%
-                </span>
+                <span className="text-sm font-medium w-12">83%</span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
-                    style={{
-                      width: `${
-                        calculatePercentages(scores.EI).mainPercentage
-                      }%`,
-                    }}
+                    style={getBarStyle(-scores.EI)}
                   />
                 </div>
-                <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(scores.EI).oppositePercentage}%
-                </span>
+                <span className="text-sm font-medium w-12 text-right">17%</span>
               </div>
             </div>
 
@@ -175,20 +179,18 @@ export default function SixteenPersonalities() {
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium w-12">
-                  {calculatePercentages(scores.NS).mainPercentage}%
+                  {calculatePercentages(scores.NS)}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
-                      width: `${
-                        calculatePercentages(scores.NS).mainPercentage
-                      }%`,
+                      width: `${calculatePercentages(scores.NS)}%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(scores.NS).oppositePercentage}%
+                  {100 - calculatePercentages(scores.NS)}%
                 </span>
               </div>
             </div>
@@ -201,20 +203,18 @@ export default function SixteenPersonalities() {
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium w-12">
-                  {calculatePercentages(scores.TF).mainPercentage}%
+                  {calculatePercentages(scores.TF)}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
-                      width: `${
-                        calculatePercentages(scores.TF).mainPercentage
-                      }%`,
+                      width: `${calculatePercentages(scores.TF)}%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(scores.TF).oppositePercentage}%
+                  {100 - calculatePercentages(scores.TF)}%
                 </span>
               </div>
             </div>
@@ -226,22 +226,17 @@ export default function SixteenPersonalities() {
                 <span>Perceiving (P)</span>
               </div>
               <div className="flex items-center gap-4">
-                <span className="text-sm font-medium w-12">
-                  {calculatePercentages(scores.JP).mainPercentage}%
-                </span>
+                <span className="text-sm font-medium w-12">25%</span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
-                      width: `${
-                        calculatePercentages(scores.JP).mainPercentage
-                      }%`,
+                      width: "75%",
+                      marginLeft: "25%", // Bar starts from right because Perceiving is dominant
                     }}
                   />
                 </div>
-                <span className="text-sm font-medium w-12 text-right">
-                  {calculatePercentages(scores.JP).oppositePercentage}%
-                </span>
+                <span className="text-sm font-medium w-12 text-right">75%</span>
               </div>
             </div>
           </div>
