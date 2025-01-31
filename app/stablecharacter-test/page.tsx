@@ -60,15 +60,21 @@ function ProfileCard() {
   ];
 
   return (
-    <Card className="max-w-md bg-[#050505] rounded-3xl overflow-hidden">
-      {/* Header */}
-      <CardHeader className="bg-[#E774B5] p-4">
-        <h2 className="text-2xl font-bold text-white">Manu</h2>
+    <Card className="max-w-md bg-[#F71512] rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
+      {/* Decorative elements */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
+      <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl -ml-16 -mb-16"></div>
+
+      {/* Header with gradient overlay */}
+      <CardHeader className="bg-gradient-to-r from-[#E774B5] to-[#E774B5]/80 p-4 relative">
+        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
+        <h2 className="text-2xl font-bold text-white drop-shadow-sm">Manu</h2>
       </CardHeader>
 
-      {/* Main Image */}
-      <div className="p-2">
-        <div className="rounded-2xl overflow-hidden border-2 border-[#E774B5]">
+      {/* Main Image with enhanced container */}
+      <div className="p-3">
+        <div className="rounded-2xl overflow-hidden border-2 border-[#E774B5] shadow-lg relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/10"></div>
           <img
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-30%20at%208.46.55%E2%80%AFPM-gQDmZAAz0w90R46zeLIU1gP1mek2Wm.png"
             alt="Profile illustration"
@@ -77,25 +83,65 @@ function ProfileCard() {
         </div>
       </div>
 
-      {/* Content */}
-      <CardContent className="p-6 space-y-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-1 text-white">Debater</h1>
-          <p className="text-xl text-gray-400">Analyst squad</p>
+      {/* Content with glass effect */}
+      <CardContent className="p-6 space-y-6 relative">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-bold mb-1 text-white tracking-tight">
+            Debater
+          </h1>
+          <p className="text-xl text-white/80 font-medium">Analyst squad</p>
         </div>
 
-        {/* Stats */}
-        <div className="space-y-3">
-          {stats.map((stat, index) => (
-            <StatBar
-              key={index}
-              label={stat.label}
-              percentage={stat.percentage}
-              color={stat.color}
-              index={index}
-            />
+        {/* Fun Facts with glass effect */}
+        <div className="space-y-2">
+          {[1, 2, 3].map((_, i) => (
+            <div
+              key={i}
+              className="p-3 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm 
+                        text-white/90 hover:bg-white/10 transition-colors"
+            >
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Fun fact</span>
+                <span>Answer</span>
+              </div>
+            </div>
           ))}
         </div>
+
+        {/* Stats with enhanced visuals */}
+        <div className="space-y-4">
+          {stats.map((stat, index) => (
+            <div key={index} className="space-y-2">
+              <div className="flex justify-between items-center text-white/90">
+                <span className="text-sm font-medium">{stat.label}</span>
+                <span className="text-sm font-bold">{stat.percentage}%</span>
+              </div>
+              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500 ease-out"
+                  style={{
+                    width: `${stat.percentage}%`,
+                    backgroundColor: stat.color,
+                    boxShadow: `0 0 20px ${stat.color}40`,
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Share button */}
+        <button
+          className="w-full py-3 px-4 bg-white/10 hover:bg-white/15 
+                          text-white font-medium rounded-xl transition-colors
+                          border border-white/20 backdrop-blur-sm
+                          flex items-center justify-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+          </svg>
+          Share Result
+        </button>
       </CardContent>
     </Card>
   );
