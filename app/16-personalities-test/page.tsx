@@ -39,9 +39,7 @@ export default function SixteenPersonalities() {
     // Calculate the scores for each dimension using the structured data
     questions.forEach((question) => {
       const answer = answers[question.text];
-      console.log("answer", answer);
       if (answer !== undefined) {
-        // For JP questions, we need to reverse the math logic
         const score = question.math === "+" ? answer : -answer;
         dimensionScores[question.type] += score;
       }
