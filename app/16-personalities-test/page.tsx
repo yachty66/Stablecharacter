@@ -127,7 +127,6 @@ export default function SixteenPersonalities() {
   const isLastPage = currentPage === totalPages - 1;
 
   const renderResults = () => {
-    //this func is also only called once at the end
     if (!showResults) return null;
 
     const mbtiType = `${scores.EI === 0 ? "X" : scores.EI > 0 ? "E" : "I"}${
@@ -137,9 +136,19 @@ export default function SixteenPersonalities() {
     }`;
 
     const calculatePercentages = (score: number) => {
+      // Convert the -36 to +36 range to a percentage where:
+      // -36 = 100% right side trait
+      // +36 = 100% left side trait
       const normalizedScore = Math.max(Math.min(score, 36), -36);
-      const percentage = Math.round(((normalizedScore + 36) / 72) * 100);
-      return percentage;
+      return Math.round(((normalizedScore + 36) / 72) * 100);
+    };
+
+    // For each dimension, the left trait percentage should be shown on the left
+    // and the right trait percentage should be shown on the right
+    const getTraitPercentages = (score: number) => {
+      const leftPercentage = calculatePercentages(score);
+      const rightPercentage = 100 - leftPercentage;
+      return { leftPercentage, rightPercentage };
     };
 
     return (
@@ -161,31 +170,20 @@ export default function SixteenPersonalities() {
               </div>
               <div className="flex items-center">
                 <span className="text-sm font-medium w-12">
-                  {scores.EI > 0
-                    ? calculatePercentages(scores.EI)
-                    : calculatePercentages(-scores.EI)}
-                  %
+                  {getTraitPercentages(scores.EI).leftPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
-                      width: `${calculatePercentages(Math.abs(scores.EI))}%`,
-                      marginLeft:
-                        scores.EI < 0
-                          ? `${
-                              100 - calculatePercentages(Math.abs(scores.EI))
-                            }%`
-                          : "0",
+                      width: `${
+                        getTraitPercentages(scores.EI).leftPercentage
+                      }%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {100 -
-                    (scores.EI > 0
-                      ? calculatePercentages(scores.EI)
-                      : calculatePercentages(-scores.EI))}
-                  %
+                  {getTraitPercentages(scores.EI).rightPercentage}%
                 </span>
               </div>
             </div>
@@ -198,31 +196,20 @@ export default function SixteenPersonalities() {
               </div>
               <div className="flex items-center">
                 <span className="text-sm font-medium w-12">
-                  {scores.NS > 0
-                    ? calculatePercentages(scores.NS)
-                    : calculatePercentages(-scores.NS)}
-                  %
+                  {getTraitPercentages(scores.NS).leftPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
-                      width: `${calculatePercentages(Math.abs(scores.NS))}%`,
-                      marginLeft:
-                        scores.NS < 0
-                          ? `${
-                              100 - calculatePercentages(Math.abs(scores.NS))
-                            }%`
-                          : "0",
+                      width: `${
+                        getTraitPercentages(scores.NS).leftPercentage
+                      }%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {100 -
-                    (scores.NS > 0
-                      ? calculatePercentages(scores.NS)
-                      : calculatePercentages(-scores.NS))}
-                  %
+                  {getTraitPercentages(scores.NS).rightPercentage}%
                 </span>
               </div>
             </div>
@@ -235,31 +222,20 @@ export default function SixteenPersonalities() {
               </div>
               <div className="flex items-center">
                 <span className="text-sm font-medium w-12">
-                  {scores.TF > 0
-                    ? calculatePercentages(scores.TF)
-                    : calculatePercentages(-scores.TF)}
-                  %
+                  {getTraitPercentages(scores.TF).leftPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
-                      width: `${calculatePercentages(Math.abs(scores.TF))}%`,
-                      marginLeft:
-                        scores.TF < 0
-                          ? `${
-                              100 - calculatePercentages(Math.abs(scores.TF))
-                            }%`
-                          : "0",
+                      width: `${
+                        getTraitPercentages(scores.TF).leftPercentage
+                      }%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {100 -
-                    (scores.TF > 0
-                      ? calculatePercentages(scores.TF)
-                      : calculatePercentages(-scores.TF))}
-                  %
+                  {getTraitPercentages(scores.TF).rightPercentage}%
                 </span>
               </div>
             </div>
@@ -272,31 +248,20 @@ export default function SixteenPersonalities() {
               </div>
               <div className="flex items-center">
                 <span className="text-sm font-medium w-12">
-                  {scores.JP > 0
-                    ? calculatePercentages(scores.JP)
-                    : calculatePercentages(-scores.JP)}
-                  %
+                  {getTraitPercentages(scores.JP).leftPercentage}%
                 </span>
                 <div className="flex-1 h-2 bg-muted rounded-full">
                   <div
                     className="h-full bg-primary rounded-full transition-all"
                     style={{
-                      width: `${calculatePercentages(Math.abs(scores.JP))}%`,
-                      marginLeft:
-                        scores.JP < 0
-                          ? `${
-                              100 - calculatePercentages(Math.abs(scores.JP))
-                            }%`
-                          : "0",
+                      width: `${
+                        getTraitPercentages(scores.JP).leftPercentage
+                      }%`,
                     }}
                   />
                 </div>
                 <span className="text-sm font-medium w-12 text-right">
-                  {100 -
-                    (scores.JP > 0
-                      ? calculatePercentages(scores.JP)
-                      : calculatePercentages(-scores.JP))}
-                  %
+                  {getTraitPercentages(scores.JP).rightPercentage}%
                 </span>
               </div>
             </div>
