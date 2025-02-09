@@ -54,7 +54,11 @@ export default function SixteenPersonalities() {
       JP: dimensionScores.JP > 0 ? "P" : "J",
     };
 
-    const mbtiType = `${type.EI}${type.NS}${type.TF}${type.JP}`;
+    const mbtiType = `${scores.EI === 0 ? "X" : scores.EI > 0 ? "E" : "I"}${
+      scores.NS === 0 ? "X" : scores.NS > 0 ? "N" : "S"
+    }${scores.TF === 0 ? "X" : scores.TF > 0 ? "T" : "F"}${
+      scores.JP === 0 ? "X" : scores.JP > 0 ? "J" : "P"
+    }`;
 
     const result = {
       scores: dimensionScores,
@@ -128,9 +132,11 @@ export default function SixteenPersonalities() {
     //this func is also only called once at the end
     if (!showResults) return null;
 
-    const mbtiType = `${scores.EI > 0 ? "E" : "I"}${scores.NS > 0 ? "N" : "S"}${
-      scores.TF > 0 ? "T" : "F"
-    }${scores.JP > 0 ? "J" : "P"}`; 
+    const mbtiType = `${scores.EI === 0 ? "X" : scores.EI > 0 ? "E" : "I"}${
+      scores.NS === 0 ? "X" : scores.NS > 0 ? "N" : "S"
+    }${scores.TF === 0 ? "X" : scores.TF > 0 ? "T" : "F"}${
+      scores.JP === 0 ? "X" : scores.JP > 0 ? "J" : "P"
+    }`;
 
     const calculatePercentages = (score: number) => {
       const normalizedScore = Math.max(Math.min(score, 36), -36);
