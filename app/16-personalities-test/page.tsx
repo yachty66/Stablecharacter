@@ -17,9 +17,6 @@ export default function SixteenPersonalities() {
   const [currentPage, setCurrentPage] = useState(0);
   const [scores, setScores] = useState<{ [key: string]: number }>({});
 
-  // console.log("answers", answers);
-  console.log("scores", scores);
-
   const questionsPerPage = 5;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
   const currentQuestions = questions.slice(
@@ -39,11 +36,22 @@ export default function SixteenPersonalities() {
     // Calculate the scores for each dimension using the structured data
     questions.forEach((question) => {
       const answer = answers[question.text];
+      console.log("here is the answer", answer);
+
       if (answer !== undefined) {
-        const score = question.math === "+" ? answer : -answer;
-        dimensionScores[question.type] += score;
+        if (question.math === "-") {
+          console.log(-answer);
+          // For negative math, negate the answer (-3 becomes 3, 3 becomes -3)
+          dimensionScores[question.type] += -answer;
+        } else {
+          console.log(answer);
+          // For positive math, keep the answer as is
+          dimensionScores[question.type] += answer;
+        }
       }
     });
+
+    console.log("dimensionScores", dimensionScores);
 
     const type = {
       EI: dimensionScores.EI > 0 ? "E" : "I",
@@ -65,11 +73,9 @@ export default function SixteenPersonalities() {
       timestamp: new Date().toISOString(),
     };
 
-    console.log("result", result);
-
     try {
       const { data, error } = await supabase
-        .from("sixteen_personalities_results")
+        .from("16_personality_results")
         .insert([{ result }]);
 
       if (error) {
