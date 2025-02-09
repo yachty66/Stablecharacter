@@ -60,10 +60,10 @@ export default function SixteenPersonalities() {
       JP: dimensionScores.JP > 0 ? "P" : "J",
     };
 
-    const mbtiType = `${scores.EI === 0 ? "X" : scores.EI > 0 ? "E" : "I"}${
-      scores.NS === 0 ? "X" : scores.NS > 0 ? "N" : "S"
-    }${scores.TF === 0 ? "X" : scores.TF > 0 ? "T" : "F"}${
-      scores.JP === 0 ? "X" : scores.JP > 0 ? "J" : "P"
+    const mbtiType = `${dimensionScores.EI === 0 ? "X" : dimensionScores.EI > 0 ? "E" : "I"}${
+      dimensionScores.NS === 0 ? "X" : dimensionScores.NS > 0 ? "N" : "S"
+    }${dimensionScores.TF === 0 ? "X" : dimensionScores.TF > 0 ? "T" : "F"}${
+      dimensionScores.JP === 0 ? "X" : dimensionScores.JP > 0 ? "J" : "P"
     }`;
 
     const result = {
