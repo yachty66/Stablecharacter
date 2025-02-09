@@ -172,12 +172,16 @@ export default function SixteenPersonalities() {
                 <span className="text-sm font-medium w-12">
                   {getTraitPercentages(scores.EI).leftPercentage}%
                 </span>
-                <div className="flex-1 h-2 bg-muted rounded-full">
+                <div className="flex-1 h-2 bg-muted rounded-full relative">
                   <div
-                    className="h-full bg-primary rounded-full transition-all"
+                    className="h-full bg-primary rounded-full transition-all absolute"
                     style={{
+                      right: scores.EI < 0 ? 0 : "auto",
+                      left: scores.EI >= 0 ? 0 : "auto",
                       width: `${
-                        getTraitPercentages(scores.EI).leftPercentage
+                        scores.EI < 0
+                          ? getTraitPercentages(scores.EI).rightPercentage
+                          : getTraitPercentages(scores.EI).leftPercentage
                       }%`,
                     }}
                   />
@@ -198,12 +202,16 @@ export default function SixteenPersonalities() {
                 <span className="text-sm font-medium w-12">
                   {getTraitPercentages(scores.NS).leftPercentage}%
                 </span>
-                <div className="flex-1 h-2 bg-muted rounded-full">
+                <div className="flex-1 h-2 bg-muted rounded-full relative">
                   <div
-                    className="h-full bg-primary rounded-full transition-all"
+                    className="h-full bg-primary rounded-full transition-all absolute"
                     style={{
+                      right: scores.NS < 0 ? 0 : "auto",
+                      left: scores.NS >= 0 ? 0 : "auto",
                       width: `${
-                        getTraitPercentages(scores.NS).leftPercentage
+                        scores.NS < 0
+                          ? getTraitPercentages(scores.NS).rightPercentage
+                          : getTraitPercentages(scores.NS).leftPercentage
                       }%`,
                     }}
                   />
@@ -224,12 +232,16 @@ export default function SixteenPersonalities() {
                 <span className="text-sm font-medium w-12">
                   {getTraitPercentages(scores.TF).leftPercentage}%
                 </span>
-                <div className="flex-1 h-2 bg-muted rounded-full">
+                <div className="flex-1 h-2 bg-muted rounded-full relative">
                   <div
-                    className="h-full bg-primary rounded-full transition-all"
+                    className="h-full bg-primary rounded-full transition-all absolute"
                     style={{
+                      right: scores.TF < 0 ? 0 : "auto",
+                      left: scores.TF >= 0 ? 0 : "auto",
                       width: `${
-                        getTraitPercentages(scores.TF).leftPercentage
+                        scores.TF < 0
+                          ? getTraitPercentages(scores.TF).rightPercentage
+                          : getTraitPercentages(scores.TF).leftPercentage
                       }%`,
                     }}
                   />
@@ -250,12 +262,16 @@ export default function SixteenPersonalities() {
                 <span className="text-sm font-medium w-12">
                   {getTraitPercentages(scores.JP).leftPercentage}%
                 </span>
-                <div className="flex-1 h-2 bg-muted rounded-full">
+                <div className="flex-1 h-2 bg-muted rounded-full relative">
                   <div
-                    className="h-full bg-primary rounded-full transition-all"
+                    className="h-full bg-primary rounded-full transition-all absolute"
                     style={{
+                      right: scores.JP < 0 ? 0 : "auto",
+                      left: scores.JP >= 0 ? 0 : "auto",
                       width: `${
-                        getTraitPercentages(scores.JP).leftPercentage
+                        scores.JP < 0
+                          ? getTraitPercentages(scores.JP).rightPercentage
+                          : getTraitPercentages(scores.JP).leftPercentage
                       }%`,
                     }}
                   />
