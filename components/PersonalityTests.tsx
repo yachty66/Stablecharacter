@@ -9,7 +9,7 @@ export default function PersonalityTests() {
         {/* Header */}
         <div className="text-center space-y-4">
           <h2 className="text-2xl sm:text-3xl font-bold text-white">
-            Free Personality Tests
+            Other Personality Tests
           </h2>
           <p className="text-gray-200 text-lg">
             Discover yourself through free assessments

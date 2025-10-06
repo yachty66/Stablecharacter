@@ -23,7 +23,7 @@ export default function HomePage() {
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-br from-white via-purple-100 to-purple-300 bg-clip-text text-transparent animate-fade-in-up">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight pb-1 bg-gradient-to-br from-white via-purple-100 to-purple-300 bg-clip-text text-transparent animate-fade-in-up">
             Find Your Love Language
           </h1>
 
