@@ -1,6 +1,5 @@
 "use client";
 
-import { Github, Mail } from "lucide-react";
 import Link from "next/link";
 
 function XIcon() {
@@ -72,21 +71,7 @@ export default function Footer() {
             <InstagramIcon />
           </Link>
 
-          <Link
-            href="mailto:maxhager28@gmail.com"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Mail className="h-5 w-5" />
-          </Link>
-
-          <Link
-            href="https://github.com/yachty66/Stablecharacter"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Github className="h-5 w-5" />
-          </Link>
+          {/* Mail and GitHub icons removed per request */}
         </div>
       </div>
     </footer>
