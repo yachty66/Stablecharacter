@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 
 export default function PersonalityTests() {
   return (
-    <section className="px-4 py-12 bg-gradient-to-b from-background/50 to-background">
+    <section className="px-4 py-12 bg-gradient-to-b from-background/50 to-background relative z-10">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
-          <h2 className="text-2xl sm:text-3xl font-bold">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">
             Free Personality Tests
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-gray-200 text-lg">
             Discover yourself through free assessments
           </p>
         </div>
