@@ -15,20 +15,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stablecharacter - MBTI Personalities chat",
+  title: "Stablecharacter - The Five Love Languages Test",
   description:
-    "Have meaningful conversations with AI-powered MBTI personality characters. Explore different personality types and engage in authentic dialogue.",
+    "Discover your primary love languages with a quick, free assessment. Understand how you prefer to give and receive love.",
   openGraph: {
-    title: "Stablecharacter - MBTI Personalities chat",
+    title: "Stablecharacter - The Five Love Languages Test",
     description:
-      "Have meaningful conversations with AI-powered MBTI personality characters.",
+      "Discover your primary love languages with a quick, free assessment. Understand how you prefer to give and receive love.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Stablecharacter - MBTI Personalities chat",
+    title: "Stablecharacter - The Five Love Languages Test",
     description:
-      "Have meaningful conversations with AI-powered MBTI personality characters.",
+      "Discover your primary love languages with a quick, free assessment. Understand how you prefer to give and receive love.",
   },
 };
 
