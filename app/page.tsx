@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import PersonalityTests from "@/components/PersonalityTests";
@@ -10,28 +9,6 @@ import { Heart } from "lucide-react";
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header with gradient background */}
-      <div className="w-full px-4 py-6 relative border-b border-border/40">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 via-background to-background pointer-events-none" />
-        <div className="relative z-10 max-w-7xl mx-auto flex justify-between items-center">
-          <Link
-            href="/"
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-          >
-            <Image
-              src="/logo.png"
-              alt="Stablecharacter Logo"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-            <span className="font-bold tracking-tight text-xl bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 bg-clip-text text-transparent">
-              Stablecharacter
-            </span>
-          </Link>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <div className="w-full relative overflow-hidden">
         {/* Animated gradient background */}
