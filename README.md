@@ -40,12 +40,14 @@ npm run dev
 ## Tests
 
 For now we only have manual tests. Major things to check after big updates:
-
+ 
 - chat is getting transferred from non to login area
 
 ## Todo 
 
 - make the page hardcore focused on the 5 love languages test - 
-- check the test itself doest have any bugs and its up to date and all works
+- check the test itself doest have any bugs and its up to date and all works -
+    - in the end change the "chat about results button with the "
 - make the test result page sharable so that folks can share the test
 - upsell the person which is doing the test by adding a link to a group chat for 9$ 
+
