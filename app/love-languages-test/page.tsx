@@ -453,6 +453,205 @@ export default function LoveLanguages() {
                   ))}
               </div>
 
+              {/* Upsell Section */}
+              <div className="mt-12 space-y-6">
+                <div className="text-center">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                    Take Your Understanding Further
+                  </h3>
+                  <p className="text-gray-400">
+                    Unlock premium resources to deepen your love languages
+                    knowledge
+                  </p>
+                </div>
+
+                <div className="max-w-2xl mx-auto">
+                  {/* Combined Premium Package */}
+                  <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-2xl p-8 border-2 border-purple-500/30">
+                    <div className="text-center mb-6">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 mb-4">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="32"
+                          height="32"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-white"
+                        >
+                          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                          <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                      </div>
+                      <h4 className="text-2xl font-bold text-white mb-2">
+                        Premium Love Languages Package
+                      </h4>
+                      <p className="text-gray-300 mb-4">
+                        Get everything you need to master your love languages
+                        and connect with a supportive community
+                      </p>
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-6">
+                        <span className="text-3xl font-bold text-white">
+                          $9
+                        </span>
+                        <span className="text-gray-400">one-time payment</span>
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-6 mb-6">
+                      <div>
+                        <h5 className="text-white font-semibold mb-3 flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="text-purple-400"
+                          >
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                          </svg>
+                          Complete Guide
+                        </h5>
+                        <ul className="space-y-2 text-sm text-gray-400">
+                          <li className="flex items-center gap-2">
+                            <svg
+                              className="w-4 h-4 text-purple-400 flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            Detailed infographic with your results
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <svg
+                              className="w-4 h-4 text-purple-400 flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            Practical tips for each love language
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <svg
+                              className="w-4 h-4 text-purple-400 flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            Relationship improvement strategies
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h5 className="text-white font-semibold mb-3 flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="text-purple-400"
+                          >
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                          </svg>
+                          Discord Community
+                        </h5>
+                        <ul className="space-y-2 text-sm text-gray-400">
+                          <li className="flex items-center gap-2">
+                            <svg
+                              className="w-4 h-4 text-purple-400 flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            Exclusive community access
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <svg
+                              className="w-4 h-4 text-purple-400 flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            Monthly live Q&A sessions
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <svg
+                              className="w-4 h-4 text-purple-400 flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            Share tips and learn from others
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <button className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-purple-500/25 text-lg">
+                      Get Premium Package - $9
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <div className="mt-10 flex justify-center">
                 <button
                   onClick={handleCopyShareLink}
