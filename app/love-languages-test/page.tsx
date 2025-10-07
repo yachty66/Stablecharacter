@@ -233,6 +233,84 @@ export default function LoveLanguages() {
         <div className="max-w-4xl mx-auto px-4">
           {!showResults ? (
             <div className="space-y-8">
+              {/* Test info header */}
+              <div className="text-center space-y-3">
+                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white via-purple-100 to-purple-300 bg-clip-text text-transparent">
+                  Love Languages Test
+                </h1>
+                <div className="flex items-center justify-center gap-3 text-xs sm:text-sm text-gray-400">
+                  <span className="flex items-center gap-1.5">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    3 min
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1.5">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                    </svg>
+                    Secure & Private
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1.5">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                    </svg>
+                    No registration
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1.5">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    100% Free
+                  </span>
+                </div>
+              </div>
+
               {/* Progress indicator */}
               <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-gray-800">
                 <div className="flex justify-between items-center mb-3">
