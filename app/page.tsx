@@ -45,8 +45,8 @@ export default function HomePage() {
             </Button>
           </Link>
 
-          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-muted-foreground animate-fade-in-up animation-delay-400">
-            <div className="flex items-center gap-2">
+          <div className="mt-8 grid grid-cols-3 gap-4 sm:flex sm:items-center sm:justify-center sm:gap-6 text-sm text-muted-foreground animate-fade-in-up animation-delay-400">
+            <div className="flex flex-col items-center sm:flex-row sm:items-center gap-1.5 sm:gap-2">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -62,7 +62,7 @@ export default function HomePage() {
               </svg>
               <span>3 minutes</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col items-center sm:flex-row sm:items-center gap-1.5 sm:gap-2">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -78,7 +78,7 @@ export default function HomePage() {
               </svg>
               <span>100% Free</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col items-center sm:flex-row sm:items-center gap-1.5 sm:gap-2">
               <svg
                 className="w-5 h-5"
                 fill="none"

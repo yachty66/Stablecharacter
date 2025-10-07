@@ -20,6 +20,7 @@ export default function LoveLanguages() {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">(
     "idle"
   );
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const traitOrder = [
     { number: "W", name: "Words of Affirmation" },
@@ -156,6 +157,34 @@ export default function LoveLanguages() {
     }
   };
 
+  const handlePremiumPurchase = async () => {
+    setIsProcessingPayment(true);
+    try {
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product: "love_languages_premium",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        console.error("No checkout URL returned");
+        setIsProcessingPayment(false);
+      }
+    } catch (error) {
+      console.error("Error initiating checkout:", error);
+      setIsProcessingPayment(false);
+    }
+  };
+
   // Load results if a result_id is present in the URL
   useEffect(() => {
     const paramId = searchParams?.get("result_id");
@@ -260,12 +289,12 @@ export default function LoveLanguages() {
                 <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white via-purple-100 to-purple-300 bg-clip-text text-transparent">
                   Love Languages Test
                 </h1>
-                <div className="flex items-center justify-center gap-3 text-xs sm:text-sm text-gray-400">
-                  <span className="flex items-center gap-1.5">
+                <div className="grid grid-cols-4 gap-3 sm:flex sm:items-center sm:justify-center sm:gap-3 text-xs sm:text-sm text-gray-400">
+                  <span className="flex flex-col items-center sm:flex-row sm:items-center gap-1 sm:gap-1.5">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
+                      width="16"
+                      height="16"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -278,12 +307,12 @@ export default function LoveLanguages() {
                     </svg>
                     3 min
                   </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1.5">
+                  <span className="hidden sm:inline">•</span>
+                  <span className="flex flex-col items-center sm:flex-row sm:items-center gap-1 sm:gap-1.5">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
+                      width="16"
+                      height="16"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -295,12 +324,12 @@ export default function LoveLanguages() {
                     </svg>
                     Secure & Private
                   </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1.5">
+                  <span className="hidden sm:inline">•</span>
+                  <span className="flex flex-col items-center sm:flex-row sm:items-center gap-1 sm:gap-1.5">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
+                      width="16"
+                      height="16"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -313,12 +342,12 @@ export default function LoveLanguages() {
                     </svg>
                     No registration
                   </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1.5">
+                  <span className="hidden sm:inline">•</span>
+                  <span className="flex flex-col items-center sm:flex-row sm:items-center gap-1 sm:gap-1.5">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
+                      width="16"
+                      height="16"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -645,8 +674,18 @@ export default function LoveLanguages() {
                       </div>
                     </div>
 
-                    <button className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-purple-500/25 text-lg">
-                      Get Premium Package - $9
+                    <button
+                      onClick={handlePremiumPurchase}
+                      disabled={isProcessingPayment}
+                      className={`w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-purple-500/25 text-lg ${
+                        isProcessingPayment
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }`}
+                    >
+                      {isProcessingPayment
+                        ? "Processing..."
+                        : "Get Premium Package - $9"}
                     </button>
                   </div>
                 </div>
