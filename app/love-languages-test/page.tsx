@@ -424,16 +424,9 @@ export default function LoveLanguages() {
                   .map(({ number, name }, index) => (
                     <div key={number} className="space-y-3">
                       <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-3">
-                          {index === 0 && (
-                            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 text-white text-sm font-bold">
-                              1
-                            </span>
-                          )}
-                          <h3 className="text-lg sm:text-xl font-semibold text-white">
-                            {name}
-                          </h3>
-                        </div>
+                        <h3 className="text-lg sm:text-xl font-semibold text-white">
+                          {name}
+                        </h3>
                         <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
                           {scores[number]}%
                         </span>
